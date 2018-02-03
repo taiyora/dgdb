@@ -1,7 +1,16 @@
+@import url("https://fonts.googleapis.com/css?family=Graduate");
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background: url("/images/background.png") repeat;
 }
-a {
-  color: #00b7ff;
+h1 {
+  margin: 0;
+  padding-left: 15px;
+  font: 80px Graduate;
+  color: #fff;
+  text-shadow: -2px 2px 0px #00e6e6, -4px 4px 0px #01cccc, -6px 6px 0px #00bdbd;
+}
+p.stylized {
+  margin: 0;
+  font: 12px Graduate;
+  color: #fff;
 }

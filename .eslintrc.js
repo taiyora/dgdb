@@ -1,3 +1,11 @@
 module.exports = {
-    "extends": "google"
+	"extends": "google",
+	"parserOptions": {
+		"ecmaVersion": 6
+	},
+	"rules": {
+		"new-cap": "off",
+		"no-tabs": "off",
+		"object-curly-spacing": "off"
+	}
 };

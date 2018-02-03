@@ -1,9 +1,11 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-/* GET home page. */
+const websiteName = 'DGDB';
+
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+	res.render('index', {
+		title: websiteName + ' // home' });
 });
 
 module.exports = router;
