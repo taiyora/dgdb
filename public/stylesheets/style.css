@@ -9,8 +9,24 @@ h1 {
   color: #fff;
   text-shadow: -2px 2px 0px #00e6e6, -4px 4px 0px #01cccc, -6px 6px 0px #00bdbd;
 }
+p {
+  font: 12px Verdana;
+  color: #fff;
+}
 p.stylized {
   margin: 0;
-  font: 12px Graduate;
-  color: #fff;
+  font-family: Graduate;
+}
+a {
+  text-decoration: none;
+  color: #c080ff;
+}
+a:hover {
+  text-decoration: underline;
+}
+div.main {
+  margin-top: 10px;
+  height: 300px;
+  background-color: rgba(64,64,64,0.8);
+  border: 1px #808080 solid;
 }
