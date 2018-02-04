@@ -1,28 +1,59 @@
 extends ../layout
 
 block content
+	if error
+		p.error(align='center')= error
+
 	form(action='/game/new' method='post')
 		table
 			tr
 				td(width='25%')
 					label(for='title-jp') Title (Japanese)
-					input#title-jp(type='text' name='title-jp' placeholder='私は今日ここで死にます。' maxlength='100')
+					input#title-jp(
+						type='text'
+						name='title_jp'
+						placeholder='私は今日ここで死にます。'
+						value=form.title_jp
+						maxlength='100'
+						autocomplete='off' )
 
 				td(width='25%')
 					label(for='title-romaji') Title (Romaji)
-					input#title-romaji(type='text' name='title-romaji' placeholder='Watashi wa Kyou Koko de Shinimasu.' maxlength='100')
+					input#title-romaji(
+						type='text'
+						name='title_romaji'
+						placeholder='Watashi wa Kyou Koko de Shinimasu.'
+						value=form.title_romaji
+						maxlength='100'
+						autocomplete='off' )
 
 				td(width='25%')
 					div(style='float: right;')
-						input#title-english-official(type='checkbox' name='official' value='title-english')
+						if form.title_english_official
+							input#title-english-official(type='checkbox' name='title_english_official' checked)
+						else
+							input#title-english-official(type='checkbox' name='title_english_official')
+
 						label(for='title-english-official' style='color: rgb(192,192,192);') Official localization
 
 					label(for='title-english') Title (English translated)
-					input#title-english(type='text' name='title-english' placeholder='This is where I die today.' maxlength='100')
+					input#title-english(
+						type='text'
+						name='title_english'
+						placeholder='This is where I die today.'
+						value=form.title_english
+						maxlength='100'
+						autocomplete='off' )
 
 				td
 					label(for='title-other') Abbreviations (comma-separated)
-					input#title-other(type='text' name='title-other' placeholder='KyouKoko' maxlength='100')
+					input#title-other(
+						type='text'
+						name='title_other'
+						placeholder='KyouKoko'
+						value=form.title_other
+						maxlength='100'
+						autocomplete='off')
 
 			tr
 				td(colspan='4' align='center')

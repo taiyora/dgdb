@@ -17,6 +17,12 @@ p.stylized {
   margin: 0;
   font-family: Graduate;
 }
+p.error {
+  padding: 5px;
+  background: rgba(128,64,64,0.5);
+  font-weight: bold;
+  color: #ff8080;
+}
 label {
   font: 10px Verdana;
   color: #fff;

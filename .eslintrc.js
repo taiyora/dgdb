@@ -6,6 +6,9 @@ module.exports = {
 	"rules": {
 		"new-cap": "off",
 		"no-tabs": "off",
-		"object-curly-spacing": "off"
+		"brace-style": "off",
+		"array-bracket-spacing": "off",
+		"object-curly-spacing": "off",
+		"no-multi-spaces": "off"
 	}
 };
