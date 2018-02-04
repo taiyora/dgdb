@@ -1,0 +1,14 @@
+extends ../layout
+
+block content
+	if error
+		p.error(align='center')= error
+
+	else
+		h2
+			| !{game.title_jp}
+			| <span class='subdued'>(!{game.title_romaji})</span>
+
+		h3(style='margin-left: 30px;')
+			| <span class='subdued'>&gt;</span>&nbsp;
+			| !{game.title_english}

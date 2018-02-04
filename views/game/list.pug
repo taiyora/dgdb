@@ -16,9 +16,12 @@ block content
 			tr
 				td.list
 					if game.title_english_official
-						p !{game.title_english} <span class='subdued'>☑</span>
+						p <a href='/game/view/!{game.id}'>!{game.title_english} <span class='subdued'>☑</span></a>
 					else
-						p !{game.title_english}
+						p <a href='/game/view/!{game.id}'>!{game.title_english}</a>
 
 				td.list
-					p !{game.title_jp} <span class='subdued'>(!{game.title_romaji})</span> 
+					if game.title_romaji
+						p <a href='/game/view/!{game.id}'>!{game.title_jp} <span class='subdued'>(!{game.title_romaji})</span></a>
+					else
+						p <a href='/game/view/!{game.id}'>!{game.title_jp}</a>

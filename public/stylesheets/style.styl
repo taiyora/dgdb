@@ -1,4 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Graduate')
+@import url('https://fonts.googleapis.com/css?family=Indie+Flower')
+@import url('https://fonts.googleapis.com/css?family=Nova+Flat')
+
+@font-face // For Japanese text
+	font-family AiharaHudemojiKaisho
+	src url("/fonts/AiharaHudemojiKaisho2.01.ttf")
 
 body
 	background url('/images/background.png') repeat
@@ -30,6 +36,19 @@ h1.logo:hover
 h1.logo a
 	text-decoration none
 	color white
+
+h2, h3
+	margin 0
+	margin-left 10px
+
+	font 25px 'Nova Flat'
+	color white
+
+h3
+	font-size 20px
+
+.fancy
+	font-family 'Indie Flower', AiharaHudemojiKaisho
 
 p
 	margin 0
@@ -73,6 +92,7 @@ a.menu-item.purple
 
 div.main
 	margin-top 10px
+	padding 5px
 
 	background rgba(64,64,64,.8)
 	border 1px rgb(128,128,128) solid
@@ -84,7 +104,6 @@ div.menu-bar
 
 table
 	width 100%
-	padding 5px
 
 table.centered
 	margin 0 auto
@@ -96,12 +115,19 @@ td
 
 td.list
 	padding 0
-	padding-left 10px
+	padding-left 7px
 	
 	height 21px // A height of 21px centers 11px Verdana text better
 	vertical-align middle
 
 	background rgba(32,32,32,.5)
+
+td.list a
+	color white
+
+td.list a:hover
+	border-bottom 1px rgb(128,128,128) dotted
+	text-decoration none
 
 input[type='text']
 	padding 3px

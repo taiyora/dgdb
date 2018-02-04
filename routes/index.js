@@ -61,6 +61,34 @@ router.get('/game/list', function(req, res, next) {
 	});
 });
 
+router.get('/game/view/:id', function(req, res, next) {
+	const query = `SELECT * FROM games WHERE id = $1;`;
+	const vars = [ req.params.id ];
+
+	pgPool.query(query, vars, function(err, res2) {
+		if (err) {
+			console.error(err);
+
+			res.render('game/view', {
+				title: websiteName + ' // game',
+				error: 'Something went wrong; please try again',
+				game: {} });
+		}
+		else if (!res2.rows.length) {
+			res.render('game/view', {
+				title: websiteName + ' // game',
+				error: 'No entry with that ID exists',
+				game: {} });
+		}
+		else {
+			// TODO: Show game title in window title
+			res.render('game/view', {
+				title: websiteName + ' // game',
+				game: res2.rows[0] });
+		}
+	});
+});
+
 router.get('/game/new', function(req, res, next) {
 	res.render('game/new', {
 		title: websiteName + ' // new entry',
