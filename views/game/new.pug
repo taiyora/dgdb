@@ -1,0 +1,29 @@
+extends ../layout
+
+block content
+	form(action='/game/new' method='post')
+		table
+			tr
+				td(width='25%')
+					label(for='title-jp') Title (Japanese)
+					input#title-jp(type='text' name='title-jp' placeholder='私は今日ここで死にます。' maxlength='100')
+
+				td(width='25%')
+					label(for='title-romaji') Title (Romaji)
+					input#title-romaji(type='text' name='title-romaji' placeholder='Watashi wa Kyou Koko de Shinimasu.' maxlength='100')
+
+				td(width='25%')
+					div(style='float: right;')
+						input#title-english-official(type='checkbox' name='official' value='title-english')
+						label(for='title-english-official' style='color: rgb(192,192,192);') Official localization
+
+					label(for='title-english') Title (English translated)
+					input#title-english(type='text' name='title-english' placeholder='This is where I die today.' maxlength='100')
+
+				td
+					label(for='title-other') Abbreviations (comma-separated)
+					input#title-other(type='text' name='title-english' placeholder='KyouKoko' maxlength='100')
+
+			tr
+				td(colspan='4' align='center')
+					input(type='submit' value='Submit')

@@ -21,6 +21,10 @@ p.stylized
 	margin 0
 	font-family Graduate
 
+label
+	font 10px Verdana
+	color white
+
 a
 	text-decoration none
 	color rgb(192,128,255)
@@ -28,9 +32,42 @@ a
 a:hover
 	text-decoration underline
 
+a.menu-item
+	margin-right 20px
+
 div.main
 	margin-top 10px
-	height 300px
 
-	background-color rgba(64,64,64,.8)
+	background rgba(64,64,64,.8)
 	border 1px rgb(128,128,128) solid
+
+div.menu-bar
+	position absolute
+	top 100px
+	left 300px
+
+table
+	margin 0 auto // 'auto' centers the table
+	max-width 1500px
+
+td
+	padding 5px
+	vertical-align top
+
+input[type='text']
+	padding 3px
+	width 100%
+
+	background rgba(0,0,0,.5)
+	border none
+
+	font 12px Verdana
+	color white
+
+input[type='checkbox']
+	position relative
+	top 2px
+
+	margin 0
+	margin-right 2px
+	padding 0

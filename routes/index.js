@@ -8,4 +8,9 @@ router.get('/', function(req, res, next) {
 		title: websiteName + ' // home' });
 });
 
+router.get('/game/new', function(req, res, next) {
+	res.render('game/new', {
+		title: websiteName + ' // new entry' });
+});
+
 module.exports = router;

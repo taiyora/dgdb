@@ -9,8 +9,10 @@ html
 		h1 DGDB
 		p.stylized(style='padding-left: 35px;') <font color='#00e6e6'>//</font> doujin game database
 
-		div(style='position: absolute; left: 300px; top: 99px;')
-			p.stylized <a href='/'>home</a>
+		div.menu-bar
+			p.stylized
+				| <a class='menu-item' href='/'>home</a>
+				| <a class='menu-item' href='/game/new'>new entry</a>
 
 		div.main
 			block content
