@@ -5,6 +5,7 @@ body {
 h1.logo {
   margin: 0;
   padding-left: 15px;
+  width: 200px;
   font: 80px Graduate;
   color: #fff;
   transition: text-shadow 3s;
