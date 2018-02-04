@@ -47,7 +47,7 @@ label {
 }
 a {
   text-decoration: none;
-  color: #c080ff;
+  color: #80c0ff;
 }
 a:hover {
   text-decoration: underline;
@@ -55,8 +55,8 @@ a:hover {
 a.menu-item {
   margin-right: 15px;
 }
-a.menu-item.blue {
-  color: #80c0ff;
+a.menu-item.purple {
+  color: #c080ff;
 }
 div.main {
   margin-top: 10px;
