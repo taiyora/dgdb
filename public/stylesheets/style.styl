@@ -14,12 +14,17 @@ h1
 	            -6px 6px 0px #00bdbd
 
 p
-	font 12px Verdana
+	margin 0
+
+	font 11px Verdana
 	color white
 
 p.stylized
-	margin 0
-	font-family Graduate
+	font 12px Graduate
+
+p.heading
+	font-style italic
+	color rgb(192,192,192)
 
 p.error
 	padding 5px
@@ -27,6 +32,9 @@ p.error
 
 	font-weight bold
 	color rgb(255,128,128)
+
+span.subdued
+	color rgb(128,128,128)
 
 label
 	font 10px Verdana
@@ -42,6 +50,9 @@ a:hover
 a.menu-item
 	margin-right 20px
 
+a.menu-item.blue
+	color rgb(128,192,255)
+
 div.main
 	margin-top 10px
 
@@ -54,12 +65,25 @@ div.menu-bar
 	left 300px
 
 table
-	margin 0 auto // 'auto' centers the table
+	width 100%
+	padding 5px
+
+table.centered
+	margin 0 auto
 	max-width 1500px
 
 td
 	padding 5px
 	vertical-align top
+
+td.list
+	padding 0
+	padding-left 10px
+	
+	height 21px // A height of 21px centers 11px Verdana text better
+	vertical-align middle
+
+	background rgba(32,32,32,.5)
 
 input[type='text']
 	padding 3px
@@ -71,6 +95,9 @@ input[type='text']
 	font 12px Verdana
 	color white
 
+input[type='text']:hover
+	background rgb(0,0,0)
+
 input[type='checkbox']
 	position relative
 	top 2px
@@ -78,3 +105,6 @@ input[type='checkbox']
 	margin 0
 	margin-right 2px
 	padding 0
+
+input[type='submit']
+	font 12px Verdana

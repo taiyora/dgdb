@@ -39,6 +39,28 @@ router.get('/', function(req, res, next) {
 		title: websiteName + ' // home' });
 });
 
+router.get('/game/list', function(req, res, next) {
+	const query = `SELECT * FROM games ORDER BY
+		title_english ASC,
+		title_romaji ASC,
+		title_jp ASC;`;
+
+	pgPool.query(query, function(err, res2) {
+		if (err) {
+			console.error(err);
+
+			res.render('game/list', {
+				title: websiteName + ' // games',
+				error: 'Something went wrong; please try again' });
+		}
+		else {
+			res.render('game/list', {
+				title: websiteName + ' // games',
+				games: res2.rows });
+		}
+	});
+});
+
 router.get('/game/new', function(req, res, next) {
 	res.render('game/new', {
 		title: websiteName + ' // new entry',

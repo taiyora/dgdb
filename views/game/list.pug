@@ -1,0 +1,18 @@
+extends ../layout
+
+block content
+	if error
+		p.error(align='center')= error
+
+	table
+		tr
+			td <p class='heading'>Title (English)</p>
+			td <p class='heading'>Title (Japanese)</p>
+
+		each game in games
+			tr
+				td.list
+					p !{game.title_english}
+
+				td.list
+					p !{game.title_jp} <span class='subdued'>(!{game.title_romaji})</span> 
