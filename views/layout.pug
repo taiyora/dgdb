@@ -5,6 +5,10 @@ html
 		title= title
 		link(rel='stylesheet' href='/stylesheets/style.css')
 
+		script.
+			;/* Google Chrome has a bug where CSS transitions trigger on page load if the page contains a form.
+				Having an empty script prevents this bug from occuring. ¯\_(ツ)_/¯ */
+
 	body
 		h1.logo <a href='/'>DGDB</a>
 		p.stylized(style='padding-left: 35px;') <font color='#00e6e6'>//</font> doujin game database
