@@ -3,15 +3,32 @@
 body
 	background url('/images/background.png') repeat
 
-h1
+h1.logo
 	margin 0
 	padding-left 15px
 
 	font 80px Graduate
 	color white
+
+	transition 3s
 	text-shadow -2px 2px 0px #00e6e6, // Credit: https://designshack.net/articles/css/12-fun-css-text-shadows-you-can-copy-and-paste/
 	            -4px 4px 0px #01cccc,
 	            -6px 6px 0px #00bdbd
+
+	cursor pointer
+
+h1.logo:hover
+	transition .5s
+	text-shadow -4px  2px 0px  #00e6e6,
+	            -8px  4px 0px  #01cccc,
+	            -12px 6px 0px  #00bdbd,
+	            -2px  2px 20px #00e6e6,
+	            -4px  4px 40px #01cccc,
+	            -6px  6px 60px #00bdbd
+
+h1.logo a
+	text-decoration none
+	color white
 
 p
 	margin 0
