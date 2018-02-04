@@ -7,7 +7,24 @@
 	src url("/fonts/AiharaHudemojiKaisho2.01.ttf")
 
 body
-	background url('/images/background.png') repeat
+	background black
+
+div.background
+	position fixed
+	top 0
+	left 0
+	width 100%
+	height 100%
+	z-index -1
+
+	background url('/images/background.png') repeat // Wallpaper is from http://www.dinpattern.com/
+	filter blur(3px)
+
+	animation 180s bg-scroll-anim infinite linear
+
+@keyframes bg-scroll-anim
+	100%
+		background-position -3000px 0
 
 h1.logo
 	margin 0
@@ -39,13 +56,13 @@ h1.logo a
 
 h2, h3
 	margin 0
-	margin-left 10px
+	margin-left 5px
 
-	font 25px 'Nova Flat'
+	font 30px 'Nova Flat'
 	color white
 
 h3
-	font-size 20px
+	font-size 25px
 
 .fancy
 	font-family 'Indie Flower', AiharaHudemojiKaisho
@@ -94,7 +111,7 @@ div.main
 	margin-top 10px
 	padding 5px
 
-	background rgba(64,64,64,.8)
+	background rgba(64,64,64,.2)
 	border 1px rgb(128,128,128) solid
 
 div.menu-bar
@@ -120,7 +137,7 @@ td.list
 	height 21px // A height of 21px centers 11px Verdana text better
 	vertical-align middle
 
-	background rgba(32,32,32,.5)
+	background rgba(64,64,64,.3)
 
 td.list a
 	color white
@@ -135,12 +152,13 @@ input[type='text']
 
 	background rgba(0,0,0,.5)
 	border none
+	border-bottom 1px rgba(64,64,64,.8) solid
 
 	font 12px Verdana
 	color white
 
 input[type='text']:hover
-	background rgb(0,0,0)
+	border-bottom 1px rgba(128,192,255,.8) solid
 
 input[type='checkbox']
 	position relative
