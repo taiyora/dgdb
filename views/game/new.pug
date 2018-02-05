@@ -7,7 +7,7 @@ block content
 	form(action='/game/new' method='post')
 		table.centered
 			tr
-				td(width='25%')
+				td(width='33.3%')
 					label(for='title-jp') Title (Japanese)
 					input#title-jp(
 						type='text'
@@ -17,7 +17,7 @@ block content
 						maxlength='100'
 						autocomplete='off' )
 
-				td(width='25%')
+				td(width='33.3%')
 					label(for='title-romaji') Title (Romaji)
 					input#title-romaji(
 						type='text'
@@ -27,15 +27,13 @@ block content
 						maxlength='100'
 						autocomplete='off' )
 
-				td(width='25%')
-					div(style='float: right;')
-						if form.title_english_official
-							input#title-english-official(type='checkbox' name='title_english_official' checked)
-						else
-							input#title-english-official(type='checkbox' name='title_english_official')
+				td(rowspan='4')
+					label(for='screenshots') Screenshots <span class='subdued'>(one URL per line)</span>
+					br
+					textarea#screenshots(name='screenshots')= form.screenshots
 
-						label(for='title-english-official' style='color: rgb(192,192,192);') Official localization
-
+			tr
+				td
 					label(for='title-english') Title (English translated)
 					input#title-english(
 						type='text'
@@ -44,6 +42,13 @@ block content
 						value=form.title_english
 						maxlength='100'
 						autocomplete='off' )
+
+					if form.title_english_official
+						input#title-english-official(type='checkbox' name='title_english_official' checked)
+					else
+						input#title-english-official(type='checkbox' name='title_english_official')
+
+					label(for='title-english-official' style='color: rgb(192,192,192);') This title is an official localization
 
 				td
 					label(for='title-other') Abbreviations (comma-separated)

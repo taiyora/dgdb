@@ -156,18 +156,25 @@ td
 td.label p
 	color rgb(192,192,192)
 
-input[type='text']
+input[type='text'], textarea
 	padding 3px
 	width 100%
 
-	background rgba(0,0,0,.5)
+	background none
 	border none
 	border-bottom 1px rgba(64,64,64,.8) solid
 
-	font 12px Verdana
+	font 11px Verdana
 	color white
 
-input[type='text']:hover
+textarea
+	max-width 500px
+	min-height 75px
+
+	background rgba(0,0,0,.3)
+	border-bottom 1px rgba(0,0,0,0) solid
+
+input[type='text']:hover, textarea:hover
 	border-bottom 1px rgba(192,128,255,.8) solid
 
 input[type='checkbox']
@@ -179,4 +186,19 @@ input[type='checkbox']
 	padding 0
 
 input[type='submit']
-	font 12px Verdana
+	width 100px
+	height 30px
+
+	background rgba(0,0,0,.3)
+	border 1px rgb(64,64,64) solid
+
+	font 11px Verdana
+	color white
+
+	cursor pointer
+
+input[type='submit']:hover
+	background rgba(192,128,255,.1)
+	border 1px rgba(192,128,255,.8) solid
+
+	box-shadow 0 0 50px 5px rgba(192,128,255,.1)
