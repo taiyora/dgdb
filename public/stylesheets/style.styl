@@ -36,24 +36,28 @@ h1.logo
 	color white
 
 	transition text-shadow 3s
-	text-shadow -2px 2px 0px #00e6e6, // Credit: https://designshack.net/articles/css/12-fun-css-text-shadows-you-can-copy-and-paste/
-	            -4px 4px 0px #01cccc,
-	            -6px 6px 0px #00bdbd
+	text-shadow -2px 2px 0px rgba(0,230,230,.5), // Credit: https://designshack.net/articles/css/12-fun-css-text-shadows-you-can-copy-and-paste/
+	            -4px 4px 0px rgba(1,204,204,.5),
+	            -6px 6px 0px rgba(0,189,189,.5)
 
 	cursor pointer
 
 h1.logo:hover
 	transition text-shadow .5s
-	text-shadow -4px  2px 0px  #00e6e6,
-	            -8px  4px 0px  #01cccc,
-	            -12px 6px 0px  #00bdbd,
-	            -2px  2px 20px #00e6e6,
-	            -4px  4px 40px #01cccc,
-	            -6px  6px 60px #00bdbd
+	text-shadow -4px  2px 0px  rgba(0,230,230,.5),
+	            -8px  4px 0px  rgba(1,204,204,.5),
+	            -12px 6px 0px  rgba(0,189,189,.5),
+	            -2px  2px 20px rgb(0,230,230),
+	            -4px  4px 40px rgb(1,204,204),
+	            -6px  6px 60px rgb(0,189,189)
 
 h1.logo a
 	text-decoration none
 	color white
+
+	-webkit-text-fill-color rgba(255,255,255,.5)
+	-webkit-text-stroke-width 2px
+	-webkit-text-stroke-color white
 
 h2, h3
 	margin 0
@@ -118,7 +122,10 @@ div.main
 	padding 5px
 
 	background rgba(64,64,64,.2)
-	border 1px rgb(128,128,128) solid
+	border 1px rgba(128,128,128,.8) outset
+
+	box-shadow 0 20px 25px 5px rgba(0,0,0,.2)
+	box-shadow 0 10px 25px 5px rgba(0,0,0,.4)
 
 div.menu-bar
 	position absolute
