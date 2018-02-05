@@ -21,5 +21,10 @@ html
 				| <a class='menu-item' href='/game/list'>games</a>
 				| <a class='menu-item purple' href='/game/new'>new entry</a>
 
-		div.main
+		//- Some pages have more complex layouts that aren't entirely enclosed in a single div.main
+		if title == 'DGDB // game'
 			block content
+		
+		else
+			div.main
+				block content

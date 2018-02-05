@@ -6,6 +6,7 @@
   src: url("/fonts/AiharaHudemojiKaisho2.01.ttf");
 }
 body {
+  overflow-x: hidden;
   background: #000;
 }
 div.background {
@@ -45,6 +46,11 @@ h3 {
 }
 h3 {
   font-size: 25px;
+}
+h3.heading {
+  position: relative;
+  top: 14px;
+  left: 20px;
 }
 .fancy {
   font-family: 'Indie Flower', AiharaHudemojiKaisho;
@@ -89,6 +95,7 @@ a.menu-item.purple {
 }
 div.main {
   margin-top: 10px;
+  margin-bottom: 7px;
   padding: 5px;
   background: rgba(64,64,64,0.2);
   border: 1px #808080 solid;
@@ -146,7 +153,7 @@ textarea {
 }
 textarea {
   max-width: 500px;
-  min-height: 75px;
+  min-height: 80px;
   background: rgba(0,0,0,0.3);
   border-bottom: 1px rgba(0,0,0,0) solid;
 }

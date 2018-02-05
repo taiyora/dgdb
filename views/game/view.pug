@@ -5,57 +5,69 @@ block content
 		p.error(align='center')= error
 
 	else
-		table
-			tr
-				td(width='40%')
-					table
-						if game.title_jp
-							tr.list
-								td.label(width='30%')
-									p Japanese title
-								td
-									p !{game.title_jp}
+		div(style='float: left; width: 80%;')
+			div.main
+				table
+					tr
+						td(width='50%')
+							table
+								if game.title_jp
+									tr.list
+										td.label(width='30%')
+											p Japanese title
+										td
+											p !{game.title_jp}
 
-						if game.title_romaji
-							tr.list
-								td.label
-									p Japanese title (romaji)
-								td
-									p= game.title_romaji
+								if game.title_romaji
+									tr.list
+										td.label
+											p Japanese title (romaji)
+										td
+											p= game.title_romaji
 
-						if game.title_english
-							tr.list
-								td.label
-									p English title
-								td
-									p= game.title_english
+								if game.title_english
+									tr.list
+										td.label
+											p English title
+										td
+											p= game.title_english
 
-							tr.list
-								td.label
-									p Officially localized title?
-								td
-									if game.title_english_official
-										p Yes
-									else
-										p No
+									tr.list
+										td.label
+											p Officially localized title?
+										td
+											if game.title_english_official
+												p Yes
+											else
+												p No
 
-						if game.title_other
-							tr.list
-								td.label
-									p Also known as
-								td
-									p= game.title_other
+								if game.title_other
+									tr.list
+										td.label
+											p Also known as
+										td
+											p= game.title_other
 
-				td(width='35%')
-					if game.title_jp
-						h2.fancy= game.title_jp
+						td
+							if game.title_jp
+								h2.fancy= game.title_jp
 
-					if game.title_romaji
-						h3.fancy(style='position: relative; bottom: 8px;')
-							| <span class='subdued'>(!{game.title_romaji})</span>
+							if game.title_romaji
+								h3.fancy(style='position: relative; bottom: 8px;')
+									| <span class='subdued'>(!{game.title_romaji})</span>
 
-					if game.title_english
-						h3.fancy(style='position: relative; bottom: 8px;')
-							| !{game.title_english}
+							if game.title_english
+								h3.fancy(style='position: relative; bottom: 8px;')
+									| !{game.title_english}
 
-				td
+		if game.ss_urls.length
+			div(style='float: right; width: 19.9%;')
+				div.main
+					each ss in game.ss_urls
+						a(href=ss) <img src=!{ss} width='100%'>
+
+		div(style='float: left; width: 80%;')
+			h3.heading Ratings and Reviews
+
+			div.main
+				p ...
