@@ -6,21 +6,21 @@ block content
 
 	table
 		tr
-			td(width='500px')
+			td(width='30%')
 				p.heading English Title <span class='subdued'>(official localizations are marked with ☑)</span>
 
 			td
 				p.heading Japanese Title
 
 		each game in games
-			tr
-				td.list
+			tr.list
+				td
 					if game.title_english_official
 						p <a href='/game/view/!{game.id}'>!{game.title_english} <span class='subdued'>☑</span></a>
 					else
 						p <a href='/game/view/!{game.id}'>!{game.title_english}</a>
 
-				td.list
+				td
 					if game.title_romaji
 						p <a href='/game/view/!{game.id}'>!{game.title_jp} <span class='subdued'>(!{game.title_romaji})</span></a>
 					else

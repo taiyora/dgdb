@@ -40,8 +40,7 @@ h1.logo a {
 h2,
 h3 {
   margin: 0;
-  margin-left: 5px;
-  font: 30px 'Nova Flat';
+  font: 35px 'Nova Flat';
   color: #fff;
 }
 h3 {
@@ -68,7 +67,7 @@ p.error {
   font-weight: bold;
   color: #ff8080;
 }
-span.subdued {
+.subdued {
   color: #808080;
 }
 label {
@@ -106,23 +105,34 @@ table.centered {
   margin: 0 auto;
   max-width: 1500px;
 }
-td {
-  padding: 5px;
-  vertical-align: top;
-}
-td.list {
+tr.list td {
   padding: 0;
   padding-left: 7px;
   height: 21px;
   vertical-align: middle;
   background: rgba(64,64,64,0.3);
 }
-td.list a {
+tr.list:nth-child(even) td {
+  background: rgba(48,48,48,0.3);
+}
+tr.list td.label {
+  padding-right: 5px;
+  background: none;
+  text-align: right;
+}
+tr.list td a {
   color: #fff;
 }
-td.list a:hover {
+tr.list td a:hover {
   border-bottom: 1px #808080 dotted;
   text-decoration: none;
+}
+td {
+  padding: 5px;
+  vertical-align: top;
+}
+td.label p {
+  color: #c0c0c0;
 }
 input[type='text'] {
   padding: 3px;
