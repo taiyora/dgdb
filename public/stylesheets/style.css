@@ -134,7 +134,7 @@ input[type='text'] {
   color: #fff;
 }
 input[type='text']:hover {
-  border-bottom: 1px rgba(128,192,255,0.8) solid;
+  border-bottom: 1px rgba(192,128,255,0.8) solid;
 }
 input[type='checkbox'] {
   position: relative;
