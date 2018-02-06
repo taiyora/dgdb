@@ -6,7 +6,7 @@ try {
 	config = require('../config');
 }
 catch (e) {
-	console.error(e);
+	console.log('Config file couldn\'t be found; continuing without it...');
 	configLoaded = false;
 }
 
