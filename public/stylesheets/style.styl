@@ -82,12 +82,16 @@ p
 	font 11px Verdana
 	color white
 
-p.stylized
-	font 12px Graduate
-
 p.heading
 	font-style italic
 	color rgb(192,192,192)
+
+p.message
+	padding 5px
+	background rgba(64,128,64,.5)
+
+	font-weight bold
+	color rgb(128,255,128)
 
 p.error
 	padding 5px
@@ -95,6 +99,9 @@ p.error
 
 	font-weight bold
 	color rgb(255,128,128)
+
+.stylized
+	font 12px Graduate
 
 .subdued
 	color rgb(128,128,128)
@@ -116,6 +123,9 @@ a.menu-item
 a.menu-item.purple
 	color rgb(192,128,255)
 
+a.menu-item.gold
+	color rgb(255,192,128)
+
 div.main
 	margin-top 10px
 	margin-bottom 8px
@@ -132,12 +142,20 @@ div.menu-bar
 	top 100px
 	left 300px
 
+div.menu-bar-right
+	position absolute
+	top 100px
+	right 10px
+
 table
 	width 100%
 
 table.centered
 	margin 0 auto
 	max-width 1500px
+
+table.small
+	max-width 500px
 
 tr.list td
 	padding 0
@@ -170,7 +188,7 @@ td
 td.label p
 	color rgb(192,192,192)
 
-input[type='text'], textarea
+input[type='text'], input[type='password'], textarea
 	padding 3px
 	width 100%
 
@@ -188,7 +206,7 @@ textarea
 	background rgba(0,0,0,.3)
 	border-bottom 1px rgba(0,0,0,0) solid
 
-input[type='text']:hover, textarea:hover
+input[type='text']:hover, input[type='password']:hover, textarea:hover
 	border-bottom 1px rgba(192,128,255,.8) solid
 
 input[type='checkbox']

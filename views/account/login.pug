@@ -1,0 +1,34 @@
+extends ../layout
+
+block content
+	if message
+		p.message(align='center')= message
+
+	if error
+		p.error(align='center')= error
+
+	form(action='/account/login' method='post')
+		table.centered.small
+			tr
+				td
+					label(for='username') Username
+					input#username(
+						type='text'
+						name='username'
+						value=form.username
+						maxlength='20'
+						autocomplete='off' )
+
+			tr
+				td
+					label(for='password') Password
+					input#password(
+						type='password'
+						name='password'
+						value=form.password
+						maxlength='100'
+						autocomplete='off' )
+
+			tr
+				td(align='center')
+					input(type='submit' value='Login')

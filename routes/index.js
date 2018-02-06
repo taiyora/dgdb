@@ -1,4 +1,5 @@
 const config = require('../config');
+const bcrypt = require('bcrypt');
 
 const express = require('express');
 const router = express.Router();
@@ -32,6 +33,59 @@ else {
 pgPool.on('error', function(err, client) {
 	console.error('Idle client error: ', err.message, err.stack);
 });
+
+// ================================================================= Sessions
+const sessions = require('client-sessions');
+const keygen   = require('generate-key');
+
+router.use(sessions({
+	cookieName: 'session',
+	secret: keygen.generateKey(60),
+	duration: 1000 * 60 * 60 * 25, // One day
+	activeDuration: 1000 * 60 * 60 * 25,
+	httpOnly: true, // Prevents clients from using JavaScript to access cookies
+	secure: true })); // Ensures that cookies are only sent over HTTPS
+
+// res.session.user is the logged in user's username.
+// res.locals contains the user's full details
+router.use(function(req, res, next) {
+	if (req.session && req.session.user) {
+		const query = 'SELECT * FROM users WHERE username = $1';
+		const vars = [ req.session.user ];
+
+		pgPool.query(query, vars, function(err, res2) {
+			if (err) {
+				console.error(err);
+			}
+			else if (res2.rows.length) {
+				res.locals.user = res2.rows[0];
+				delete res.locals.user.pw_hash;
+				req.user = res.locals.user;
+			}
+
+			next();
+		});
+	}
+	else {
+		next();
+	}
+});
+
+/**
+ * Ensures that a user is logged in before progressing.
+ *
+ * @param {dict} req - req.
+ * @param {dict} res - res.
+ * @param {dict} next - next.
+ */
+function requireLogin(req, res, next) {
+	if (req.session.user) {
+		next();
+	}
+	else {
+		res.redirect('/account/login');
+	}
+}
 
 // ================================================================= Routing
 router.get('/', function(req, res, next) {
@@ -96,7 +150,7 @@ router.get('/game/view/:id', function(req, res, next) {
 });
 
 // ----------------------------------------------------------------- game/new
-router.get('/game/new', function(req, res, next) {
+router.get('/game/new', requireLogin, function(req, res, next) {
 	res.render('game/new', {
 		title: websiteName + ' // new entry',
 		form: {} });
@@ -106,7 +160,7 @@ router.get('/game/new', function(req, res, next) {
  * Saves a game entry to the database.
  *
  * @param {dict} form - Information about the game (from a form).
- * @param {function(bool)} callback - The callback function.
+ * @param {function(bool, int)} callback - The callback function.
  */
 function saveGameEntry(form, callback) {
 	const query = `INSERT INTO games (
@@ -213,7 +267,10 @@ router.post('/game/new', function(req, res, next) {
 					res.redirect('/game/view/' + gameId);
 				}
 				else {
-					error = 'Something went wrong; please try again';
+					res.render('game/new', {
+						title: websiteName + ' // new entry',
+						error: 'Something went wrong; please try again',
+						form: form });
 				}
 			});
 		}
@@ -222,6 +279,205 @@ router.post('/game/new', function(req, res, next) {
 	if (error) {
 		res.render('game/new', {
 			title: websiteName + ' // new entry',
+			error: error,
+			form: form });
+	}
+});
+
+// ----------------------------------------------------------------- account/
+router.get('/account/login', function(req, res, next) { //           login
+	if (req.session.user) {
+		res.redirect('/');
+	}
+	else {
+		res.render('account/login', {
+			title: websiteName + ' // login',
+			form: {} });
+	}
+});
+
+router.post('/account/login', function(req, res, next) {
+	const form = req.body;
+	let error = '';
+
+	if (!form.username || !form.password) {
+		error = 'A required field was left blank';
+	}
+	else if (form.username.length > 20 || form.password.length > 100) {
+		error = 'Bypassing the character limit is bad!';
+	}
+	else {
+		const query = 'SELECT * FROM users WHERE username = $1;';
+		const vars = [ form.username ];
+
+		pgPool.query(query, vars, function(err, res2) {
+			if (err) {
+				console.error(err);
+				error = 'Something went wrong; please try again';
+			}
+			else if (res2.rows.length <= 0) {
+				error = 'No user with that username exists';
+			}
+			else {
+				if (bcrypt.compareSync(form.password, res2.rows[0].pw_hash)) {
+					req.session.user = form.username;
+					res.redirect('/');
+				}
+				else {
+					error = 'Invalid credentials';
+				}
+			}
+
+			if (error) {
+				res.render('account/login', {
+					title: websiteName + ' // login',
+					error: error,
+					form: form });
+			}
+		});
+	}
+
+	if (error) {
+		res.render('account/login', {
+			title: websiteName + ' // login',
+			error: error,
+			form: form });
+	}
+});
+
+// ----------------------------------------------------------------- account/
+router.get('/account/logout', function(req, res, next) { //          logout
+	req.session.reset();
+	res.redirect('/');
+});
+
+// ----------------------------------------------------------------- account/
+router.get('/account/register', function(req, res, next) { //        register
+	if (req.session.user) {
+		res.redirect('/');
+	}
+	else {
+		res.render('account/register', {
+			title: websiteName + ' // register',
+			form: {} });
+	}
+});
+
+/**
+ * Ensures that an string contains only plaintext.
+ * Used to validate usernames.
+ *
+ * @param {string} text - The text.
+ * @return {bool} - true if the text is plaintext, false otherwise.
+ */
+function isPlainText(text) {
+	const regex = /^[a-zA-Z0-9]*$/;
+	return regex.test(text);
+}
+
+/**
+ * Ensures that an string contains only ASCII.
+ * Used to validate passwords.
+ *
+ * @param {string} text - The text.
+ * @return {bool} - true if the text is entirely ASCII, false otherwise.
+ */
+function isAscii(text) {
+	const regex = /^[\x20-\x7e]*$/;
+	return regex.test(text);
+}
+
+/**
+ * Checks whether the specified username already exists in the database.
+ *
+ * @param {string} username - The username.
+ * @param {function(bool)} callback - The callback function.
+ */
+function doesUsernameExist(username, callback) {
+	const query = 'SELECT * FROM users WHERE username = $1;';
+	const vars = [ username ];
+
+	pgPool.query(query, vars, function(err, res) {
+		if (err) {
+			console.error(err);
+			callback(true);
+		}
+		else {
+			callback(res.rows.length > 0);
+		}
+	});
+}
+
+/**
+ * Registers a new user in the database.
+ *
+ * @param {dict} user - The user's details.
+ * @param {dict} res - So that .render can be accessed.
+ */
+function registerUser(user, res) {
+	// Hash the password before saving it to the database
+	const salt = bcrypt.genSaltSync(10);
+	const hash = bcrypt.hashSync(user.password, salt);
+
+	const query = 'INSERT INTO users (username, pw_hash) VALUES ($1, $2);';
+	const vars = [
+		user.username,
+		hash ];
+
+	pgPool.query(query, vars, function(err, res2) {
+		if (err) {
+			console.error(err);
+
+			res.render('account/register', {
+				title: websiteName + ' // register',
+				error: 'Something went wrong; please try again',
+				form: user });
+		}
+		else {
+			res.render('account/login', {
+				title: websiteName + ' // login',
+				message: 'Account created! You may now login',
+				form: user });
+		}
+	});
+}
+
+router.post('/account/register', function(req, res, next) {
+	const form  = req.body;
+	let error = '';
+
+	if (!form.username || !form.password) {
+		error = 'A required field was left blank';
+	}
+	else if (form.username.length < 3 || form.username.length > 20) {
+		error = 'Username must be between 3 and 20 characters long (inclusive)';
+	}
+	else if (!isPlainText(form.username)) {
+		error = 'Username must use only plain text characters (a-z, A-Z, 0-9)';
+	}
+	else if (form.password.length < 10 || form.password.length > 100) {
+		error = 'Password must be between 10 and 100 characters long (inclusive)';
+	}
+	else if (!isAscii(form.password)) {
+		error = 'Password must use only ASCII characters';
+	}
+	else {
+		doesUsernameExist(form.username, function(exists) {
+			if (exists) {
+				res.render('account/register', {
+					title: websiteName + ' // register',
+					error: 'Username is taken',
+					form: form });
+			}
+			else {
+				registerUser(form, res);
+			}
+		});
+	}
+
+	if (error) {
+		res.render('account/register', {
+			title: websiteName + ' // register',
 			error: error,
 			form: form });
 	}

@@ -63,18 +63,24 @@ p {
   font: 11px Verdana;
   color: #fff;
 }
-p.stylized {
-  font: 12px Graduate;
-}
 p.heading {
   font-style: italic;
   color: #c0c0c0;
+}
+p.message {
+  padding: 5px;
+  background: rgba(64,128,64,0.5);
+  font-weight: bold;
+  color: #80ff80;
 }
 p.error {
   padding: 5px;
   background: rgba(128,64,64,0.5);
   font-weight: bold;
   color: #ff8080;
+}
+.stylized {
+  font: 12px Graduate;
 }
 .subdued {
   color: #808080;
@@ -96,6 +102,9 @@ a.menu-item {
 a.menu-item.purple {
   color: #c080ff;
 }
+a.menu-item.gold {
+  color: #ffc080;
+}
 div.main {
   margin-top: 10px;
   margin-bottom: 8px;
@@ -110,12 +119,20 @@ div.menu-bar {
   top: 100px;
   left: 300px;
 }
+div.menu-bar-right {
+  position: absolute;
+  top: 100px;
+  right: 10px;
+}
 table {
   width: 100%;
 }
 table.centered {
   margin: 0 auto;
   max-width: 1500px;
+}
+table.small {
+  max-width: 500px;
 }
 tr.list td {
   padding: 0;
@@ -147,6 +164,7 @@ td.label p {
   color: #c0c0c0;
 }
 input[type='text'],
+input[type='password'],
 textarea {
   padding: 3px;
   width: 100%;
@@ -163,6 +181,7 @@ textarea {
   border-bottom: 1px rgba(0,0,0,0) solid;
 }
 input[type='text']:hover,
+input[type='password']:hover,
 textarea:hover {
   border-bottom: 1px rgba(192,128,255,0.8) solid;
 }

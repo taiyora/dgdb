@@ -19,7 +19,20 @@ html
 			p.stylized
 				| <a class='menu-item' href='/'>home</a>
 				| <a class='menu-item' href='/game/list'>games</a>
-				| <a class='menu-item purple' href='/game/new'>new entry</a>
+
+				if user
+					span <a class='menu-item purple' href='/game/new'>new entry</a>
+
+		div.menu-bar-right
+			if user
+				p
+					| <span class='subdued'>!{user.username}</span> &nbsp;
+					| <span class='stylized'><a class='menu-item gold' href='/account/logout'>logout</a></span>
+
+			else
+				p.stylized
+					| <a class='menu-item gold' href='/account/login'>login</a>
+					| <a class='menu-item gold' href='/account/register'>register</a>
 
 		//- Some pages have more complex layouts that aren't entirely enclosed in a single div.main
 		if title == 'DGDB // game'
