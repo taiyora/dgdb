@@ -109,6 +109,7 @@ div.main {
   margin-top: 10px;
   margin-bottom: 8px;
   padding: 5px;
+  box-sizing: border-box;
   background: rgba(128,128,128,0.2);
   border: 1px rgba(128,128,128,0.8) outset;
   box-shadow: 0 20px 25px 5px rgba(0,0,0,0.2);

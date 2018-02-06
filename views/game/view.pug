@@ -2,7 +2,81 @@ extends ../layout
 
 block content
 	script.
+		const coloursRainbowThin =  [
+			'rgba(253,163,180,.2)',
+			'rgba(253,195,163,.2)',
+			'rgba(253,242,163,.2)',
+			'rgba(204,253,163,.2)',
+			'rgba(163,253,170,.2)',
+			'rgba(163,253,217,.2)',
+			'rgba(163,253,249,.2)',
+			'rgba(163,221,253,.2)',
+			'rgba(163,170,253,.2)',
+			'rgba(212,163,253,.2)' ];
+
+		const coloursRainbowThick = [
+			'rgba(253,163,180,.8)',
+			'rgba(253,195,163,.8)',
+			'rgba(253,242,163,.8)',
+			'rgba(204,253,163,.8)',
+			'rgba(163,253,170,.8)',
+			'rgba(163,253,217,.8)',
+			'rgba(163,253,249,.8)',
+			'rgba(163,221,253,.8)',
+			'rgba(163,170,253,.8)',
+			'rgba(212,163,253,.8)' ];
+
+		function renderRatingsChart() {
+			const ratings = [!{game.ratings}];
+			let ratingCounts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+			// Convert the list of ratings into an array of frequencies
+			for (let i = 0; i < ratings.length; i++) {
+				ratingCounts[Math.round(ratings[i]) - 1]++;
+			}
+
+			Chart.defaults.global.defaultFontFamily = 'Verdana';
+			Chart.defaults.global.defaultFontSize = 11;
+
+			let ctx = document.getElementById('ratings-chart').getContext('2d');
+			let chart = new Chart(ctx, {
+				type: 'bar',
+				data: {
+					labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+					datasets: [{
+						label: ' Ratings',
+						data: ratingCounts,
+						backgroundColor: coloursRainbowThin,
+						borderColor: coloursRainbowThick,
+						borderWidth: 1
+					}]
+				},
+				options: {
+					legend: {
+						display: false
+					},
+					scales: {
+						yAxes: [{
+							position: 'right',
+							ticks: {
+								callback: function(value) { if (value % 1 === 0) { return value; }}
+							}
+						}]
+					}
+				}
+			});
+		}
+
 		$(document).ready(function() {
+			renderRatingsChart();
+
+			// Set the text colour of the user's rating to a rainbow colour
+			$('#user-rating').css('color', coloursRainbowThick[Math.round($('#user-rating').val()) - 1]);
+
+			$('#user-rating').on('input', function() {
+				$('#user-rating').css('color', coloursRainbowThick[Math.round($('#user-rating').val()) - 1]);
+			});
+
 			// Update database when user changes their rating
 			$('#rating-form').submit(function(e) {
 				// Prevent the page from trying to change
@@ -90,7 +164,7 @@ block content
 									| !{game.title_english}
 
 		if game.ss_urls.length
-			div(style='float: right; width: 19.9%;')
+			div(style='float: right; width: 19.6%;')
 				div.main
 					each ss in game.ss_urls
 						a(href=ss) <img src=!{ss} width='100%'>
@@ -98,13 +172,20 @@ block content
 		div(style='float: left; width: 80%;')
 			h3.heading Ratings and Reviews
 
-			div.main
-					if user
+			div.main(style='float: left; width: 30%;')
+				if user
+					div(style='padding: 5px; padding-left: 15px; background: rgba(0,0,0,.3);')
 						form#rating-form
 							input(type='hidden' name='game_id' value=game.id)
 
 							p Your rating: &nbsp;
-								| <input type='number' name='user_rating' min='1' max='10' step='.1' value=!{game.user_rating}>
+								| <input id='user-rating' type='number' name='user_rating' min='1' max='10' step='.1' value=!{game.user_rating}>
 								| <span class='subdued'>/10</span> &nbsp;
 								| <input id='rating-submit' type='submit' class='small' value='Save'> &nbsp;
 								| <span id='rating-saved' class='gold' style='display: none;'>Saved!</span>
+
+				div(style='margin-top: 10px;')
+					canvas#ratings-chart
+
+			div.main(style='float: right; width: 69.5%;')
+				p No reviews found
