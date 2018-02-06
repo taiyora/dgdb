@@ -1,4 +1,12 @@
-const config = require('../config');
+// Try to load the config file; it's fine if it doesn't load (e.g. on Heroku)
+let config;
+try {
+	config = require('../config');
+}
+catch (e) {
+	console.error(e);
+}
+
 const bcrypt = require('bcrypt');
 
 const express = require('express');
