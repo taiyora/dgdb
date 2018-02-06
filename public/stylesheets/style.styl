@@ -120,10 +120,10 @@ a:hover
 a.menu-item
 	margin-right 15px
 
-a.menu-item.purple
+.purple
 	color rgb(192,128,255)
 
-a.menu-item.gold
+.gold
 	color rgb(255,192,128)
 
 div.main
@@ -188,7 +188,7 @@ td
 td.label p
 	color rgb(192,192,192)
 
-input[type='text'], input[type='password'], textarea
+input[type='text'], input[type='password'], input[type='number'], textarea
 	padding 3px
 	width 100%
 
@@ -199,6 +199,10 @@ input[type='text'], input[type='password'], textarea
 	font 11px Verdana
 	color white
 
+input[type='number']
+	width 40px
+	color rgb(255,192,128)
+
 textarea
 	max-width 500px
 	min-height 80px
@@ -206,7 +210,7 @@ textarea
 	background rgba(0,0,0,.3)
 	border-bottom 1px rgba(0,0,0,0) solid
 
-input[type='text']:hover, input[type='password']:hover, textarea:hover
+input[type='text']:hover, input[type='password']:hover, input[type='number']:hover, textarea:hover
 	border-bottom 1px rgba(192,128,255,.8) solid
 
 input[type='checkbox']
@@ -234,3 +238,17 @@ input[type='submit']:hover
 	border 1px rgba(192,128,255,.8) solid
 
 	box-shadow 0 0 50px 5px rgba(192,128,255,.1)
+
+input[type='submit']:disabled
+	color rgb(128,128,128)
+
+input[type='submit']:disabled:hover
+	background rgba(0,0,0,.3)
+	border 1px rgb(64,64,64) solid
+
+	box-shadow none
+	cursor default
+
+input[type='submit'].small
+	width 50px
+	height 25px

@@ -34,6 +34,26 @@ pgPool.on('error', function(err, client) {
 	console.error('Idle client error: ', err.message, err.stack);
 });
 
+// Create a necessary SQL function
+const query = `CREATE OR REPLACE FUNCTION
+upsert_ratings(uid integer, gid integer, new_rating real) RETURNS VOID AS $$
+	DECLARE
+	BEGIN
+		UPDATE ratings SET rating = new_rating
+			WHERE user_id = uid AND game_id = gid;
+		IF NOT FOUND THEN
+		INSERT INTO ratings (user_id, game_id, rating)
+			VALUES (uid, gid, new_rating);
+		END IF;
+	END;
+	$$ LANGUAGE 'plpgsql';`;
+
+pgPool.query(query, function(err, res) {
+	if (err) {
+		console.error(err);
+	}
+});
+
 // ================================================================= Sessions
 const sessions = require('client-sessions');
 const keygen   = require('generate-key');
@@ -118,12 +138,20 @@ router.get('/game/list', function(req, res, next) {
 
 // ----------------------------------------------------------------- game/view
 router.get('/game/view/:id', function(req, res, next) {
-	// Get all the information on the game, as well as its related screenshots
+	// Get all the information on the game, as well as its related screenshots.
+	// ss_urls: A list of screenshots associated with the game.
+	// ratings: A list of every user's rating for the game.
+	// user_rating: The rating that the logged in user gave the game.
 	const query = `SELECT *,
-		array(SELECT url FROM screenshots WHERE game_id = $1) AS ss_urls
+		array(SELECT url FROM screenshots WHERE game_id = $1) AS ss_urls,
+		array(SELECT rating FROM ratings WHERE game_id = $1) AS ratings,
+		(SELECT rating FROM ratings where game_id = $1 AND user_id = $2)
+			AS user_rating
 		FROM games WHERE id = $1;`;
 
-	const vars = [ req.params.id ];
+	const vars = [
+		req.params.id,
+		res.locals.user ? res.locals.user.id : 0 ];
 
 	pgPool.query(query, vars, function(err, res2) {
 		if (err) {
@@ -145,6 +173,34 @@ router.get('/game/view/:id', function(req, res, next) {
 			res.render('game/view', {
 				title: websiteName + ' // game',
 				game: res2.rows[0] });
+		}
+	});
+});
+
+router.post('/game/updateRating', requireLogin, function(req, res, next) {
+	const form = req.body;
+
+	// Make sure that the given rating has only one decimal place
+	let rating = Math.round(form.user_rating * 10) / 10;
+
+	// Ensure that rating is within bounds
+	if (rating < 1 || rating > 10) {
+		res.send('failure');
+		return;
+	}
+
+	const query = `SELECT upsert_ratings($1, $2, $3);`;
+	const vars = [
+		res.locals.user ? res.locals.user.id : 0,
+		form.game_id,
+		rating ];
+
+	pgPool.query(query, vars, function(err, res2) {
+		if (err) {
+			console.error(err);
+		}
+		else {
+			res.send('success');
 		}
 	});
 });

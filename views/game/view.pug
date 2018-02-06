@@ -1,6 +1,35 @@
 extends ../layout
 
 block content
+	script.
+		$(document).ready(function() {
+			// Update database when user changes their rating
+			$('#rating-form').submit(function(e) {
+				// Prevent the page from trying to change
+				e.preventDefault();
+				e.stopImmediatePropagation();
+
+				// Temporarily disable the submit button
+				$('#rating-submit').prop('disabled', true);
+
+				$.ajax({
+					type: 'POST',
+					url: '/game/updateRating',
+					data: $('#rating-form').serialize(),
+					success: function(res) {
+						if (res == 'success') {
+							$('#rating-saved').show();
+							$('#rating-saved').fadeOut(3000);
+						}
+
+						$('#rating-submit').prop('disabled', false);
+					}
+				});
+
+				return false; // Not sure if this is needed
+			});
+		});
+
 	if error
 		p.error(align='center')= error
 
@@ -70,4 +99,12 @@ block content
 			h3.heading Ratings and Reviews
 
 			div.main
-				p ...
+					if user
+						form#rating-form
+							input(type='hidden' name='game_id' value=game.id)
+
+							p Your rating: &nbsp;
+								| <input type='number' name='user_rating' min='1' max='10' step='.1' value=!{game.user_rating}>
+								| <span class='subdued'>/10</span> &nbsp;
+								| <input id='rating-submit' type='submit' class='small' value='Save'> &nbsp;
+								| <span id='rating-saved' class='gold' style='display: none;'>Saved!</span>
