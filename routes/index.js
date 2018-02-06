@@ -1,10 +1,13 @@
 // Try to load the config file; it's fine if it doesn't load (e.g. on Heroku)
 let config;
+let configLoaded = true;
+
 try {
 	config = require('../config');
 }
 catch (e) {
 	console.error(e);
+	configLoaded = false;
 }
 
 const bcrypt = require('bcrypt');
@@ -29,14 +32,17 @@ if (process.env.DATABASE_URL) {
 		user: auth[0],
 		password: auth[1],
 		database: params.pathname.split('/')[1],
-		ssl: config.db.ssl,
-		max: config.db.max,
-		idleTimoutMillis: config.db.idleTimoutMillis };
+		ssl: configLoaded ? config.db.ssl : true,
+		max: configLoaded ? config.db.max : 10,
+		idleTimoutMillis: configLoaded ? config.db.idleTimoutMillis : 30000 };
 
 	pgPool = new pg.Pool(pgConfig);
 }
-else {
+else if (configLoaded) {
 	pgPool = new pg.Pool(config.db);
+}
+else {
+	console.error('Can\'t connect to database: no config could be found!');
 }
 
 pgPool.on('error', function(err, client) {
