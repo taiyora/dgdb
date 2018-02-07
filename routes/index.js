@@ -132,12 +132,17 @@ router.get('/', function(req, res, next) {
 router.get('/game/list', function(req, res, next) {
 	const query = `
 		SELECT
-			games.*,
-			ROUND(AVG(ratings.rating)::numeric, 2) AS rating_average,
-			COUNT(ratings.rating) AS ratings
-		FROM games INNER JOIN ratings ON games.id = ratings.game_id
-		GROUP BY games.id
-		ORDER BY title_english ASC, title_romaji ASC, title_jp ASC;`;
+			*,
+
+			(SELECT ROUND(AVG(ratings.rating)::numeric, 2)
+				FROM ratings WHERE games.id = ratings.game_id)
+					AS rating_average,
+
+			(SELECT COUNT(ratings.rating) AS ratings
+				FROM ratings WHERE games.id = ratings.game_id)
+					AS ratings
+
+		FROM games ORDER BY title_english ASC, title_romaji ASC, title_jp ASC;`;
 
 	pgPool.query(query, function(err, res2) {
 		if (err) {
@@ -158,10 +163,10 @@ router.get('/game/list', function(req, res, next) {
 // ----------------------------------------------------------------- game/view
 router.get('/game/view/:id', function(req, res, next) {
 	// Get all the information on the game, as well as its related screenshots.
-	// ss_urls: A list of screenshots associated with the game.
-	// ratings: A list of every user's rating for the game.
+	// ss_urls:        A list of screenshots associated with the game.
+	// ratings:        A list of every user's rating for the game.
 	// rating_average: The average of every rating for the game.
-	// user_rating: The rating that the logged in user gave the game.
+	// user_rating:    The rating that the logged in user gave the game.
 	const query = `
 		SELECT
 			*,
