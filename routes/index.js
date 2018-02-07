@@ -184,9 +184,8 @@ router.get('/game/view/:id', function(req, res, next) {
 				game: {} });
 		}
 		else {
-			// TODO: Show game title in window title
 			res.render('game/view', {
-				title: websiteName + ' // game',
+				title: websiteName + ' // ' + res2.rows[0].title_romaji,
 				game: res2.rows[0] });
 		}
 	});
