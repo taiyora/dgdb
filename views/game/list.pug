@@ -26,16 +26,32 @@ block content
 	table
 		tr
 			td(width='30%')
-				p.heading English Title <span class='subdued'>(official localizations are marked with ☑)</span>
+				p.heading
+					| <a href="!{getSortUrl(url, 'title_english')}">
+					|     English Title<span class='icon-sortable'>⥮</span>
+					| </a> &nbsp;
+					| <span class='subdued'>(official localizations are marked with ☑)</span>
 
 			td
-				p.heading Japanese Title
+				p.heading
+					| <a href="!{getSortUrl(url, 'title_jp')}">
+					|     Japanese Title<span class='icon-sortable'>⥮</span>
+					| </a> &nbsp;
+					| <a href="!{getSortUrl(url, 'title_romaji')}">
+					|     (Romaji Title<span class='icon-sortable'>⥮</span>)
+					| </a>
 
 			td(width='50px')
-				p.heading Average
+				p.heading
+					| <a href="!{getSortUrl(url, 'rating_average')}">
+					|     Average<span class='icon-sortable'>⥮</span>
+					| </a>
 
 			td(width='50px')
-				p.heading Ratings
+				p.heading
+					| <a href="!{getSortUrl(url, 'ratings')}">
+					|     Ratings<span class='icon-sortable'>⥮</span>
+					| </a>
 
 		each game in games
 			tr.list

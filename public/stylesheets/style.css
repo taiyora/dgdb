@@ -67,6 +67,9 @@ p.heading {
   font-style: italic;
   color: #c0c0c0;
 }
+p.heading a {
+  color: #c0c0c0;
+}
 p.message {
   padding: 5px;
   background: rgba(64,128,64,0.5);
@@ -78,6 +81,10 @@ p.error {
   background: rgba(128,64,64,0.5);
   font-weight: bold;
   color: #ff8080;
+}
+span.icon-sortable {
+  font-size: 14px;
+  color: #80c0ff;
 }
 .stylized {
   font: 12px Graduate;

@@ -122,6 +122,54 @@ function requireLogin(req, res, next) {
 	}
 }
 
+// ================================================================= Other
+const queryString = require('query-string');
+
+router.use(function(req, res, next) {
+	// The game list page needs to know what URL query was given
+	res.locals.url = req.url;
+	next();
+});
+
+/**
+ * Used by the /game/list page.
+ * Given a URL, checks the query string to see if an ordering is specified.
+ * If so, it reverses it. This is so that a user can click a heading twice
+ * to reverse the way it orders its values.
+ * Also gives appropriate default orderings.
+ *
+ * @param {string} url - The current URL.
+ * @param {string} column - The column heading that is requesting a URL.
+ * @return {string} - The URL that the column heading should use.
+ */
+function getSortUrl(url, column) {
+	const query = queryString.parseUrl(url).query;
+	let ordering = 'asc';
+
+	// Check if the query string already specifies an ordering
+	if (query.o && query.s && query.s == column) {
+		if (query.o.toLowerCase() == 'asc') {
+			ordering = 'desc';
+		}
+	}
+	else {
+		/*
+		* If we're trying to sort by a numeric type and haven't specified an
+		* ordering yet, we should order by descending, so that e.g. the highest
+		* ratings come first. Otherwise it's text and should be ascending.
+		*/
+		const numericSortingOptions = [
+			'rating_average',
+			'ratings' ];
+
+		if (numericSortingOptions.indexOf(column) != -1) {
+			ordering = 'desc';
+		}
+	}
+
+	return '/game/list?s=' + column + '&o=' + ordering;
+}
+
 // ================================================================= Routing
 router.get('/', function(req, res, next) {
 	res.render('index', {
@@ -130,6 +178,45 @@ router.get('/', function(req, res, next) {
 
 // ----------------------------------------------------------------- game/list
 router.get('/game/list', function(req, res, next) {
+	let sortBy = 'title_jp';
+	let orderBy = 'ASC';
+
+	// Prevent SQL injection by checking against valid sorting options
+	const validSortingOptions = [
+		'title_english',
+		'title_jp',
+		'title_romaji',
+		'rating_average',
+		'ratings' ];
+
+	// Determine the sorting and ordering methods
+	if (req.query.s) { // s for sorting method
+		if (validSortingOptions.indexOf(req.query.s.toLowerCase()) != -1) {
+			sortBy = req.query.s;
+		}
+
+		if (req.query.o) { // o for ordering method
+			if (req.query.o.toLowerCase() == 'asc' ||
+				req.query.o.toLowerCase() == 'desc')
+			{
+				orderBy = req.query.o;
+			}
+		}
+	}
+
+	// If sorting by a text type, we need to convert NULL entries to empty strings
+	// so that they go to the bottom of the list
+	const stringSortingOptions = [
+		'title_english',
+		'title_jp',
+		'title_romaji' ];
+
+	if (stringSortingOptions.indexOf(sortBy) != -1) {
+		sortBy = 'NULLIF(' + sortBy + ', \'\')';
+	}
+
+	// We use NULLS LAST so that when sorting by average rating for example,
+	// all the entries with no ratings will come last
 	const query = `
 		SELECT
 			*,
@@ -142,7 +229,8 @@ router.get('/game/list', function(req, res, next) {
 				FROM ratings WHERE games.id = ratings.game_id)
 					AS ratings
 
-		FROM games ORDER BY title_english ASC, title_romaji ASC, title_jp ASC;`;
+		FROM games
+		ORDER BY ` + sortBy + ' ' + orderBy + ' NULLS LAST;';
 
 	pgPool.query(query, function(err, res2) {
 		if (err) {
@@ -150,12 +238,14 @@ router.get('/game/list', function(req, res, next) {
 
 			res.render('game/list', {
 				title: websiteName + ' // games',
-				error: 'Something went wrong; please try again' });
+				error: 'Something went wrong; please try again',
+				getSortUrl: getSortUrl });
 		}
 		else {
 			res.render('game/list', {
 				title: websiteName + ' // games',
-				games: res2.rows });
+				games: res2.rows,
+				getSortUrl: getSortUrl });
 		}
 	});
 });
@@ -320,9 +410,10 @@ router.post('/game/new', function(req, res, next) {
 	if (form.title_jp.length      > 100 ||
 		form.title_romaji.length  > 100 ||
 		form.title_english.length > 100 ||
-		form.title_other.length   > 100) {
-			error = 'Bypassing the character limit is bad!';
-		}
+		form.title_other.length   > 100)
+	{
+		error = 'Bypassing the character limit is bad!';
+	}
 
 	// Ensure that at least one title has been entered
 	else if (!form.title_jp && !form.title_romaji && !form.title_english) {
