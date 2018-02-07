@@ -130,10 +130,14 @@ router.get('/', function(req, res, next) {
 
 // ----------------------------------------------------------------- game/list
 router.get('/game/list', function(req, res, next) {
-	const query = `SELECT * FROM games ORDER BY
-		title_english ASC,
-		title_romaji ASC,
-		title_jp ASC;`;
+	const query = `
+		SELECT
+			games.*,
+			ROUND(AVG(ratings.rating)::numeric, 2) AS rating_average,
+			COUNT(ratings.rating) AS ratings
+		FROM games INNER JOIN ratings ON games.id = ratings.game_id
+		GROUP BY games.id
+		ORDER BY title_english ASC, title_romaji ASC, title_jp ASC;`;
 
 	pgPool.query(query, function(err, res2) {
 		if (err) {
@@ -156,12 +160,20 @@ router.get('/game/view/:id', function(req, res, next) {
 	// Get all the information on the game, as well as its related screenshots.
 	// ss_urls: A list of screenshots associated with the game.
 	// ratings: A list of every user's rating for the game.
+	// rating_average: The average of every rating for the game.
 	// user_rating: The rating that the logged in user gave the game.
-	const query = `SELECT *,
-		array(SELECT url FROM screenshots WHERE game_id = $1) AS ss_urls,
-		array(SELECT rating FROM ratings WHERE game_id = $1) AS ratings,
-		(SELECT rating FROM ratings where game_id = $1 AND user_id = $2)
-			AS user_rating
+	const query = `
+		SELECT
+			*,
+			array(SELECT url FROM screenshots WHERE game_id = $1)
+				AS ss_urls,
+			array(SELECT rating FROM ratings WHERE game_id = $1)
+				AS ratings,
+			(SELECT ROUND(AVG(rating)::numeric, 2) FROM ratings WHERE game_id = $1)
+				AS rating_average,
+			(SELECT rating FROM ratings where game_id = $1 AND user_id = $2)
+				AS user_rating
+		
 		FROM games WHERE id = $1;`;
 
 	const vars = [
@@ -233,13 +245,16 @@ router.get('/game/new', requireLogin, function(req, res, next) {
  * @param {function(bool, int)} callback - The callback function.
  */
 function saveGameEntry(form, callback) {
-	const query = `INSERT INTO games (
-		title_jp,
-		title_romaji,
-		title_english,
-		title_english_official,
-		title_other,
-		entry_created ) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id;`;
+	const query = `
+		INSERT INTO games (
+			title_jp,
+			title_romaji,
+			title_english,
+			title_english_official,
+			title_other,
+			entry_created )
+		VALUES ($1, $2, $3, $4, $5, $6)
+		RETURNING id;`;
 
 	const vars = [
 		form.title_jp,

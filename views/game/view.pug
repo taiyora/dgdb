@@ -26,6 +26,18 @@ block content
 			'rgba(163,170,253,.8)',
 			'rgba(212,163,253,.8)' ];
 
+		const coloursRainbowFull = [
+			'rgb(253,163,180)',
+			'rgb(253,195,163)',
+			'rgb(253,242,163)',
+			'rgb(204,253,163)',
+			'rgb(163,253,170)',
+			'rgb(163,253,217)',
+			'rgb(163,253,249)',
+			'rgb(163,221,253)',
+			'rgb(163,170,253)',
+			'rgb(212,163,253)' ];
+
 		function renderRatingsChart() {
 			const ratings = [!{game.ratings}];
 			let ratingCounts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -70,12 +82,13 @@ block content
 		$(document).ready(function() {
 			renderRatingsChart();
 
-			// Set the text colour of the user's rating to a rainbow colour
-			$('#user-rating').css('color', coloursRainbowThick[Math.round($('#user-rating').val()) - 1]);
-
+			// Set the text colour of the user's rating and the average rating to a rainbow colour
+			$('#user-rating').css('color', coloursRainbowFull[Math.round($('#user-rating').val()) - 1]);
 			$('#user-rating').on('input', function() {
-				$('#user-rating').css('color', coloursRainbowThick[Math.round($('#user-rating').val()) - 1]);
+				$('#user-rating').css('color', coloursRainbowFull[Math.round($('#user-rating').val()) - 1]);
 			});
+
+			$('#average-rating').css('color', coloursRainbowFull[Math.round($('#average-rating').text()) - 1]);
 
 			// Update database when user changes their rating
 			$('#rating-form').submit(function(e) {
@@ -183,6 +196,19 @@ block content
 								| <span class='subdued'>/10</span> &nbsp;
 								| <input id='rating-submit' type='submit' class='small' value='Save'> &nbsp;
 								| <span id='rating-saved' class='gold' style='display: none;'>Saved!</span>
+
+				table
+					tr.list
+						td.label(width='52%')
+							p Average rating
+						td
+							p#average-rating= game.rating_average
+
+					tr.list
+						td.label
+							p Number of ratings
+						td
+							p= game.ratings.length
 
 				div(style='margin-top: 10px;')
 					canvas#ratings-chart

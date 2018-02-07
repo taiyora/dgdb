@@ -1,6 +1,25 @@
 extends ../layout
 
 block content
+	script.
+		const coloursRainbowFull = [
+			'rgb(253,163,180)',
+			'rgb(253,195,163)',
+			'rgb(253,242,163)',
+			'rgb(204,253,163)',
+			'rgb(163,253,170)',
+			'rgb(163,253,217)',
+			'rgb(163,253,249)',
+			'rgb(163,221,253)',
+			'rgb(163,170,253)',
+			'rgb(212,163,253)' ];
+
+		$(document).ready(function() {
+			$('.average-rating').each(function(i, obj) {
+				$(this).css('color', coloursRainbowFull[Math.round($(this).text()) - 1]);
+			});
+		});
+
 	if error
 		p.error(align='center')= error
 
@@ -11,6 +30,12 @@ block content
 
 			td
 				p.heading Japanese Title
+
+			td(width='50px')
+				p.heading Average
+
+			td(width='50px')
+				p.heading Ratings
 
 		each game in games
 			tr.list
@@ -25,3 +50,9 @@ block content
 						p <a href='/game/view/!{game.id}'>!{game.title_jp} <span class='subdued'>(!{game.title_romaji})</span></a>
 					else
 						p <a href='/game/view/!{game.id}'>!{game.title_jp}</a>
+
+				td
+					p.average-rating= game.rating_average
+
+				td
+					p= game.ratings
