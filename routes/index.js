@@ -180,7 +180,7 @@ function getSortUrl(url, column) {
 		* ratings come first. Otherwise it's text and should be ascending.
 		*/
 		const numericSortingOptions = [
-			'rating_average',
+//			'rating_average', // Since the default sort is this DESC, exclude it
 			'ratings' ];
 
 		if (numericSortingOptions.indexOf(column) != -1) {
@@ -199,8 +199,8 @@ router.get('/', function(req, res, next) {
 
 // ----------------------------------------------------------------- game/list
 router.get('/game/list', function(req, res, next) {
-	let sortBy = 'title_jp';
-	let orderBy = 'ASC';
+	let sortBy = 'rating_average';
+	let orderBy = 'DESC';
 
 	// Prevent SQL injection by checking against valid sorting options
 	const validSortingOptions = [
