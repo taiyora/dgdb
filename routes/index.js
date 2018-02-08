@@ -127,6 +127,7 @@ function requireLogin(req, res, next) {
 		next();
 	}
 	else {
+		req.session.returnTo = req.path; // Remember where user was trying to go
 		res.redirect('/account/login');
 	}
 }
@@ -689,7 +690,7 @@ router.post('/account/login', function(req, res, next) {
 			else {
 				if (bcrypt.compareSync(form.password, res2.rows[0].pw_hash)) {
 					req.session.user = form.username;
-					res.redirect('/');
+					res.redirect(req.session.returnTo ? req.session.returnTo : '/');
 				}
 				else {
 					error = 'Invalid credentials';
