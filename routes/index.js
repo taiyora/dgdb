@@ -80,11 +80,13 @@ pgPool.query(query, function(err, res) {
 const sessions = require('client-sessions');
 const keygen   = require('generate-key');
 
+const oneWeek = 1000 * 60 * 60 * 24 * 7; // In milliseconds
+
 router.use(sessions({
 	cookieName: 'session',
 	secret: keygen.generateKey(60),
-	duration: 1000 * 60 * 60 * 25, // One day
-	activeDuration: 1000 * 60 * 60 * 25,
+	duration: oneWeek,
+	activeDuration: oneWeek,
 	httpOnly: true, // Prevents clients from using JavaScript to access cookies
 	secure: true })); // Ensures that cookies are only sent over HTTPS
 
