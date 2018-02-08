@@ -223,12 +223,12 @@ block content
 				table
 					each rating in game.ratings_recent
 						tr.list
-							td.label
-								p= rating.f1
-							td
+							td.label(width='36%')
+								p.timestamp= rating.f3
+							td(width='16%')
 								p.rating= rating.f2
 							td
-								p.timestamp= rating.f3
+								p= rating.f1
 
 			div.main(style='float: right; width: 69.5%;')
 				p No reviews found
