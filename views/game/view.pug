@@ -175,6 +175,34 @@ block content
 										td
 											p= game.title_other
 
+								if game.website
+									tr.list
+										td.label
+											p Website
+										td
+											p <a class='normal' href=!{game.website}>Link</a>
+
+								if game.vndb
+									tr.list
+										td.label
+											p VNDB page
+										td
+											p <a class='normal' href=!{game.vndb}>Link</a>
+
+								if game.download
+									tr.list
+										td.label
+											p Download link
+										td
+											p <a class='normal' href=!{game.download}>Link</a>
+
+								if game.download_alt
+									tr.list
+										td.label
+											p Alternate download link
+										td
+											p <a class='normal' href=!{game.download_alt}>Link</a>
+
 						td
 							if game.title_jp
 								h2.fancy= game.title_jp
@@ -187,6 +215,10 @@ block content
 								h3.fancy(style='position: relative; bottom: 8px;')
 									| !{game.title_english}
 
+							if game.description
+								div.darkened
+									pre= game.description
+
 		div(style='float: right; width: 19.6%;')
 			div.main
 				each ss in game.ss_urls
@@ -197,7 +229,7 @@ block content
 
 			div.main(style='float: left; width: 30%;')
 				if user
-					div(style='padding: 5px; padding-left: 15px; background: rgba(0,0,0,.3);')
+					div.darkened
 						form#rating-form
 							input(type='hidden' name='game_id' value=game.id)
 
@@ -235,3 +267,13 @@ block content
 
 			div.main(style='float: right; width: 69.5%;')
 				p No reviews found
+
+		if game.last_updated
+			p.subdued(align='right')
+				| Last edited: !{game.last_updated}
+				| (<span class='timestamp'>!{game.last_updated}</span>)
+
+		if game.entry_created
+			p.subdued(align='right')
+				| Entry created: !{game.entry_created}
+				| (<span class='timestamp'>!{game.entry_created}</span>)

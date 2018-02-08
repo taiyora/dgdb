@@ -4,65 +4,105 @@ block content
 	if error
 		p.error(align='center')= error
 
-	form(action='/game/edit/' + game.id method='post')
-		input(type='hidden' name='gameId' value=game.id)
+	else
+		form(action='/game/edit/' + gameId method='post')
+			input(type='hidden' name='gameId' value=gameId)
 
-		table.centered
-			tr
-				td(width='33.3%')
-					label(for='title-jp') Title (Japanese)
-					input#title-jp(
-						type='text'
-						name='title_jp'
-						placeholder='私は今日ここで死にます。'
-						value=game.title_jp
-						maxlength='100'
-						autocomplete='off' )
+			table.centered
+				tr
+					td(width='33.3%' style='height: 40px;')
+						label(for='title-jp') Title (Japanese) <span class='subdued'>(at least one title is required)</span>
+						input#title-jp(
+							type='text'
+							name='title_jp'
+							value=game.title_jp
+							maxlength='100'
+							autocomplete='off' )
 
-				td(width='33.3%')
-					label(for='title-romaji') Title (Romaji)
-					input#title-romaji(
-						type='text'
-						name='title_romaji'
-						placeholder='Watashi wa Kyou Koko de Shinimasu.'
-						value=game.title_romaji
-						maxlength='100'
-						autocomplete='off' )
+					td(width='33.4%')
+						label(for='title-romaji') Title (Romaji)
+						input#title-romaji(
+							type='text'
+							name='title_romaji'
+							value=game.title_romaji
+							maxlength='100'
+							autocomplete='off' )
 
-				td(rowspan='4')
-					label(for='screenshots') Add screenshots <span class='subdued'>(one URL per line)</span>
-					br
-					textarea#screenshots(name='screenshots')= game.screenshots
-					p.subdued (existing screenshots will remain; just enter new ones here)
+					td(rowspan='2')
+						label(for='description') Description
+						br
+						textarea#description(name='description' maxlength='3000')= game.description
 
-			tr
-				td
-					label(for='title-english') Title (English translated)
-					input#title-english(
-						type='text'
-						name='title_english'
-						placeholder='This is where I die today.'
-						value=game.title_english
-						maxlength='100'
-						autocomplete='off' )
+				tr
+					td
+						label(for='title-english') Title (English translated)
+						input#title-english(
+							type='text'
+							name='title_english'
+							value=game.title_english
+							maxlength='100'
+							autocomplete='off' )
 
-					if game.title_english_official
-						input#title-english-official(type='checkbox' name='title_english_official' checked)
-					else
-						input#title-english-official(type='checkbox' name='title_english_official')
+						if game.title_english_official
+							input#title-english-official(type='checkbox' name='title_english_official' checked)
+						else
+							input#title-english-official(type='checkbox' name='title_english_official')
 
-					label(for='title-english-official' style='color: rgb(192,192,192);') This title is an official localization
+						label(for='title-english-official' style='color: rgb(192,192,192);') This title is an official localization
 
-				td
-					label(for='title-other') Abbreviations (comma-separated)
-					input#title-other(
-						type='text'
-						name='title_other'
-						placeholder='KyouKoko'
-						value=game.title_other
-						maxlength='100'
-						autocomplete='off')
+					td
+						label(for='title-other') Also known as (comma-separated)
+						input#title-other(
+							type='text'
+							name='title_other'
+							value=game.title_other
+							maxlength='100'
+							autocomplete='off')
 
-			tr
-				td(colspan='4' align='center')
-					input(type='submit' value='Submit')
+				tr
+					td(style='height: 40px;')
+						label(for='website') Website
+						input#website(
+							type='text'
+							name='website'
+							value=game.website
+							maxlength='100'
+							autocomplete='off' )
+
+					td
+						label(for='vndb') VNDB page
+						input#download(
+							type='text'
+							name='vndb'
+							value=game.vndb
+							maxlength='25'
+							autocomplete='off')
+
+					td(rowspan='2')
+						label(for='screenshots') Add screenshots <span class='subdued'>(one URL per line)</span>
+						br
+						textarea#screenshots(name='screenshots' maxlength='1000')
+						p.subdued (existing screenshots will remain; just enter new ones here)
+
+				tr
+					td
+						label(for='download') Direct download link <span class='subdued'>(free games only)</span>
+						input#download(
+							type='text'
+							name='download'
+							value=game.download
+							maxlength='200'
+							autocomplete='off')
+
+					td
+						label(for='download_alt') Alternate download link
+						input#download(
+							type='text'
+							name='download_alt'
+							value=game.download_alt
+							maxlength='200'
+							autocomplete='off')
+
+				tr
+					td(colspan='4' align='center')
+						input(type='submit' value='Submit')

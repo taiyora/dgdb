@@ -58,7 +58,8 @@ h3.heading {
 .fancy {
   font-family: 'Indie Flower', AiharaHudemojiKaisho;
 }
-p {
+p,
+pre {
   margin: 0;
   font: 11px Verdana;
   color: #fff;
@@ -81,6 +82,10 @@ p.error {
   background: rgba(128,64,64,0.5);
   font-weight: bold;
   color: #ff8080;
+}
+pre {
+  white-space: pre-wrap;
+  word-wrap: break-all;
 }
 span.icon-sortable {
   font-size: 14px;
@@ -136,6 +141,11 @@ div.menu-bar-right {
   top: 100px;
   right: 10px;
 }
+div.darkened {
+  padding: 10px;
+  background: rgba(0,0,0,0.3);
+  border: 1px rgba(128,128,128,0.5) dotted;
+}
 div.edit-page-link {
   padding: 0 10px 5px 10px;
   position: fixed;
@@ -175,6 +185,12 @@ tr.list td a:hover {
   border-bottom: 1px #808080 dotted;
   text-decoration: none;
 }
+tr.list td a.normal {
+  color: #80c0ff;
+}
+tr.list td a.normal:hover {
+  border-bottom: 1px #80c0ff solid;
+}
 td {
   padding: 5px;
   vertical-align: top;
@@ -188,7 +204,7 @@ input[type='number'],
 textarea {
   padding: 3px;
   width: 100%;
-  background: none;
+  background: rgba(0,0,0,0.1);
   border: none;
   border-bottom: 1px rgba(64,64,64,0.8) solid;
   font: 11px Verdana;
@@ -199,7 +215,7 @@ input[type='number'] {
   color: #ffc080;
 }
 textarea {
-  max-width: 500px;
+  max-width: 480px;
   min-height: 80px;
   background: rgba(0,0,0,0.3);
   border-bottom: 1px rgba(0,0,0,0) solid;

@@ -7,30 +7,28 @@ block content
 	form(action='/game/new' method='post')
 		table.centered
 			tr
-				td(width='33.3%')
-					label(for='title-jp') Title (Japanese)
+				td(width='33.3%' style='height: 40px;')
+					label(for='title-jp') Title (Japanese) <span class='subdued'>(at least one title is required)</span>
 					input#title-jp(
 						type='text'
 						name='title_jp'
-						placeholder='私は今日ここで死にます。'
 						value=form.title_jp
 						maxlength='100'
 						autocomplete='off' )
 
-				td(width='33.3%')
+				td(width='33.4%')
 					label(for='title-romaji') Title (Romaji)
 					input#title-romaji(
 						type='text'
 						name='title_romaji'
-						placeholder='Watashi wa Kyou Koko de Shinimasu.'
 						value=form.title_romaji
 						maxlength='100'
 						autocomplete='off' )
 
-				td(rowspan='4')
-					label(for='screenshots') Screenshots <span class='subdued'>(one URL per line)</span>
+				td(rowspan='2')
+					label(for='description') Description
 					br
-					textarea#screenshots(name='screenshots')= form.screenshots
+					textarea#description(name='description' maxlength='3000')= form.description
 
 			tr
 				td
@@ -38,7 +36,6 @@ block content
 					input#title-english(
 						type='text'
 						name='title_english'
-						placeholder='This is where I die today.'
 						value=form.title_english
 						maxlength='100'
 						autocomplete='off' )
@@ -51,13 +48,55 @@ block content
 					label(for='title-english-official' style='color: rgb(192,192,192);') This title is an official localization
 
 				td
-					label(for='title-other') Abbreviations (comma-separated)
+					label(for='title-other') Also known as (comma-separated)
 					input#title-other(
 						type='text'
 						name='title_other'
-						placeholder='KyouKoko'
 						value=form.title_other
 						maxlength='100'
+						autocomplete='off')
+
+			tr
+				td(style='height: 40px;')
+					label(for='website') Website
+					input#website(
+						type='text'
+						name='website'
+						value=form.website
+						maxlength='100'
+						autocomplete='off' )
+
+				td
+					label(for='vndb') VNDB page
+					input#download(
+						type='text'
+						name='vndb'
+						value=form.vndb
+						maxlength='25'
+						autocomplete='off')
+
+				td(rowspan='2')
+					label(for='screenshots') Screenshots <span class='subdued'>(one URL per line)</span>
+					br
+					textarea#screenshots(name='screenshots' maxlength='1000')
+
+			tr
+				td
+					label(for='download') Direct download link <span class='subdued'>(free games only)</span>
+					input#download(
+						type='text'
+						name='download'
+						value=form.download
+						maxlength='200'
+						autocomplete='off')
+
+				td
+					label(for='download_alt') Alternate download link
+					input#download(
+						type='text'
+						name='download_alt'
+						value=form.download_alt
+						maxlength='200'
 						autocomplete='off')
 
 			tr

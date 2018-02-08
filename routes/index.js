@@ -397,7 +397,12 @@ function saveGameEntry(form, gameId, callback) {
 				title_english = $4,
 				title_english_official = $5,
 				title_other = $6,
-				last_updated = $7
+				description = $7,
+				website = $8,
+				vndb = $9,
+				download = $10,
+				download_alt = $11,
+				last_updated = $12
 			WHERE id = $1
 			RETURNING id;`;
 
@@ -408,6 +413,11 @@ function saveGameEntry(form, gameId, callback) {
 			form.title_english,
 			form.title_english_official ? 'TRUE' : 'FALSE',
 			form.title_other,
+			form.description,
+			form.website,
+			form.vndb,
+			form.download,
+			form.download_alt,
 			getTimestamp() ];
 	}
 	else {
@@ -419,8 +429,13 @@ function saveGameEntry(form, gameId, callback) {
 				title_english,
 				title_english_official,
 				title_other,
+				description,
+				website,
+				vndb,
+				download,
+				download_alt,
 				entry_created )
-			VALUES ($1, $2, $3, $4, $5, $6)
+			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
 			RETURNING id;`;
 
 		vars = [
@@ -429,6 +444,11 @@ function saveGameEntry(form, gameId, callback) {
 			form.title_english,
 			form.title_english_official ? 'TRUE' : 'FALSE',
 			form.title_other,
+			form.description,
+			form.website,
+			form.vndb,
+			form.download,
+			form.download_alt,
 			getTimestamp() ];
 	}
 
@@ -484,10 +504,16 @@ router.post('/game/new', function(req, res, next) {
 	let error = '';
 
 	// Ensure that the user hasn't bypassed the character limits
-	if (form.title_jp.length      > 100 ||
-		form.title_romaji.length  > 100 ||
-		form.title_english.length > 100 ||
-		form.title_other.length   > 100)
+	if (form.title_jp.length      > 100  ||
+		form.title_romaji.length  > 100  ||
+		form.title_english.length > 100  ||
+		form.title_other.length   > 100  ||
+		form.website.length       > 100  ||
+		form.vndb.length          > 25   ||
+		form.download.length      > 200  ||
+		form.download_alt.length  > 200  ||
+		form.description.length   > 3100 || // textarea maxlength is wrong?
+		form.screenshots.length   > 1100)   // ^
 	{
 		error = 'Bypassing the character limit is bad!';
 	}
@@ -575,7 +601,8 @@ router.get('/game/edit/:id', requireLogin, function(req, res, next) {
 
 			res.render('game/edit', {
 				title: websiteName + ' // edit: ' + windowTitle,
-				game: res2.rows[0] });
+				game: res2.rows[0],
+				gameId: req.params.id });
 		}
 	});
 });
@@ -592,10 +619,16 @@ router.post('/game/edit/:id', function(req, res, next) {
 				form.title_english;
 
 	// Ensure that the user hasn't bypassed the character limits
-	if (form.title_jp.length      > 100 ||
-		form.title_romaji.length  > 100 ||
-		form.title_english.length > 100 ||
-		form.title_other.length   > 100)
+	if (form.title_jp.length      > 100  ||
+		form.title_romaji.length  > 100  ||
+		form.title_english.length > 100  ||
+		form.title_other.length   > 100  ||
+		form.website.length       > 100  ||
+		form.vndb.length          > 25   ||
+		form.download.length      > 200  ||
+		form.download_alt.length  > 200  ||
+		form.description.length   > 3100 || // textarea maxlength is wrong?
+		form.screenshots.length   > 1100)   // ^
 	{
 		error = 'Bypassing the character limit is bad!';
 	}
@@ -639,7 +672,8 @@ router.post('/game/edit/:id', function(req, res, next) {
 					res.render('game/edit', {
 						title: websiteName + ' // edit: ' + windowTitle,
 						error: 'Something went wrong; please try again',
-						game: form });
+						game: form,
+						gameId: form.gameId });
 				}
 			});
 		}
@@ -649,7 +683,8 @@ router.post('/game/edit/:id', function(req, res, next) {
 		res.render('game/edit', {
 			title: websiteName + ' // edit: ' + windowTitle,
 			error: error,
-			game: form });
+			game: form,
+			gameId: form.gameId });
 	}
 });
 
