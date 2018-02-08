@@ -49,7 +49,9 @@ pgPool.on('error', function(err, client) {
 	console.error('Idle client error: ', err.message, err.stack);
 });
 
-// Create a necessary SQL function
+// Create a necessary SQL function.
+// TODO: Users may hit the "Save" button often to make their rating show up at
+//       top of the list. This should be prevented
 const query = `
 	CREATE OR REPLACE FUNCTION upsert_ratings(
 		uid integer,
@@ -272,19 +274,31 @@ router.get('/game/view/:id', function(req, res, next) {
 	// ss_urls:        A list of screenshots associated with the game.
 	// ratings:        A list of every user's rating for the game.
 	// rating_average: The average of every rating for the game.
+	// ratings_recent: The 10 most recent ratings, with name of user who gave it.
 	// user_rating:    The rating that the logged in user gave the game.
 	const query = `
 		SELECT
 			*,
+
 			array(SELECT url FROM screenshots WHERE game_id = $1)
 				AS ss_urls,
+
 			array(SELECT rating FROM ratings WHERE game_id = $1)
 				AS ratings,
+
 			(SELECT ROUND(AVG(rating)::numeric, 2) FROM ratings WHERE game_id = $1)
 				AS rating_average,
-			(SELECT rating FROM ratings where game_id = $1 AND user_id = $2)
+
+			array_to_json(array(
+				SELECT (users.username, ratings.rating, ratings.time_stamp) FROM ratings
+				INNER JOIN users ON users.id = ratings.user_id
+				WHERE game_id = $1
+				ORDER BY time_stamp DESC LIMIT 10))
+					AS ratings_recent,
+
+			(SELECT rating FROM ratings WHERE game_id = $1 AND user_id = $2)
 				AS user_rating
-		
+
 		FROM games WHERE id = $1;`;
 
 	const vars = [

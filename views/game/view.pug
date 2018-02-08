@@ -82,13 +82,20 @@ block content
 		$(document).ready(function() {
 			renderRatingsChart();
 
-			// Set the text colour of the user's rating and the average rating to a rainbow colour
+			// Set the text colour of all rating values to a rainbow colour
+			$('.rating').each(function(i, obj) {
+				$(this).css('color', coloursRainbowFull[Math.round($(this).text()) - 1]);
+			});
+
 			$('#user-rating').css('color', coloursRainbowFull[Math.round($('#user-rating').val()) - 1]);
 			$('#user-rating').on('input', function() {
 				$('#user-rating').css('color', coloursRainbowFull[Math.round($('#user-rating').val()) - 1]);
 			});
 
-			$('#average-rating').css('color', coloursRainbowFull[Math.round($('#average-rating').text()) - 1]);
+			// Convert absolute timestamps to "... ago" format
+			$('.timestamp').each(function(i, obj) {
+				this.innerHTML = moment(this.innerHTML).fromNow();
+			});
 
 			// Update database when user changes their rating
 			$('#rating-form').submit(function(e) {
@@ -118,7 +125,8 @@ block content
 		});
 
 	if error
-		p.error(align='center')= error
+		div.main
+			p.error(align='center')= error
 
 	else
 		div(style='float: left; width: 80%;')
@@ -201,7 +209,7 @@ block content
 						td.label(width='52%')
 							p Average rating
 						td
-							p#average-rating= game.rating_average
+							p.rating= game.rating_average
 
 					tr.list
 						td.label
@@ -209,8 +217,18 @@ block content
 						td
 							p= game.ratings.length
 
-				div(style='margin-top: 10px;')
+				div(style='margin: 10px 0 10px 0;')
 					canvas#ratings-chart
+
+				table
+					each rating in game.ratings_recent
+						tr.list
+							td.label
+								p= rating.f1
+							td
+								p.rating= rating.f2
+							td
+								p.timestamp= rating.f3
 
 			div.main(style='float: right; width: 69.5%;')
 				p No reviews found
