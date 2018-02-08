@@ -50,18 +50,23 @@ pgPool.on('error', function(err, client) {
 });
 
 // Create a necessary SQL function
-const query = `CREATE OR REPLACE FUNCTION
-upsert_ratings(uid integer, gid integer, new_rating real) RETURNS VOID AS $$
-	DECLARE
-	BEGIN
-		UPDATE ratings SET rating = new_rating
-			WHERE user_id = uid AND game_id = gid;
-		IF NOT FOUND THEN
-		INSERT INTO ratings (user_id, game_id, rating)
-			VALUES (uid, gid, new_rating);
-		END IF;
-	END;
-	$$ LANGUAGE 'plpgsql';`;
+const query = `
+	CREATE OR REPLACE FUNCTION upsert_ratings(
+		uid integer,
+		gid integer,
+		new_rating real,
+		new_time text )
+	RETURNS VOID AS $$
+		DECLARE
+		BEGIN
+			UPDATE ratings SET rating = new_rating, time_stamp = new_time
+				WHERE user_id = uid AND game_id = gid;
+			IF NOT FOUND THEN
+			INSERT INTO ratings (user_id, game_id, rating, time_stamp)
+				VALUES (uid, gid, new_rating, new_time);
+			END IF;
+		END;
+		$$ LANGUAGE 'plpgsql';`;
 
 pgPool.query(query, function(err, res) {
 	if (err) {
@@ -120,6 +125,17 @@ function requireLogin(req, res, next) {
 	else {
 		res.redirect('/account/login');
 	}
+}
+
+/**
+ * We store timestamps in the database as ISO strings, because this is the
+ * easiest way to keep them in UTC time.
+ * This function simply gets the current data and time as a string.
+ *
+ * @return {string} - The current datetime as an ISO string.
+ */
+function getTimestamp() {
+	return new Date(new Date().getTime()).toISOString();
 }
 
 // ================================================================= Other
@@ -317,11 +333,12 @@ router.post('/game/updateRating', requireLogin, function(req, res, next) {
 		return;
 	}
 
-	const query = `SELECT upsert_ratings($1, $2, $3);`;
+	const query = `SELECT upsert_ratings($1, $2, $3, $4);`;
 	const vars = [
 		res.locals.user ? res.locals.user.id : 0,
 		form.game_id,
-		rating ];
+		rating,
+		getTimestamp() ];
 
 	pgPool.query(query, vars, function(err, res2) {
 		if (err) {
@@ -364,7 +381,7 @@ function saveGameEntry(form, callback) {
 		form.title_english,
 		form.title_english_official ? 'TRUE' : 'FALSE',
 		form.title_other,
-		new Date(new Date().getTime()).toISOString() ];
+		getTimestamp() ];
 
 	pgPool.query(query, vars, function(err, res) {
 		if (err) {
@@ -385,17 +402,19 @@ function saveGameEntry(form, callback) {
  */
 function saveScreenshots(screenshots, gameId) {
 	// Form the query string
-	let query = 'INSERT INTO screenshots (url, game_id) VALUES';
-	let vars = [ gameId ];
-	let n = 1;
+	let query = 'INSERT INTO screenshots (url, game_id, time_stamp) VALUES';
+	let vars = [
+		gameId,
+		getTimestamp() ];
 
+	let n = 2;
 	screenshots.forEach(function(ss) {
 		n++;
-		if (n > 2) {
+		if (n > 3) {
 			query += ',';
 		}
 
-		query += ' ($' + n + ', $1)';
+		query += ' ($' + n + ', $1, $2)';
 		vars.push(ss);
 	});
 
@@ -607,10 +626,17 @@ function registerUser(user, res) {
 	const salt = bcrypt.genSaltSync(10);
 	const hash = bcrypt.hashSync(user.password, salt);
 
-	const query = 'INSERT INTO users (username, pw_hash) VALUES ($1, $2);';
+	const query = `
+		INSERT INTO users (
+			username,
+			pw_hash,
+			created)
+		VALUES ($1, $2, $3);`;
+
 	const vars = [
 		user.username,
-		hash ];
+		hash,
+		getTimestamp() ];
 
 	pgPool.query(query, vars, function(err, res2) {
 		if (err) {
