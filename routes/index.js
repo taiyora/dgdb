@@ -291,7 +291,7 @@ router.get('/game/view/:id', function(req, res, next) {
 
 			array_to_json(array(
 				SELECT (users.username, ratings.rating, ratings.time_stamp) FROM ratings
-				INNER JOIN users ON users.id = ratings.user_id
+				LEFT JOIN users ON users.id = ratings.user_id
 				WHERE game_id = $1
 				ORDER BY time_stamp DESC LIMIT 10))
 					AS ratings_recent,
