@@ -244,6 +244,19 @@ input[type='submit'].small {
   width: 50px;
   height: 25px;
 }
+::-webkit-scrollbar {
+  width: 15px;
+}
+::-webkit-scrollbar-track {
+  background: #000;
+  border-left: 1px rgba(128,192,255,0.8) dotted;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(128,192,255,0.1);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(128,192,255,0.2);
+}
 @-moz-keyframes bg-scroll-anim {
   100% {
     background-position: -3000px 0;
