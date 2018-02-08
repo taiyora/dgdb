@@ -311,12 +311,14 @@ router.get('/game/view/:id', function(req, res, next) {
 
 			res.render('game/view', {
 				title: websiteName + ' // game',
+				page: 'view', // Required for correct formatting
 				error: 'Something went wrong; please try again',
 				game: {} });
 		}
 		else if (!res2.rows.length) {
 			res.render('game/view', {
 				title: websiteName + ' // game',
+				page: 'view', // Required for correct formatting
 				error: 'No entry with that ID exists',
 				game: {} });
 		}
@@ -330,6 +332,7 @@ router.get('/game/view/:id', function(req, res, next) {
 
 			res.render('game/view', {
 				title: websiteName + ' // ' + windowTitle,
+				page: 'view', // Required for correct formatting
 				game: res2.rows[0] });
 		}
 	});
@@ -503,6 +506,41 @@ router.post('/game/new', function(req, res, next) {
 			error: error,
 			form: form });
 	}
+});
+
+// ----------------------------------------------------------------- game/edit
+router.get('/game/edit/:id', requireLogin, function(req, res, next) {
+	const query = 'SELECT * FROM games WHERE id = $1;';
+	const vars = [ req.params.id ];
+
+	pgPool.query(query, vars, function(err, res2) {
+		if (err) {
+			console.error(err);
+
+			res.render('game/edit', {
+				title: websiteName + ' // edit',
+				error: 'Something went wrong; please try again',
+				game: {} });
+		}
+		else if (!res2.rows.length) {
+			res.render('game/edit', {
+				title: websiteName + ' // edit',
+				error: 'No entry with that ID exists',
+				game: {} });
+		}
+		else {
+			windowTitle =
+				res2.rows[0].title_romaji.length ?
+					res2.rows[0].title_romaji :
+					res2.rows[0].title_jp ?
+						res2.rows[0].title_jp :
+						res2.rows[0].title_english;
+
+			res.render('game/edit', {
+				title: websiteName + ' // edit: ' + windowTitle,
+				game: res2.rows[0] });
+		}
+	});
 });
 
 // ----------------------------------------------------------------- account/

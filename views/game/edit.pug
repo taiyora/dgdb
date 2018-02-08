@@ -1,0 +1,65 @@
+extends ../layout
+
+block content
+	if error
+		p.error(align='center')= error
+
+	form(action='/game/edit' method='post')
+		table.centered
+			tr
+				td(width='33.3%')
+					label(for='title-jp') Title (Japanese)
+					input#title-jp(
+						type='text'
+						name='title_jp'
+						placeholder='私は今日ここで死にます。'
+						value=game.title_jp
+						maxlength='100'
+						autocomplete='off' )
+
+				td(width='33.3%')
+					label(for='title-romaji') Title (Romaji)
+					input#title-romaji(
+						type='text'
+						name='title_romaji'
+						placeholder='Watashi wa Kyou Koko de Shinimasu.'
+						value=game.title_romaji
+						maxlength='100'
+						autocomplete='off' )
+
+				td(rowspan='4')
+					label(for='screenshots') Screenshots <span class='subdued'>(one URL per line)</span>
+					br
+					textarea#screenshots(name='screenshots')= game.screenshots
+
+			tr
+				td
+					label(for='title-english') Title (English translated)
+					input#title-english(
+						type='text'
+						name='title_english'
+						placeholder='This is where I die today.'
+						value=game.title_english
+						maxlength='100'
+						autocomplete='off' )
+
+					if game.title_english_official
+						input#title-english-official(type='checkbox' name='title_english_official' checked)
+					else
+						input#title-english-official(type='checkbox' name='title_english_official')
+
+					label(for='title-english-official' style='color: rgb(192,192,192);') This title is an official localization
+
+				td
+					label(for='title-other') Abbreviations (comma-separated)
+					input#title-other(
+						type='text'
+						name='title_other'
+						placeholder='KyouKoko'
+						value=game.title_other
+						maxlength='100'
+						autocomplete='off')
+
+			tr
+				td(colspan='4' align='center')
+					input(type='submit' value='Submit')
