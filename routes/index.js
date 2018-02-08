@@ -380,27 +380,56 @@ router.get('/game/new', requireLogin, function(req, res, next) {
  * Saves a game entry to the database.
  *
  * @param {dict} form - Information about the game (from a form).
+ * @param {bool} gameId - The game ID if we're editing, or 0 if a new entry.
  * @param {function(bool, int)} callback - The callback function.
  */
-function saveGameEntry(form, callback) {
-	const query = `
-		INSERT INTO games (
-			title_jp,
-			title_romaji,
-			title_english,
-			title_english_official,
-			title_other,
-			entry_created )
-		VALUES ($1, $2, $3, $4, $5, $6)
-		RETURNING id;`;
+function saveGameEntry(form, gameId, callback) {
+	let query;
+	let vars;
 
-	const vars = [
-		form.title_jp,
-		form.title_romaji,
-		form.title_english,
-		form.title_english_official ? 'TRUE' : 'FALSE',
-		form.title_other,
-		getTimestamp() ];
+	if (gameId) {
+		// Edit an existing entry
+		query = `
+			UPDATE games SET
+				title_jp = $2,
+				title_romaji = $3,
+				title_english = $4,
+				title_english_official = $5,
+				title_other = $6,
+				last_updated = $7
+			WHERE id = $1
+			RETURNING id;`;
+
+		vars = [
+			gameId,
+			form.title_jp,
+			form.title_romaji,
+			form.title_english,
+			form.title_english_official ? 'TRUE' : 'FALSE',
+			form.title_other,
+			getTimestamp() ];
+	}
+	else {
+		// Create a new entry
+		query = `
+			INSERT INTO games (
+				title_jp,
+				title_romaji,
+				title_english,
+				title_english_official,
+				title_other,
+				entry_created )
+			VALUES ($1, $2, $3, $4, $5, $6)
+			RETURNING id;`;
+
+		vars = [
+			form.title_jp,
+			form.title_romaji,
+			form.title_english,
+			form.title_english_official ? 'TRUE' : 'FALSE',
+			form.title_other,
+			getTimestamp() ];
+	}
 
 	pgPool.query(query, vars, function(err, res) {
 		if (err) {
@@ -415,6 +444,8 @@ function saveGameEntry(form, callback) {
 
 /**
  * Saves a list of screenshots to the database.
+ * Screenshots should have a unique constraint in the database, so duplicates
+ * won't be stored, meaning don't have to worry about that here.
  *
  * @param {array} screenshots - An array of screenshot URLs.
  * @param {int} gameId - The ID of the game the screenshot is related to.
@@ -487,9 +518,12 @@ router.post('/game/new', function(req, res, next) {
 
 		// If an error occurred while validating the screenshot URLs, we skip this
 		if (!error) {
-			saveGameEntry(form, function(success, gameId) {
+			saveGameEntry(form, 0, function(success, gameId) {
 				if (success) {
-					saveScreenshots(screenshotsValidated, gameId);
+					if (screenshotsValidated.length) {
+						saveScreenshots(screenshotsValidated, gameId);
+					}
+
 					res.redirect('/game/view/' + gameId);
 				}
 				else {
@@ -543,6 +577,79 @@ router.get('/game/edit/:id', requireLogin, function(req, res, next) {
 				game: res2.rows[0] });
 		}
 	});
+});
+
+router.post('/game/edit/:id', function(req, res, next) {
+	const form = req.body;
+	let error = '';
+
+	windowTitle =
+		form.title_romaji.length ?
+			form.title_romaji :
+			form.title_jp ?
+				form.title_jp :
+				form.title_english;
+
+	// Ensure that the user hasn't bypassed the character limits
+	if (form.title_jp.length      > 100 ||
+		form.title_romaji.length  > 100 ||
+		form.title_english.length > 100 ||
+		form.title_other.length   > 100)
+	{
+		error = 'Bypassing the character limit is bad!';
+	}
+
+	// Ensure that at least one title has been entered
+	else if (!form.title_jp && !form.title_romaji && !form.title_english) {
+		error = 'At least one title is required (abbreviations don\'t count)';
+	}
+
+	else {
+		// Parse the list of screenshots
+		let screenshotsValidated = [];
+
+		if (form.screenshots) {
+			// textareas use \r\n for newlines it seems
+			const screenshots = form.screenshots.split('\r\n');
+
+			// Validate that each given string is an image URL
+			screenshots.forEach(function(ss) {
+				if ( /^https?:\/\/.+\.(gif|png|jpg|jpeg)$/i.test(ss) ) {
+					screenshotsValidated.push(ss);
+				}
+				else {
+					error = 'At least one of the screenshot URLs is invalid';
+					return;
+				}
+			});
+		}
+
+		// If an error occurred while validating the screenshot URLs, we skip this
+		if (!error) {
+			saveGameEntry(form, form.gameId, function(success, gameId) {
+				if (success) {
+					if (screenshotsValidated.length) {
+						saveScreenshots(screenshotsValidated, gameId);
+					}
+
+					res.redirect('/game/view/' + gameId);
+				}
+				else {
+					res.render('game/edit', {
+						title: websiteName + ' // edit: ' + windowTitle,
+						error: 'Something went wrong; please try again',
+						game: form });
+				}
+			});
+		}
+	}
+
+	if (error) {
+		res.render('game/edit', {
+			title: websiteName + ' // edit: ' + windowTitle,
+			error: error,
+			game: form });
+	}
 });
 
 // ----------------------------------------------------------------- account/

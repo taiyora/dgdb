@@ -4,7 +4,9 @@ block content
 	if error
 		p.error(align='center')= error
 
-	form(action='/game/edit' method='post')
+	form(action='/game/edit/' + game.id method='post')
+		input(type='hidden' name='gameId' value=game.id)
+
 		table.centered
 			tr
 				td(width='33.3%')
@@ -28,9 +30,10 @@ block content
 						autocomplete='off' )
 
 				td(rowspan='4')
-					label(for='screenshots') Screenshots <span class='subdued'>(one URL per line)</span>
+					label(for='screenshots') Add screenshots <span class='subdued'>(one URL per line)</span>
 					br
 					textarea#screenshots(name='screenshots')= game.screenshots
+					p.subdued (existing screenshots will remain; just enter new ones here)
 
 			tr
 				td
