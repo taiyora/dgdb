@@ -224,6 +224,17 @@ block content
 				each ss in game.ss_urls
 					a(href=ss) <img src=!{ss} width='100%'>
 
+			div(style='margin-bottom: 10px;')
+				if game.last_updated
+					p.subdued(align='right')
+						| Last edited: !{game.last_updated}
+						| (<span class='timestamp'>!{game.last_updated}</span>)
+
+				if game.entry_created
+					p.subdued(align='right')
+						| Entry created: !{game.entry_created}
+						| (<span class='timestamp'>!{game.entry_created}</span>)
+
 		div(style='float: left; width: 80%;')
 			h3.heading Ratings and Reviews
 
@@ -267,13 +278,3 @@ block content
 
 			div.main(style='float: right; width: 69.5%;')
 				p No reviews found
-
-		if game.last_updated
-			p.subdued(align='right')
-				| Last edited: !{game.last_updated}
-				| (<span class='timestamp'>!{game.last_updated}</span>)
-
-		if game.entry_created
-			p.subdued(align='right')
-				| Entry created: !{game.entry_created}
-				| (<span class='timestamp'>!{game.entry_created}</span>)
