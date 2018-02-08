@@ -291,8 +291,15 @@ router.get('/game/view/:id', function(req, res, next) {
 				game: {} });
 		}
 		else {
+			windowTitle =
+				res2.rows[0].title_romaji.length ?
+					res2.rows[0].title_romaji :
+					res2.rows[0].title_jp ?
+						res2.rows[0].title_jp :
+						res2.rows[0].title_english;
+
 			res.render('game/view', {
-				title: websiteName + ' // ' + res2.rows[0].title_romaji,
+				title: websiteName + ' // ' + windowTitle,
 				game: res2.rows[0] });
 		}
 	});

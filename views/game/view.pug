@@ -176,11 +176,10 @@ block content
 								h3.fancy(style='position: relative; bottom: 8px;')
 									| !{game.title_english}
 
-		if game.ss_urls.length
-			div(style='float: right; width: 19.6%;')
-				div.main
-					each ss in game.ss_urls
-						a(href=ss) <img src=!{ss} width='100%'>
+		div(style='float: right; width: 19.6%;')
+			div.main
+				each ss in game.ss_urls
+					a(href=ss) <img src=!{ss} width='100%'>
 
 		div(style='float: left; width: 80%;')
 			h3.heading Ratings and Reviews
