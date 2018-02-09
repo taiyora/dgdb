@@ -87,6 +87,12 @@ pre {
   white-space: pre-wrap;
   word-wrap: break-all;
 }
+pre.error {
+  padding: 5px;
+  background: rgba(128,64,64,0.5);
+  font-family: Consolas, 'Courier New';
+  color: #ff8080;
+}
 span.icon-sortable {
   font-size: 14px;
   color: #80c0ff;
