@@ -325,7 +325,7 @@ router.post(['/new', '/edit/:id'], requireLogin, function(req, res, next) { // e
 
 		// If an error occurred while validating the screenshot URLs, we skip this
 		if (!error) {
-			saveGameEntry(form, gameId, function(success, retGameId) {
+			saveGameEntry(form, gameId, res.locals.user.id, function(success, retGameId) { // eslint-disable-line max-len
 				if (success) {
 					// Even if no screenshots were entered, we need to do this in case
 					// existing screenshots were removed and need to be disabled
@@ -361,15 +361,30 @@ router.post(['/new', '/edit/:id'], requireLogin, function(req, res, next) { // e
  * Saves a game entry to the database.
  *
  * @param {dict} form - Information about the game (from a form).
- * @param {bool} gameId - The game ID if we're editing, or 0 if a new entry.
+ * @param {int} gameId - The game ID if we're editing, or 0 if a new entry.
+ * @param {int} userId - The ID of the user making the edit.
  * @param {function(bool, int)} callback - The callback function.
  */
-function saveGameEntry(form, gameId, callback) {
+function saveGameEntry(form, gameId, userId, callback) {
 	let query;
-	let vars;
+	let vars = [
+		form.title_jp,
+		form.title_romaji,
+		form.title_english,
+		form.title_english_official ? 'TRUE' : 'FALSE',
+		form.title_other,
+		form.description,
+		form.website,
+		form.vndb,
+		form.download,
+		form.download_alt,
+		form.screenshots,
+		getTimestamp() ];
 
 	if (gameId) {
-		// Edit an existing entry
+		// We're editing an existing entry.
+		// This query will return the values from before the edit, so that we can
+		// enter the changes into the revision details
 		query = `
 			UPDATE games SET
 				title_jp = $2,
@@ -382,23 +397,14 @@ function saveGameEntry(form, gameId, callback) {
 				vndb = $9,
 				download = $10,
 				download_alt = $11,
-				last_updated = $12
-			WHERE id = $1
-			RETURNING id;`;
+				screenshots = $12
+			FROM (SELECT * FROM games WHERE id = $1 FOR UPDATE) dummy
+			WHERE games.id = dummy.id
+			RETURNING dummy.*;`;
 
-		vars = [
-			gameId,
-			form.title_jp,
-			form.title_romaji,
-			form.title_english,
-			form.title_english_official ? 'TRUE' : 'FALSE',
-			form.title_other,
-			form.description,
-			form.website,
-			form.vndb,
-			form.download,
-			form.download_alt,
-			getTimestamp() ];
+		// Add the game ID and remove the timestamp (which is the last element)
+		vars = [gameId].concat(vars);
+		vars.pop();
 	}
 	else {
 		// Create a new entry
@@ -414,22 +420,10 @@ function saveGameEntry(form, gameId, callback) {
 				vndb,
 				download,
 				download_alt,
+				screenshots,
 				entry_created )
-			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
-			RETURNING id;`;
-
-		vars = [
-			form.title_jp,
-			form.title_romaji,
-			form.title_english,
-			form.title_english_official ? 'TRUE' : 'FALSE',
-			form.title_other,
-			form.description,
-			form.website,
-			form.vndb,
-			form.download,
-			form.download_alt,
-			getTimestamp() ];
+			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+			RETURNING *;`;
 	}
 
 	pgPool.query(query, vars, function(err, res) {
@@ -438,7 +432,59 @@ function saveGameEntry(form, gameId, callback) {
 			callback(false, 0);
 		}
 		else {
-			callback(true, res.rows[0].id);
+			// Add the changes as a new revision to the database
+			query = 'INSERT INTO revisions (game_id, user_id, time_stamp';
+			vars = [
+				gameId ? gameId : res.rows[0].id,
+				userId,
+				getTimestamp() ];
+
+			// Determine which fields were edited
+			// (or just add whatever fields were filled if it's a new entry)
+			for (const key in form) {
+				if ((form[key] != res.rows[0][key]) || (!gameId && form[key])) {
+					query += ', ' + key;
+					vars.push(form[key]);
+				}
+			}
+
+			query += ') VALUES ($1, $2, $3';
+
+			for (let i = 4; i <= vars.length; i++) {
+				query += ', ' + '$' + i;
+			}
+
+			query += ');';
+
+			// Only add the revision if anything was actually changed.
+			// If 'vars' is only length 3, then nothing was changed
+			if (vars.length > 3) {
+				pgPool.query(query, vars, function(err, res2) {
+					if (err) {
+						console.error(err);
+					}
+				});
+
+				// Change the Last Updated value for the game entry
+				query = 'UPDATE games SET last_updated = $1 WHERE id = $2;';
+				vars = [
+					getTimestamp(),
+					gameId ];
+
+				pgPool.query(query, vars, function(err, res2) {
+					if (err) {
+						console.error(err);
+					}
+					else {
+						// Wait until now to do the callback, so that the game view page
+						// shows the correct Last Updated time
+						callback(true, res.rows[0].id);
+					}
+				});
+			}
+			else {
+				callback(true, res.rows[0].id);
+			}
 		}
 	});
 }
@@ -449,6 +495,9 @@ function saveGameEntry(form, gameId, callback) {
  * Then any new screenshots are inserted. If there's a URL conflict, that
  * screenshot gets re-enabled (because it has remained in the list).
  * Removed screenshots remain in the database, just disabled, just in case.
+ *
+ * Game entries also store a list of screenshots as a string.
+ * This is just so that screenshot changes can be saved in the revision system.
  *
  * @param {array} screenshots - An array of screenshot URLs.
  * @param {int} gameId - The ID of the game the screenshot is related to.
