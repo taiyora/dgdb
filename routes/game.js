@@ -439,12 +439,23 @@ function saveGameEntry(form, gameId, userId, callback) {
 				userId,
 				getTimestamp() ];
 
+			// The HTML form identifies a checked checkbox with the string "on".
+			// This needs to be changed to "true", so that it matches PostgreSQL.
+			// It's also "undefined" when unchecked, so that needs to be "false"
+			if (form.title_english_official) {
+				form.title_english_official = true;
+			}
+			else {
+				form.title_english_official = false;
+			}
+
 			// Determine which fields were edited
 			// (or just add whatever fields were filled if it's a new entry)
 			for (const key in form) {
 				if ((form[key] != res.rows[0][key]) || (!gameId && form[key])) {
 					query += ', ' + key;
 					vars.push(form[key]);
+					console.log(form[key], res.rows[0][key]);
 				}
 			}
 
