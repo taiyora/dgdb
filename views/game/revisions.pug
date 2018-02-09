@@ -1,0 +1,40 @@
+extends ../layout
+
+block content
+	script.
+		$(document).ready(function() {
+			// Convert absolute timestamps to "... ago" format
+			$('.timestamp').each(function(i, obj) {
+				this.innerHTML = moment(this.innerHTML).fromNow();
+			});
+		});
+
+	if error
+		p.error(align='center')= error
+
+	if revisions.length
+		p(align='center') Revisions for game <a href='/game/view/!{revisions[0].game_id}'>#!{revisions[0].game_id}</a>
+
+		table
+			tr.heading
+				td(width='300px')
+				td(width='20px')
+					p ID
+				td(width='150px')
+					p User
+				td
+					p Message
+
+			each revision in revisions
+				tr.list
+					td.label
+						p
+							| <span class='subdued timestamp'>!{revision.time_stamp}</span>
+							| @!{revision.time_stamp}
+
+					td
+						p= revision.id
+					td
+						p= revision.username
+					td
+						p= revision.message

@@ -103,4 +103,12 @@ block content
 
 				tr
 					td(colspan='4' align='center')
+						if editing
+							hr
+
+							label(for='message') Revision message
+							br
+							textarea#message(name='message' maxlength='300')
+
+						br
 						input(type='submit' value='Submit')

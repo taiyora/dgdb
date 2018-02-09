@@ -237,6 +237,41 @@ router.post('/updateRating', requireLogin, function(req, res, next) {
 });
 
 // eslint-disable-next-line max-len
+// ================================================================================================================================== Revisions
+router.get('/revisions/:id/', function(req, res, next) {
+	const query = `
+		SELECT
+			*,
+			(SELECT username FROM users WHERE id = user_id)
+				AS username
+		FROM revisions WHERE game_id = $1 ORDER BY id DESC;`;
+
+	const vars = [ req.params.id ];
+
+	pgPool.query(query, vars, function(err, res2) {
+		if (err) {
+			console.error(err);
+
+			res.render('game/revisions', {
+				title: websiteName + ' // revisions',
+				error: 'Something went wrong; please try again',
+				revisions: {} });
+		}
+		else if (!res2.rows.length) {
+			res.render('game/revisions', {
+				title: websiteName + ' // revisions',
+				error: 'No entry with that ID exists',
+				revisions: {} });
+		}
+		else {
+			res.render('game/revisions', {
+				title: websiteName + ' // revisions',
+				revisions: res2.rows });
+		}
+	});
+});
+
+// eslint-disable-next-line max-len
 // ================================================================================================================================== New | Edit (POST)
 /*
  * Both adding a new entry and editing an existing entry are handled by the
@@ -281,10 +316,19 @@ router.post(['/new', '/edit/:id'], requireLogin, function(req, res, next) { // e
 		destPageTitle = websiteName + ' // edit: ' + windowTitle;
 		formAction = '/game/edit/' + req.params.id;
 		editing = true;
+
+		// Make sure the user entered a revision message
+		if (!form.message) {
+			error = 'Please enter a revision message noting what change(s) you made';
+		}
+	}
+
+	if (error) {
+		; // Skip to the end of the function if there was an error
 	}
 
 	// Ensure that the user hasn't bypassed the character limits
-	if (form.title_jp.length      > 100  ||
+	else if (form.title_jp.length > 100  ||
 		form.title_romaji.length  > 100  ||
 		form.title_english.length > 100  ||
 		form.title_other.length   > 100  ||
@@ -293,7 +337,8 @@ router.post(['/new', '/edit/:id'], requireLogin, function(req, res, next) { // e
 		form.download.length      > 200  ||
 		form.download_alt.length  > 200  ||
 		form.description.length   > 3100 || // textarea maxlength is wrong?
-		form.screenshots.length   > 1100)   // ^
+		form.screenshots.length   > 1100 || // ^
+		form.message.length       > 310)    // ^
 	{
 		error = 'Bypassing the character limit is bad!';
 	}
@@ -433,11 +478,14 @@ function saveGameEntry(form, gameId, userId, callback) {
 		}
 		else {
 			// Add the changes as a new revision to the database
-			query = 'INSERT INTO revisions (game_id, user_id, time_stamp';
+			query = 'INSERT INTO revisions (game_id, user_id, time_stamp, message';
 			vars = [
 				gameId ? gameId : res.rows[0].id,
 				userId,
-				getTimestamp() ];
+				getTimestamp(),
+				form.message ];
+
+			delete form.message;
 
 			// The HTML form identifies a checked checkbox with the string "on".
 			// This needs to be changed to "true", so that it matches PostgreSQL.
@@ -459,17 +507,17 @@ function saveGameEntry(form, gameId, userId, callback) {
 				}
 			}
 
-			query += ') VALUES ($1, $2, $3';
+			query += ') VALUES ($1, $2, $3, $4';
 
-			for (let i = 4; i <= vars.length; i++) {
+			for (let i = 5; i <= vars.length; i++) {
 				query += ', ' + '$' + i;
 			}
 
 			query += ');';
 
 			// Only add the revision if anything was actually changed.
-			// If 'vars' is only length 3, then nothing was changed
-			if (vars.length > 3) {
+			// If 'vars' is only length 4, then nothing was changed
+			if (vars.length > 4) {
 				pgPool.query(query, vars, function(err, res2) {
 					if (err) {
 						console.error(err);

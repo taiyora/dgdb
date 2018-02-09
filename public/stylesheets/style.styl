@@ -82,13 +82,6 @@ p, pre
 	font 11px Verdana
 	color white
 
-p.heading
-	font-style italic
-	color rgb(192,192,192)
-
-p.heading a
-	color rgb(192,192,192)
-
 p.message
 	padding 5px
 	background rgba(64,128,64,.5)
@@ -195,6 +188,13 @@ table.centered
 table.small
 	max-width 500px
 
+tr.heading td p
+	font-style italic
+	color rgb(192,192,192)
+
+tr.heading td p a
+	color rgb(192,192,192)
+
 tr.list td
 	padding 0
 	padding-left 7px
@@ -296,6 +296,10 @@ input[type='submit']:disabled:hover
 input[type='submit'].small
 	width 50px
 	height 25px
+
+hr
+	border none
+	border-top 1px rgb(128,128,128) dashed
 
 ::-webkit-scrollbar
 	width 15px

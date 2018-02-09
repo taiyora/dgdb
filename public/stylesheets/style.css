@@ -64,13 +64,6 @@ pre {
   font: 11px Verdana;
   color: #fff;
 }
-p.heading {
-  font-style: italic;
-  color: #c0c0c0;
-}
-p.heading a {
-  color: #c0c0c0;
-}
 p.message {
   padding: 5px;
   background: rgba(64,128,64,0.5);
@@ -169,6 +162,13 @@ table.centered {
 table.small {
   max-width: 500px;
 }
+tr.heading td p {
+  font-style: italic;
+  color: #c0c0c0;
+}
+tr.heading td p a {
+  color: #c0c0c0;
+}
 tr.list td {
   padding: 0;
   padding-left: 7px;
@@ -265,6 +265,10 @@ input[type='submit']:disabled:hover {
 input[type='submit'].small {
   width: 50px;
   height: 25px;
+}
+hr {
+  border: none;
+  border-top: 1px #808080 dashed;
 }
 ::-webkit-scrollbar {
   width: 15px;

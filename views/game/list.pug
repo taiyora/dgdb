@@ -24,16 +24,16 @@ block content
 		p.error(align='center')= error
 
 	table
-		tr
+		tr.heading
 			td(width='30%')
-				p.heading
+				p
 					| <a href="!{getSortUrl(url, 'title_english')}">
 					|     English Title<span class='icon-sortable'>⥮</span>
 					| </a> &nbsp;
 					| <span class='subdued'>(official localizations are marked with ☑)</span>
 
 			td
-				p.heading
+				p
 					| <a href="!{getSortUrl(url, 'title_jp')}">
 					|     Japanese Title<span class='icon-sortable'>⥮</span>
 					| </a> &nbsp;
@@ -42,13 +42,13 @@ block content
 					| </a>
 
 			td(width='50px')
-				p.heading
+				p
 					| <a href="!{getSortUrl(url, 'rating_average')}">
 					|     Average<span class='icon-sortable'>⥮</span>
 					| </a>
 
 			td(width='50px')
-				p.heading
+				p
 					| <a href="!{getSortUrl(url, 'ratings')}">
 					|     Ratings<span class='icon-sortable'>⥮</span>
 					| </a>
