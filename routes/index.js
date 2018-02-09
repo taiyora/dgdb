@@ -12,7 +12,7 @@ router.use(main.sessionsConfig);
 router.use(main.sessionsMiddleware);
 
 // eslint-disable-next-line max-len
-// ================================================================================================================================== Home
+// ======================================================================================================================== Home
 router.get('/', function(req, res, next) {
 	res.render('index', {
 		title: websiteName + ' // home' });

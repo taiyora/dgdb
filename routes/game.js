@@ -12,7 +12,7 @@ router.use(main.sessionsMiddleware);
 const requireLogin = main.requireLogin;
 
 // eslint-disable-next-line max-len
-// ================================================================================================================================== List
+// ======================================================================================================================== List
 router.use(function(req, res, next) {
 	// The game list page needs to know what URL query was given
 	res.locals.url = req.url;
@@ -135,7 +135,7 @@ function getSortUrl(url, column) {
 }
 
 // eslint-disable-next-line max-len
-// ================================================================================================================================== View
+// ======================================================================================================================== View
 router.get('/view/:id', function(req, res, next) {
 	// Get all the information on the game, as well as its related screenshots.
 	// ss_urls:        A list of (enabled) screenshots associated with the game.
@@ -237,7 +237,7 @@ router.post('/updateRating', requireLogin, function(req, res, next) {
 });
 
 // eslint-disable-next-line max-len
-// ================================================================================================================================== Revisions
+// ======================================================================================================================== Revisions
 router.get('/revisions/:id/', function(req, res, next) {
 	const query = `
 		SELECT
@@ -272,7 +272,7 @@ router.get('/revisions/:id/', function(req, res, next) {
 });
 
 // eslint-disable-next-line max-len
-// ================================================================================================================================== New | Edit (POST)
+// ======================================================================================================================== New | Edit (POST)
 /*
  * Both adding a new entry and editing an existing entry are handled by the
  * same router function and page. When editing, the "new entry" page will be
@@ -614,7 +614,7 @@ async function saveScreenshots(screenshots, gameId) {
 }
 
 // eslint-disable-next-line max-len
-// ================================================================================================================================== Edit (GET)
+// ======================================================================================================================== Edit (GET)
 /*
  * Editing is actually handled the same way as making a new entry. But as long
  * as the formAction variable is set correctly, we'll edit the entry instead.
