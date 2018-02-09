@@ -260,7 +260,7 @@ router.get('/revisions/:id/', function(req, res, next) {
 		else if (!res2.rows.length) {
 			res.render('game/revisions', {
 				title: websiteName + ' // revisions',
-				error: 'No entry with that ID exists',
+				error: 'No revisions were found',
 				revisions: {} });
 		}
 		else {
