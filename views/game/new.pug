@@ -3,6 +3,7 @@ extends ../layout
 block content
 	if error
 		p.error(align='center')= error
+		br
 
 	if form
 		//- This page also handles editing entries. The 'formAction' and 'editing' variables specify which operation to do

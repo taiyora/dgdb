@@ -381,7 +381,8 @@ router.post(['/new', '/edit/:id'], requireLogin, function(req, res, next) { // e
 				else {
 					res.render('game/new', {
 						title: destPageTitle,
-						error: 'Something went wrong; please try again',
+						error: `Something went wrong; please try again.
+							Did you not make any changes?`,
 						form: form,
 						formAction: formAction,
 						editing: editing });
@@ -542,7 +543,7 @@ function saveGameEntry(form, gameId, userId, callback) {
 				});
 			}
 			else {
-				callback(true, res.rows[0].id);
+				callback(false, res.rows[0].id);
 			}
 		}
 	});
