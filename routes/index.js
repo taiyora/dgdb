@@ -371,10 +371,21 @@ router.post('/game/updateRating', requireLogin, function(req, res, next) {
 });
 
 // ----------------------------------------------------------------- game/new
+/*
+ * Both adding a new entry and editing an existing entry are handled by the
+ * same router function and page. When editing, the "new entry" page will be
+ * given a flag and the game ID. This specifies the fact that we're editing.
+ *
+ * To preserve sensible window titles and URLs, the form will still post to
+ * edit/:id when editing, but functionally it'll be handled mostly the same
+ * way as a new entry being saved.
+ */
 router.get('/game/new', requireLogin, function(req, res, next) {
 	res.render('game/new', {
 		title: websiteName + ' // new entry',
-		form: {} });
+		form: {},
+		formAction: '/game/new',
+		editing: false });
 });
 
 /**
@@ -499,9 +510,33 @@ function saveScreenshots(screenshots, gameId) {
 	});
 }
 
-router.post('/game/new', function(req, res, next) {
+router.post(['/game/new', '/game/edit/:id'], requireLogin, function(req, res, next) { // eslint-disable-line max-len
 	const form = req.body;
 	let error = '';
+
+	let destPageTitle = websiteName + ' // new entry';
+	let formAction = '/game/new';
+	let editing = false;
+
+	let gameId = 0;
+
+	if (req.params.id) {
+		// In this case, we're actually editing an existing entry.
+		// By gameId being not 0, everything here will be handled in the context of
+		// editing rather than adding a new entry
+		gameId = req.params.id;
+
+		windowTitle =
+		form.title_romaji.length ?
+			form.title_romaji :
+			form.title_jp ?
+				form.title_jp :
+				form.title_english;
+
+		destPageTitle = websiteName + ' // edit: ' + windowTitle;
+		formAction = '/game/edit/' + req.params.id;
+		editing = true;
+	}
 
 	// Ensure that the user hasn't bypassed the character limits
 	if (form.title_jp.length      > 100  ||
@@ -545,19 +580,21 @@ router.post('/game/new', function(req, res, next) {
 
 		// If an error occurred while validating the screenshot URLs, we skip this
 		if (!error) {
-			saveGameEntry(form, 0, function(success, gameId) {
+			saveGameEntry(form, gameId, function(success, retGameId) {
 				if (success) {
 					if (screenshotsValidated.length) {
-						saveScreenshots(screenshotsValidated, gameId);
+						saveScreenshots(screenshotsValidated, retGameId);
 					}
 
-					res.redirect('/game/view/' + gameId);
+					res.redirect('/game/view/' + retGameId);
 				}
 				else {
 					res.render('game/new', {
-						title: websiteName + ' // new entry',
+						title: destPageTitle,
 						error: 'Something went wrong; please try again',
-						form: form });
+						form: form,
+						formAction: formAction,
+						editing: editing });
 				}
 			});
 		}
@@ -565,13 +602,19 @@ router.post('/game/new', function(req, res, next) {
 
 	if (error) {
 		res.render('game/new', {
-			title: websiteName + ' // new entry',
+			title: destPageTitle,
 			error: error,
-			form: form });
+			form: form,
+			formAction: formAction,
+			editing: editing });
 	}
 });
 
 // ----------------------------------------------------------------- game/edit
+/*
+ * Editing is actually handled the same way as making a new entry. But as long
+ * as the formAction variable is set correctly, we'll edit the entry instead.
+ */
 router.get('/game/edit/:id', requireLogin, function(req, res, next) {
 	const query = 'SELECT * FROM games WHERE id = $1;';
 	const vars = [ req.params.id ];
@@ -580,16 +623,14 @@ router.get('/game/edit/:id', requireLogin, function(req, res, next) {
 		if (err) {
 			console.error(err);
 
-			res.render('game/edit', {
+			res.render('game/new', {
 				title: websiteName + ' // edit',
-				error: 'Something went wrong; please try again',
-				game: {} });
+				error: 'Something went wrong; please try again' });
 		}
 		else if (!res2.rows.length) {
-			res.render('game/edit', {
+			res.render('game/new', {
 				title: websiteName + ' // edit',
-				error: 'No entry with that ID exists',
-				game: {} });
+				error: 'No entry with that ID exists' });
 		}
 		else {
 			windowTitle =
@@ -599,93 +640,13 @@ router.get('/game/edit/:id', requireLogin, function(req, res, next) {
 						res2.rows[0].title_jp :
 						res2.rows[0].title_english;
 
-			res.render('game/edit', {
+			res.render('game/new', {
 				title: websiteName + ' // edit: ' + windowTitle,
-				game: res2.rows[0],
-				gameId: req.params.id });
+				form: res2.rows[0],
+				formAction: '/game/edit/' + req.params.id,
+				editing: true });
 		}
 	});
-});
-
-router.post('/game/edit/:id', function(req, res, next) {
-	const form = req.body;
-	let error = '';
-
-	windowTitle =
-		form.title_romaji.length ?
-			form.title_romaji :
-			form.title_jp ?
-				form.title_jp :
-				form.title_english;
-
-	// Ensure that the user hasn't bypassed the character limits
-	if (form.title_jp.length      > 100  ||
-		form.title_romaji.length  > 100  ||
-		form.title_english.length > 100  ||
-		form.title_other.length   > 100  ||
-		form.website.length       > 100  ||
-		form.vndb.length          > 25   ||
-		form.download.length      > 200  ||
-		form.download_alt.length  > 200  ||
-		form.description.length   > 3100 || // textarea maxlength is wrong?
-		form.screenshots.length   > 1100)   // ^
-	{
-		error = 'Bypassing the character limit is bad!';
-	}
-
-	// Ensure that at least one title has been entered
-	else if (!form.title_jp && !form.title_romaji && !form.title_english) {
-		error = 'At least one title is required (abbreviations don\'t count)';
-	}
-
-	else {
-		// Parse the list of screenshots
-		let screenshotsValidated = [];
-
-		if (form.screenshots) {
-			// textareas use \r\n for newlines it seems
-			const screenshots = form.screenshots.split('\r\n');
-
-			// Validate that each given string is an image URL
-			screenshots.forEach(function(ss) {
-				if ( /^https?:\/\/.+\.(gif|png|jpg|jpeg)$/i.test(ss) ) {
-					screenshotsValidated.push(ss);
-				}
-				else {
-					error = 'At least one of the screenshot URLs is invalid';
-					return;
-				}
-			});
-		}
-
-		// If an error occurred while validating the screenshot URLs, we skip this
-		if (!error) {
-			saveGameEntry(form, form.gameId, function(success, gameId) {
-				if (success) {
-					if (screenshotsValidated.length) {
-						saveScreenshots(screenshotsValidated, gameId);
-					}
-
-					res.redirect('/game/view/' + gameId);
-				}
-				else {
-					res.render('game/edit', {
-						title: websiteName + ' // edit: ' + windowTitle,
-						error: 'Something went wrong; please try again',
-						game: form,
-						gameId: form.gameId });
-				}
-			});
-		}
-	}
-
-	if (error) {
-		res.render('game/edit', {
-			title: websiteName + ' // edit: ' + windowTitle,
-			error: error,
-			game: form,
-			gameId: form.gameId });
-	}
 });
 
 // ----------------------------------------------------------------- account/
