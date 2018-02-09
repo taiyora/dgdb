@@ -138,7 +138,7 @@ function getSortUrl(url, column) {
 // ================================================================================================================================== View
 router.get('/view/:id', function(req, res, next) {
 	// Get all the information on the game, as well as its related screenshots.
-	// ss_urls:        A list of screenshots associated with the game.
+	// ss_urls:        A list of (enabled) screenshots associated with the game.
 	// ratings:        A list of every user's rating for the game.
 	// rating_average: The average of every rating for the game.
 	// ratings_recent: The 10 most recent ratings, with name of user who gave it.
@@ -147,7 +147,7 @@ router.get('/view/:id', function(req, res, next) {
 		SELECT
 			*,
 
-			array(SELECT url FROM screenshots WHERE game_id = $1)
+			array(SELECT url FROM screenshots WHERE game_id = $1 AND enabled = TRUE)
 				AS ss_urls,
 
 			array(SELECT rating FROM ratings WHERE game_id = $1)
@@ -237,7 +237,7 @@ router.post('/updateRating', requireLogin, function(req, res, next) {
 });
 
 // eslint-disable-next-line max-len
-// ================================================================================================================================== New/Edit
+// ================================================================================================================================== New | Edit (POST)
 /*
  * Both adding a new entry and editing an existing entry are handled by the
  * same router function and page. When editing, the "new entry" page will be
@@ -327,9 +327,9 @@ router.post(['/new', '/edit/:id'], requireLogin, function(req, res, next) { // e
 		if (!error) {
 			saveGameEntry(form, gameId, function(success, retGameId) {
 				if (success) {
-					if (screenshotsValidated.length) {
-						saveScreenshots(screenshotsValidated, retGameId);
-					}
+					// Even if no screenshots were entered, we need to do this in case
+					// existing screenshots were removed and need to be disabled
+					saveScreenshots(screenshotsValidated, retGameId);
 
 					res.redirect('/game/view/' + retGameId);
 				}
@@ -445,48 +445,75 @@ function saveGameEntry(form, gameId, callback) {
 
 /**
  * Saves a list of screenshots to the database.
- * Screenshots should have a unique constraint in the database, so duplicates
- * won't be stored, meaning don't have to worry about that here.
+ * First, every screenshot associated with the specified game ID is disabled.
+ * Then any new screenshots are inserted. If there's a URL conflict, that
+ * screenshot gets re-enabled (because it has remained in the list).
+ * Removed screenshots remain in the database, just disabled, just in case.
  *
  * @param {array} screenshots - An array of screenshot URLs.
  * @param {int} gameId - The ID of the game the screenshot is related to.
  */
-function saveScreenshots(screenshots, gameId) {
-	// Form the query string
-	let query = 'INSERT INTO screenshots (url, game_id, time_stamp) VALUES';
-	let vars = [
-		gameId,
-		getTimestamp() ];
+async function saveScreenshots(screenshots, gameId) {
+	// First disable all related screenshots
+	let query = 'UPDATE screenshots SET enabled = FALSE WHERE game_id = $1;';
+	let vars = [ gameId ];
 
-	let n = 2;
-	screenshots.forEach(function(ss) {
-		n++;
-		if (n > 3) {
-			query += ',';
-		}
+	await pgPool.query(query, vars);
 
-		query += ' ($' + n + ', $1, $2)';
-		vars.push(ss);
-	});
+	// Only try to save/re-enable screenshots if any were actually entered
+	if (screenshots.length) {
+		// Now save the new screenshots and re-enable the ones still in the list
+		query = `
+			INSERT INTO screenshots (
+				url,
+				game_id,
+				time_stamp,
+				enabled )
+			VALUES`;
 
-	query += ';';
+		vars = [
+			gameId,
+			getTimestamp() ];
 
-	// Query the database
-	pgPool.query(query, vars, function(err, res) {
-		if (err) {
-			console.error(err);
-		}
-	});
+		let n = 2;
+		screenshots.forEach(function(ss) {
+			n++;
+			if (n > 3) {
+				query += ',';
+			}
+
+			query += ' ($' + n + ', $1, $2, TRUE)';
+			vars.push(ss);
+		});
+
+		query += ' ON CONFLICT (url) DO UPDATE SET enabled = TRUE;';
+
+		pgPool.query(query, vars, function(err, res2) {
+			if (err) {
+				console.error(err);
+			}
+		});
+	}
 }
 
 // eslint-disable-next-line max-len
-// ================================================================================================================================== Edit
+// ================================================================================================================================== Edit (GET)
 /*
  * Editing is actually handled the same way as making a new entry. But as long
  * as the formAction variable is set correctly, we'll edit the entry instead.
  */
 router.get('/edit/:id', requireLogin, function(req, res, next) {
-	const query = 'SELECT * FROM games WHERE id = $1;';
+	// When editing, we get a list of enabled screenshots associated with the
+	// game. When saving changes, any changes to the list will be reflected
+	// in the database via enabling or disabling screenshot entries.
+	const query = `
+		SELECT
+			*,
+			array_to_string(array(SELECT url FROM screenshots
+				WHERE game_id = $1 AND enabled = TRUE), ',')
+					AS screenshots
+		FROM games WHERE id = $1;`;
+
 	const vars = [ req.params.id ];
 
 	pgPool.query(query, vars, function(err, res2) {
@@ -509,6 +536,9 @@ router.get('/edit/:id', requireLogin, function(req, res, next) {
 					res2.rows[0].title_jp ?
 						res2.rows[0].title_jp :
 						res2.rows[0].title_english;
+
+			// Format the screenshots list to display correctly in the form textarea
+			res2.rows[0].screenshots = res2.rows[0].screenshots.split(',').join('\n');
 
 			res.render('game/new', {
 				title: websiteName + ' // edit: ' + windowTitle,

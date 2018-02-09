@@ -78,12 +78,7 @@ block content
 							autocomplete='off')
 
 					td(rowspan='2')
-						label(for='screenshots')
-							| Screenshots <span class='subdued'>(one URL per line)
-							if editing
-								|  (existing screenshots will remain; just enter new ones here)
-							| </span>
-
+						label(for='screenshots') Screenshots <span class='subdued'>(one URL per line)</span>
 						br
 						textarea#screenshots(name='screenshots' maxlength='1000')= form.screenshots
 
