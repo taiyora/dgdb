@@ -123,7 +123,7 @@ function getSortUrl(url, column) {
 		* ratings come first. Otherwise it's text and should be ascending.
 		*/
 		const numericSortingOptions = [
-//			'rating_average', // Since the default sort is this DESC, exclude it
+			'rating_average',
 			'ratings' ];
 
 		if (numericSortingOptions.indexOf(column) != -1) {
