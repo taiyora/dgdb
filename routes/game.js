@@ -321,6 +321,15 @@ router.post(['/new', '/edit/:id'], requireLogin, function(req, res, next) { // e
 		if (!form.message) {
 			error = 'Please enter a revision message noting what change(s) you made';
 		}
+		else {
+			if (form.message.length > 310) { // textarea maxlength is wrong?
+				error = 'Bypassing the character limit is bad!';
+			}
+		}
+	}
+	else {
+		// Since this must be a new entry, set form.message to be a relevant note
+		form.message = '(auto) New entry';
 	}
 
 	if (error) {
@@ -337,8 +346,7 @@ router.post(['/new', '/edit/:id'], requireLogin, function(req, res, next) { // e
 		form.download.length      > 200  ||
 		form.download_alt.length  > 200  ||
 		form.description.length   > 3100 || // textarea maxlength is wrong?
-		form.screenshots.length   > 1100 || // ^
-		form.message.length       > 310)    // ^
+		form.screenshots.length   > 1100)   // ^
 	{
 		error = 'Bypassing the character limit is bad!';
 	}
