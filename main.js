@@ -68,26 +68,53 @@ pgPool.on('error', function(err, client) {
 	console.error('Idle client error: ', err.message, err.stack);
 });
 
-// Create a necessary SQL function.
+// eslint-disable-next-line max-len
+// ------------------------------------------------------------------------------------------ SQL Functions
 // TODO: Users may hit the "Save" button often to make their rating show up at
-//       top of the list. This should be prevented
-const query = `
+//       the top of the list. This should be prevented
+let query = `
 	CREATE OR REPLACE FUNCTION upsert_ratings(
-		uid integer,
-		gid integer,
+		uid        integer,
+		gid        integer,
 		new_rating real,
-		new_time text )
+		new_time   text )
 	RETURNS VOID AS $$
 		DECLARE
 		BEGIN
 			UPDATE ratings SET rating = new_rating, time_stamp = new_time
 				WHERE user_id = uid AND game_id = gid;
 			IF NOT FOUND THEN
-			INSERT INTO ratings (user_id, game_id, rating, time_stamp)
-				VALUES (uid, gid, new_rating, new_time);
+				INSERT INTO ratings (user_id, game_id, rating, time_stamp)
+					VALUES (uid, gid, new_rating, new_time);
 			END IF;
 		END;
-		$$ LANGUAGE 'plpgsql';`;
+	$$ LANGUAGE 'plpgsql';`;
+
+pgPool.query(query, function(err, res) {
+	if (err) {
+		console.error(err);
+	}
+});
+
+// Returns the Bayesian average for a game's ratings.
+// minimum_votes and global_average can just be set to 1 and 5.5 at first.
+// Forumla is: WR = (v * R + m * C) / (v + m)
+query = `
+	CREATE OR REPLACE FUNCTION get_bayesian_rating(
+		n_votes        integer,
+		rating_average real,
+		minimum_votes  integer,
+		global_average real )
+	RETURNS real AS $$
+		DECLARE
+		BEGIN
+			RETURN ROUND(
+				(
+					(n_votes * rating_average + minimum_votes * global_average) /
+					(n_votes + minimum_votes)
+				)::numeric, 2);
+		END;
+	$$ LANGUAGE 'plpgsql';`;
 
 pgPool.query(query, function(err, res) {
 	if (err) {

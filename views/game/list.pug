@@ -15,7 +15,7 @@ block content
 			'rgb(212,163,253)' ];
 
 		$(document).ready(function() {
-			$('.average-rating').each(function(i, obj) {
+			$('.bayesian-rating').each(function(i, obj) {
 				$(this).css('color', coloursRainbowFull[Math.round($(this).text()) - 1]);
 			});
 		});
@@ -43,8 +43,8 @@ block content
 
 			td(width='50px')
 				p
-					| <a href="!{getSortUrl(url, 'rating_average')}">
-					|     Average<span class='icon-sortable'>⥮</span>
+					| <a href="!{getSortUrl(url, 'rating_bayesian')}">
+					|     Score<span class='icon-sortable'>⥮</span>
 					| </a>
 
 			td(width='50px')
@@ -68,7 +68,7 @@ block content
 						p <a href='/game/view/!{game.id}'>!{game.title_jp}</a>
 
 				td
-					p.average-rating= game.rating_average
+					p.bayesian-rating= game.rating_bayesian
 
 				td
 					p= game.ratings

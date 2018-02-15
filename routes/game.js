@@ -20,7 +20,7 @@ router.use(function(req, res, next) {
 });
 
 router.get('/list', function(req, res, next) {
-	let sortBy = 'rating_average';
+	let sortBy = 'rating_bayesian';
 	let orderBy = 'DESC';
 
 	// Prevent SQL injection by checking against valid sorting options
@@ -28,7 +28,7 @@ router.get('/list', function(req, res, next) {
 		'title_english',
 		'title_jp',
 		'title_romaji',
-		'rating_average',
+		'rating_bayesian',
 		'ratings' ];
 
 	// Determine the sorting and ordering methods
@@ -63,9 +63,13 @@ router.get('/list', function(req, res, next) {
 		SELECT
 			*,
 
-			(SELECT ROUND(AVG(ratings.rating)::numeric, 2)
-				FROM ratings WHERE games.id = ratings.game_id)
-					AS rating_average,
+			(SELECT get_bayesian_rating(
+				COUNT(ratings.rating)::integer,
+				AVG(ratings.rating)::real,
+				1::integer,
+				5.5::real )
+					FROM ratings WHERE games.id = ratings.game_id)
+						AS rating_bayesian,
 
 			(SELECT COUNT(ratings.rating) AS ratings
 				FROM ratings WHERE games.id = ratings.game_id)
@@ -123,7 +127,7 @@ function getSortUrl(url, column) {
 		* ratings come first. Otherwise it's text and should be ascending.
 		*/
 		const numericSortingOptions = [
-			'rating_average',
+			'rating_bayesian',
 			'ratings' ];
 
 		if (numericSortingOptions.indexOf(column) != -1) {
@@ -152,6 +156,14 @@ router.get('/view/:id', function(req, res, next) {
 
 			array(SELECT rating FROM ratings WHERE game_id = $1)
 				AS ratings,
+
+			(SELECT get_bayesian_rating(
+				COUNT(ratings.rating)::integer,
+				AVG(ratings.rating)::real,
+				1::integer,
+				5.5::real )
+					FROM ratings WHERE games.id = ratings.game_id)
+						AS rating_bayesian,
 
 			(SELECT ROUND(AVG(rating)::numeric, 2) FROM ratings WHERE game_id = $1)
 				AS rating_average,
