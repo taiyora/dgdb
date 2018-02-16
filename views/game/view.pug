@@ -208,15 +208,15 @@ block content
 
 						td
 							if game.title_jp
-								h2.fancy= game.title_jp
+								h2= game.title_jp
 
 							if game.title_romaji
-								h3.fancy(style='position: relative; bottom: 8px;')
-									| <span class='subdued'>(!{game.title_romaji})</span>
+								h3.fancy <span class='subdued'>(!{game.title_romaji})</span>
 
 							if game.title_english && (game.title_english != game.title_jp)
-								h3.fancy(style='position: relative; bottom: 8px;')
-									| !{game.title_english}
+								h3.fancy= game.title_english
+
+							br
 
 							if game.description
 								div.darkened
