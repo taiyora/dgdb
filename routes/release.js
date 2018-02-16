@@ -31,7 +31,7 @@ router.post('/new', requireLogin, function(req, res, next) {
 		'English',
 		'French' ];
 
-	const releaseDateRegex = /[1-2][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]/g;
+	const releaseDateRegex = /[1-2][0-9][0-9][0-9]-([0-1]|x)([0-9]|x)-([0-3]|x)([0-9]|x)/g;
 
 	// Ensure that the user hasn't bypassed the character limits
 	if (form.title.length         > 100 ||
