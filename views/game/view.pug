@@ -80,7 +80,9 @@ block content
 		}
 
 		$(document).ready(function() {
-			renderRatingsChart();
+			if (!{game.ratings.length}) {
+				renderRatingsChart();
+			}
 
 			// Set the text colour of all rating values to a rainbow colour
 			$('.rating').each(function(i, obj) {
@@ -193,14 +195,14 @@ block content
 								if game.download
 									tr.list
 										td.label
-											p Download link
+											p Download
 										td
 											p <a class='normal' href=!{game.download}>Link</a>
 
 								if game.download_alt
 									tr.list
 										td.label
-											p Alternate download link
+											p Alternative download
 										td
 											p <a class='normal' href=!{game.download_alt}>Link</a>
 
@@ -212,7 +214,7 @@ block content
 								h3.fancy(style='position: relative; bottom: 8px;')
 									| <span class='subdued'>(!{game.title_romaji})</span>
 
-							if game.title_english
+							if game.title_english && (game.title_english != game.title_jp)
 								h3.fancy(style='position: relative; bottom: 8px;')
 									| !{game.title_english}
 
@@ -228,12 +230,12 @@ block content
 			div(style='margin-bottom: 10px;')
 				if game.last_updated
 					p.subdued(align='right')
-						| Last edited: !{game.last_updated}
+						| Last edited:<br>!{game.last_updated}
 						| (<span class='timestamp'>!{game.last_updated}</span>)
 
 				if game.entry_created
 					p.subdued(align='right')
-						| Entry created: !{game.entry_created}
+						| Entry created:<br>!{game.entry_created}
 						| (<span class='timestamp'>!{game.entry_created}</span>)
 
 		div(style='float: left; width: 80%;')
@@ -252,36 +254,38 @@ block content
 								| <span id='rating-saved' class='gold' style='display: none;'>Saved!</span>
 
 				table
+					if game.ratings.length
+						tr.list
+							td.label
+								p Score/Bayesian rating
+							td
+								p.rating= game.rating_bayesian
+
+						tr.list
+							td.label
+								p Average rating
+							td
+								p.rating= game.rating_average
+
 					tr.list
 						td.label(width='52%')
-							p Score/Bayesian rating
-						td
-							p.rating= game.rating_bayesian
-
-					tr.list
-						td.label
-							p Average rating
-						td
-							p.rating= game.rating_average
-
-					tr.list
-						td.label
 							p Number of ratings
 						td
 							p= game.ratings.length
 
-				div(style='margin: 10px 0 10px 0;')
-					canvas#ratings-chart
+				if game.ratings.length
+					div(style='margin: 10px 0 10px 0;')
+						canvas#ratings-chart
 
-				table
-					each rating in game.ratings_recent
-						tr.list
-							td.label(width='36%')
-								p.timestamp= rating.f3
-							td(width='16%')
-								p.rating= rating.f2
-							td
-								p= rating.f1
+					table
+						each rating in game.ratings_recent
+							tr.list
+								td.label(width='36%')
+									p.timestamp= rating.f3
+								td(width='16%')
+									p.rating= rating.f2
+								td
+									p= rating.f1
 
 			div.main(style='float: right; width: 69.5%;')
 				p No reviews found
