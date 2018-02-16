@@ -227,6 +227,9 @@ block content
 				each ss in game.ss_urls
 					a(href=ss) <img src=!{ss} width='100%'>
 
+				else
+					p No screenshots found
+
 			div(style='margin-bottom: 10px;')
 				if game.last_updated
 					p.subdued(align='right')
