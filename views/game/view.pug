@@ -250,15 +250,23 @@ block content
 						tr.heading
 							td(width='20%')
 								p Release date
+							td
 							td(width='40%')
 								p Title
-							td
+							td(width='40%')
 								p Version
 
 						each release in game.releases
 							tr.list
 								td
 									p= release.release_date
+								td
+									if release.language == 'Japanese'
+										img.flag.flag-jp(src='/images/flags/blank.gif' style='margin-right: 6px;')
+									else if release.language == 'English'
+										img.flag.flag-gb(src='/images/flags/blank.gif' style='margin-right: 6px;')
+									else if release.language == 'French'
+										img.flag.flag-fr(src='/images/flags/blank.gif' style='margin-right: 6px;')
 								td
 									p= release.title
 								td
