@@ -240,9 +240,30 @@ block content
 
 		div(style='float: left; width: 80%;')
 			h3.heading Releases&nbsp;
-				<font style='font-size: 14px;'><a class='gold' href='/release/new/!{game.id}'>add a release</a></font>
+				<font style='font-size: 14px;'><a class='gold' href='/release/new/!{game.id}'>add a release <span class='icon-edit'>✎</span></a></font>
 
 			div.main
+				if game.releases.length
+					table
+						tr.heading
+							td(width='20%')
+								p Release date
+							td(width='40%')
+								p Title
+							td
+								p Version
+
+						each release in game.releases
+							tr.list
+								td
+									p= release.release_date
+								td
+									p= release.title
+								td
+									p= release.version
+
+				else
+					p No releases found
 
 		div(style='float: left; width: 80%;')
 			h3.heading Ratings and Reviews

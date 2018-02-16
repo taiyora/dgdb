@@ -154,6 +154,14 @@ router.get('/view/:id', function(req, res, next) {
 			array(SELECT url FROM screenshots WHERE game_id = $1 AND enabled = TRUE)
 				AS ss_urls,
 
+			array(SELECT json_build_object(
+				'title', title,
+				'language', language,
+				'release_date', release_date,
+				'version', version )
+					FROM releases WHERE game_id = $1 ORDER BY release_date DESC)
+						AS releases,
+
 			array(SELECT rating FROM ratings WHERE game_id = $1)
 				AS ratings,
 
@@ -172,7 +180,7 @@ router.get('/view/:id', function(req, res, next) {
 				SELECT (users.username, ratings.rating, ratings.time_stamp) FROM ratings
 				LEFT JOIN users ON users.id = ratings.user_id
 				WHERE game_id = $1
-				ORDER BY time_stamp DESC LIMIT 10))
+				ORDER BY time_stamp DESC LIMIT 10 ))
 					AS ratings_recent,
 
 			(SELECT rating FROM ratings WHERE game_id = $1 AND user_id = $2)

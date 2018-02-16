@@ -3,7 +3,6 @@ extends ../layout
 block content
 	if error
 		p.error(align='center')= error
-		br
 
 	if form
 		div.darkened
@@ -11,6 +10,8 @@ block content
 
 		//- This page also handles editing entries. The 'formAction' and 'editing' variables specify which operation to do
 		form(action=formAction method='post')
+			input(type='hidden' name='game_id' value=gameId)
+
 			table.centered
 				tr
 					td(width='33.3%')
