@@ -206,7 +206,8 @@ td.label p {
 input[type='text'],
 input[type='password'],
 input[type='number'],
-textarea {
+textarea,
+select {
   padding: 3px;
   width: 100%;
   background: rgba(0,0,0,0.1);
@@ -224,6 +225,13 @@ textarea {
   min-height: 80px;
   background: rgba(0,0,0,0.3);
   border-bottom: 1px rgba(0,0,0,0) solid;
+}
+select {
+  margin-top: 5px;
+  width: 100px;
+}
+option {
+  background: #000;
 }
 input[type='text']:hover,
 input[type='password']:hover,

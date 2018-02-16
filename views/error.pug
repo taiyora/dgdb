@@ -2,7 +2,5 @@ extends layout
 
 block content
 	pre.error= message
-	br
-
-	p= error.status
+	pre.error= error.status
 	pre.error #{error.stack}

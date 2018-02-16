@@ -1,0 +1,59 @@
+extends ../layout
+
+block content
+	if error
+		p.error(align='center')= error
+		br
+
+	if form
+		div.darkened
+			p(align='center') Adding release for game <a href='/game/view/!{gameId}'>#!{gameId}</a>
+
+		//- This page also handles editing entries. The 'formAction' and 'editing' variables specify which operation to do
+		form(action=formAction method='post')
+			table.centered
+				tr
+					td(width='33.3%')
+						label(for='title') Title <span class='subdued'>(in the relevant language)</span>
+						input#title(
+							type='text'
+							name='title'
+							value=form.title
+							maxlength='100'
+							autocomplete='off' )
+
+						select(name='language')
+							option(value='Japanese') Japanese
+							option(value='English') English
+							option(value='French') French
+
+					td(width='33.4%')
+						label(for='release_date') Release date
+						input#release_date(
+							type='text'
+							name='release_date'
+							placeholder='YYYY-MM-DD'
+							value=form.release_date
+							maxlength='10'
+							autocomplete='off' )
+
+					td
+						label(for='version') Version
+						input#version(
+							type='text'
+							name='version'
+							value=form.version
+							maxlength='50'
+							autocomplete='off' )
+
+				tr
+					td(colspan='3' align='center')
+						if editing
+							hr
+
+							label(for='message') Revision message
+							br
+							textarea#message(name='message' maxlength='300')
+
+						br
+						input(type='submit' value='Submit')

@@ -3,6 +3,7 @@ const router = express.Router();
 
 router.use('/account', require('./account'));
 router.use('/game',    require('./game'));
+router.use('/release', require('./release'));
 
 // Load necessary stuff from main.js
 const main = require('../main');
