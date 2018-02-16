@@ -198,7 +198,8 @@ tr.list td a.normal {
   color: #80c0ff;
 }
 tr.list td a.normal:hover {
-  border-bottom: 1px #80c0ff solid;
+  text-decoration: underline;
+  border: none;
 }
 td {
   padding: 5px;
