@@ -258,7 +258,39 @@ router.post('/updateRating', requireLogin, function(req, res, next) {
 
 // eslint-disable-next-line max-len
 // ======================================================================================================================== Revisions
-router.get('/revisions/:id/', function(req, res, next) {
+router.get('/revisions', function(req, res, next) {
+	const query = `
+		SELECT
+			*,
+			(SELECT username FROM users WHERE id = user_id)
+				AS username
+		FROM revisions ORDER BY id DESC;`;
+
+	pgPool.query(query, function(err, res2) {
+		if (err) {
+			console.error(err);
+
+			res.render('game/revisions', {
+				title: websiteName + ' // revisions',
+				error: 'Something went wrong; please try again',
+				revisions: {} });
+		}
+		else if (!res2.rows.length) {
+			res.render('game/revisions', {
+				title: websiteName + ' // revisions',
+				error: 'No revisions were found',
+				revisions: {} });
+		}
+		else {
+			res.render('game/revisions', {
+				title: websiteName + ' // revisions',
+				revisions: res2.rows,
+				all: true });
+		}
+	});
+});
+
+router.get('/revisions/:id', function(req, res, next) {
 	const query = `
 		SELECT
 			*,

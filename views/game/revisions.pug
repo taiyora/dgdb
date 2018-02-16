@@ -13,8 +13,9 @@ block content
 		p.error(align='center')= error
 
 	if revisions.length
-		div.darkened
-			p(align='center') Revisions for game <a href='/game/view/!{revisions[0].game_id}'>#!{revisions[0].game_id}</a>
+		if !all
+			div.darkened
+				p(align='center') Revisions for game <a href='/game/view/!{revisions[0].game_id}'>#!{revisions[0].game_id}</a>
 
 		table
 			tr.heading
