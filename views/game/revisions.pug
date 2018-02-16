@@ -20,8 +20,13 @@ block content
 		table
 			tr.heading
 				td(width='25%')
-				td(width='5%')
+				td(width='3%')
 					p ID
+
+				if all
+					td(width='3%')
+						p Game
+
 				td(width='10%')
 					p User
 				td
@@ -36,6 +41,11 @@ block content
 
 					td
 						p= revision.id
+
+					if all
+						td
+							p <a class='normal' href='/game/view/!{revision.game_id}'>!{revision.game_id}</a>
+
 					td
 						p= revision.username
 					td
