@@ -240,7 +240,9 @@ block content
 
 		div(style='float: left; width: 80%;')
 			h3.heading Releases&nbsp;
-				<font style='font-size: 14px;'><a class='gold' href='/release/new/!{game.id}'>add a release <span class='icon-edit'>✎</span></a></font>
+				<font style='position: relative; bottom: 3px; font: 11px Verdana;'>
+					<a class='gold' href='/release/new/!{game.id}'>add a release <span class='icon-edit'>✎</span></a>
+				</font>
 
 			div.main
 				if game.releases.length

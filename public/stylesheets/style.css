@@ -120,6 +120,10 @@ a.menu-item {
 .gold {
   color: #ffc080;
 }
+a.gold:hover {
+  text-decoration: none;
+  border-bottom: 1px #ffc080 solid;
+}
 div.main {
   margin-top: 10px;
   margin-bottom: 8px;
