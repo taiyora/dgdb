@@ -76,7 +76,10 @@ router.get('/list', function(req, res, next) {
 					AS ratings
 
 		FROM games
-		ORDER BY ` + sortBy + ' ' + orderBy + ' NULLS LAST;';
+		ORDER BY
+			` + sortBy + ' ' + orderBy + ` NULLS LAST,
+			NULLIF(title_english, \'\') ASC NULLS LAST,
+			NULLIF(title_jp, \'\') ASC NULLS LAST;`;
 
 	pgPool.query(query, function(err, res2) {
 		if (err) {
