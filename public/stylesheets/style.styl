@@ -16,7 +16,7 @@ div.background
 	left 0
 	width 100%
 	height 100%
-	z-index -1
+	z-index -2
 
 	background url('/images/background.png') repeat // Wallpaper is from http://www.dinpattern.com/
 	filter blur(3px)
@@ -26,6 +26,28 @@ div.background
 @keyframes bg-scroll-anim
 	100%
 		background-position -3000px 0
+
+div.bg-image
+	position fixed
+	top 0
+	left 0
+	width 637px
+	height 100%
+	z-index -1
+
+	background url('/images/wada.png') repeat
+	filter opacity(50%)
+
+div.sprite
+	position absolute
+	top -20px
+	right 300px
+	width 104px
+	height 144px
+	z-index -1
+
+	background url('/images/wada_sprite.png')
+	filter opacity(50%)
 
 h1.logo
 	margin 0
@@ -151,8 +173,8 @@ div.main
 	padding 5px
 	box-sizing border-box
 
-	background rgba(128,128,128,.2)
-	border 1px rgba(128,128,128,.8) outset
+	background linear-gradient(90deg, rgba(16,32,48,.8), rgba(16,32,48,.4))
+	border 1px rgba(64,96,128,.6) solid
 
 	box-shadow 0 20px 25px 5px rgba(0,0,0,.2)
 	box-shadow 0 10px 25px 5px rgba(0,0,0,.4)
@@ -173,7 +195,7 @@ div.darkened
 
 div.hide-overflow
 	display block
-	width 100px
+	width 150px
 
 	overflow hidden
 	white-space nowrap
@@ -211,21 +233,16 @@ tr.list td
 	height 21px // A height of 21px centers 11px Verdana text better
 	vertical-align middle
 
-	background rgba(64,64,64,.3)
+	border-bottom 1px rgba(128,255,255,.2) dashed
 
-tr.list:nth-child(even) td
-	background rgba(92,92,92,.3)
-
-tr.list td.label
-	padding-right 5px
-	background none
-	text-align right
+tr.list:last-child td
+	border none
 
 tr.list td a
 	color white
 
 tr.list td a:hover
-	border-bottom 1px rgb(128,128,128) dotted
+	border-bottom 1px rgb(128,128,128) solid
 	text-decoration none
 
 tr.list td a.normal
@@ -246,9 +263,8 @@ input[type='text'], input[type='password'], input[type='number'], textarea, sele
 	padding 3px
 	width 100%
 
-	background rgba(0,0,0,.1)
+	background rgba(0,0,0,.2)
 	border none
-	border-bottom 1px rgba(64,64,64,.8) solid
 
 	font 11px Verdana
 	color white
@@ -261,7 +277,7 @@ textarea
 	max-width 480px
 	min-height 80px
 
-	background rgba(0,0,0,.3)
+	background rgba(0,0,0,.2)
 	border-bottom 1px rgba(0,0,0,0) solid
 
 select

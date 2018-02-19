@@ -24,7 +24,7 @@ block content
 					p ID
 
 				if all
-					td(width='100px')
+					td(width='150px')
 						p Game
 
 				td(width='10%')
@@ -36,8 +36,8 @@ block content
 				tr.list
 					td.label
 						p
+							| !{revision.time_stamp} &nbsp;
 							| <span class='subdued timestamp'>!{revision.time_stamp}</span>
-							| @!{revision.time_stamp}
 
 					td
 						p= revision.id
