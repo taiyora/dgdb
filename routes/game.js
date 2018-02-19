@@ -567,7 +567,6 @@ function saveGameEntry(form, gameId, userId, callback) {
 				if ((form[key] != res.rows[0][key]) || (!gameId && form[key])) {
 					query += ', ' + key;
 					vars.push(form[key]);
-					console.log(form[key], res.rows[0][key]);
 				}
 			}
 
@@ -592,7 +591,7 @@ function saveGameEntry(form, gameId, userId, callback) {
 				query = 'UPDATE games SET last_updated = $1 WHERE id = $2;';
 				vars = [
 					getTimestamp(),
-					gameId ];
+					gameId ? gameId : res.rows[0].id ];
 
 				pgPool.query(query, vars, function(err, res2) {
 					if (err) {
