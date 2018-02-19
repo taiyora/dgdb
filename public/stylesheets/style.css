@@ -148,6 +148,12 @@ div.darkened {
   padding: 10px;
   background: rgba(0,0,0,0.3);
 }
+div.hide-overflow {
+  display: block;
+  width: 100px;
+  overflow: hidden;
+  white-space: nowrap;
+}
 div.edit-page-link {
   padding: 0 5px 5px 5px;
   position: fixed;

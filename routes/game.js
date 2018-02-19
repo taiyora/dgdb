@@ -264,9 +264,22 @@ router.post('/updateRating', requireLogin, function(req, res, next) {
 router.get('/revisions', function(req, res, next) {
 	const query = `
 		SELECT
-			*,
+			time_stamp,
+			id,
+			game_id,
+			message,
+
+			(SELECT coalesce(
+				NULLIF(title_romaji, ''),
+				NULLIF(title_english, ''),
+				NULLIF(title_jp, '')
+			)
+			FROM games WHERE id = game_id)
+				AS title,
+
 			(SELECT username FROM users WHERE id = user_id)
 				AS username
+
 		FROM revisions ORDER BY id DESC;`;
 
 	pgPool.query(query, function(err, res2) {
@@ -296,7 +309,7 @@ router.get('/revisions', function(req, res, next) {
 router.get('/revisions/:id', function(req, res, next) {
 	const query = `
 		SELECT
-			*,
+			time_stamp, id, message,
 			(SELECT username FROM users WHERE id = user_id)
 				AS username
 		FROM revisions WHERE game_id = $1 ORDER BY id DESC;`;

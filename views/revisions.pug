@@ -1,4 +1,4 @@
-extends ../layout
+extends layout
 
 block content
 	script.
@@ -13,20 +13,13 @@ block content
 		p.error(align='center')= error
 
 	if revisions.length
-		if !all
-			div.darkened
-				p(align='center') Revisions for game <a href='/game/view/!{revisions[0].game_id}'>#!{revisions[0].game_id}</a>
-
 		table
 			tr.heading
 				td(width='25%')
 				td(width='5%')
 					p ID
-
-				if all
-					td(width='100px')
-						p Game
-
+				td(width='100px')
+					p Relation
 				td(width='10%')
 					p User
 				td
@@ -40,12 +33,14 @@ block content
 							| @!{revision.time_stamp}
 
 					td
-						p= revision.id
+						if revision.type == 'g'
+							p g!{revision.id}
+						else
+							p r!{revision.id}
 
-					if all
-						td
-							div.hide-overflow
-								p <a class='normal' href='/game/view/!{revision.game_id}'>!{revision.title}</a>
+					td
+						div.hide-overflow
+							p <a class='normal' href='/game/!{revision.relation_id}'>!{revision.title}</a>
 
 					td
 						p= revision.username
