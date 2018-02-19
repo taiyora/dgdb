@@ -309,7 +309,7 @@ router.get('/revisions', function(req, res, next) {
 router.get('/revisions/:id', function(req, res, next) {
 	const query = `
 		SELECT
-			time_stamp, id, message,
+			time_stamp, id, game_id, message,
 			(SELECT username FROM users WHERE id = user_id)
 				AS username
 		FROM revisions WHERE game_id = $1 ORDER BY id DESC;`;
