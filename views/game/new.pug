@@ -3,7 +3,12 @@ extends ../layout
 block content
 	if error
 		p.error(align='center')= error
-		br
+
+	if editing
+		div.darkened
+			p(align='center') Editing game <a href='/game/view/!{form.id}'>#!{form.id}</a>
+
+		hr
 
 	if form
 		//- This page also handles editing entries. The 'formAction' and 'editing' variables specify which operation to do

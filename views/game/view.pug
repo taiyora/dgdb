@@ -242,7 +242,7 @@ block content
 						| (<span class='timestamp'>!{game.entry_created}</span>)
 
 		div(style='float: left; width: 80%;')
-			h3.heading Releases&nbsp;
+			h3.section-heading Releases&nbsp;
 				<font style='position: relative; bottom: 3px; font: 11px Verdana;'>
 					<a class='gold' href='/release/new/!{game.id}'>add a release <span class='icon-edit'>✎</span></a>
 				</font>
@@ -265,11 +265,11 @@ block content
 									p= release.release_date
 								td
 									if release.language == 'Japanese'
-										img.flag.flag-jp(src='/images/flags/blank.gif' style='margin-right: 6px;')
+										img.flag.flag-jp(src='/images/flags/blank.gif')
 									else if release.language == 'English'
-										img.flag.flag-gb(src='/images/flags/blank.gif' style='margin-right: 6px;')
+										img.flag.flag-gb(src='/images/flags/blank.gif')
 									else if release.language == 'French'
-										img.flag.flag-fr(src='/images/flags/blank.gif' style='margin-right: 6px;')
+										img.flag.flag-fr(src='/images/flags/blank.gif')
 								td
 									p= release.title
 								td
@@ -279,7 +279,7 @@ block content
 					p No releases found
 
 		div(style='float: left; width: 80%;')
-			h3.heading Ratings and Reviews
+			h3.section-heading Ratings and Reviews
 
 			div.main(style='float: left; width: 30%;')
 				if user

@@ -1,3 +1,4 @@
+// ------------------------------------------------------------------------------------------ Fonts
 @import url('https://fonts.googleapis.com/css?family=Graduate')
 @import url('https://fonts.googleapis.com/css?family=Indie+Flower')
 @import url('https://fonts.googleapis.com/css?family=Nova+Flat')
@@ -6,6 +7,28 @@
 	font-family AiharaHudemojiKaisho
 	src url("/fonts/AiharaHudemojiKaisho2.01.ttf")
 
+// ------------------------------------------------------------------------------------------ Colours
+c-white-trans       = rgba(255, 255, 255,  .5)
+c-white-dark        = rgba(192, 192, 192, 1.0)
+c-grey-dark         = rgba( 64,  64,  64, 1.0)
+c-red               = rgba(255, 128, 128, 1.0)
+c-red-dark-trans    = rgba(128,  64,  64,  .5)
+c-green             = rgba(128, 255, 128, 1.0)
+c-green-dark-trans  = rgba( 64, 128,  64,  .5)
+c-blue              = rgba(128, 192, 255, 1.0)
+c-blue-trans        = rgba(128, 192, 255,  .5)
+c-blue-transh       = rgba(128, 192, 255,  .2)
+c-blue-dark2-transl = rgba( 16,  32,  64,  .8)
+c-blue-dark2-transh = rgba( 16,  32,  64,  .2)
+c-greenblue-transl  = rgba(128, 255, 255,  .8)
+c-greenblue-transh  = rgba(128, 255, 255,  .2)
+c-purple            = rgba(192, 128, 255, 1.0)
+c-purple-transl     = rgba(192, 128, 255,  .8)
+c-purple-transh     = rgba(192, 128, 255,  .2)
+c-gold              = rgba(255, 192, 128, 1.0)
+c-transparent       = rgba(  0,   0,   0,  .0)
+
+// ======================================================================================================================== Body/BG
 body
 	overflow-x hidden
 	background black
@@ -40,7 +63,7 @@ div.bg-image
 
 div.sprite
 	position absolute
-	top -20px
+	top -23px
 	right 300px
 	width 104px
 	height 144px
@@ -49,13 +72,15 @@ div.sprite
 	background url('/images/wada_sprite.png')
 	filter opacity(50%)
 
+	image-rendering pixelated
+
+// ======================================================================================================================== Site Logo
 h1.logo
 	margin 0
 	padding-left 15px
 	width 200px
 
 	font 80px Graduate
-	color white
 
 	transition text-shadow 3s
 	text-shadow -2px 2px 0px rgba(0,230,230,.5), // Credit: https://designshack.net/articles/css/12-fun-css-text-shadows-you-can-copy-and-paste/
@@ -77,10 +102,11 @@ h1.logo a
 	text-decoration none
 	color white
 
-	-webkit-text-fill-color rgba(255,255,255,.5)
+	-webkit-text-fill-color c-white-trans
 	-webkit-text-stroke-width 2px
 	-webkit-text-stroke-color white
 
+// ======================================================================================================================== Headings
 h2, h3
 	margin 0
 
@@ -90,7 +116,7 @@ h2, h3
 h3
 	font-size 25px
 
-h3.heading
+h3.section-heading
 	position relative
 	top 14px
 	left 20px
@@ -98,6 +124,7 @@ h3.heading
 .fancy
 	font-family 'Indie Flower', AiharaHudemojiKaisho
 
+// ======================================================================================================================== Text
 p, pre
 	margin 0
 
@@ -106,17 +133,17 @@ p, pre
 
 p.message
 	padding 5px
-	background rgba(64,128,64,.5)
+	background c-green-dark-trans
 
 	font-weight bold
-	color rgb(128,255,128)
+	color c-green
 
 p.error
 	padding 5px
-	background rgba(128,64,64,.5)
+	background c-red-dark-trans
 
 	font-weight bold
-	color rgb(255,128,128)
+	color c-red
 
 pre
 	white-space pre-wrap
@@ -124,32 +151,32 @@ pre
 
 pre.error
 	padding 5px
-	background rgba(128,64,64,.5)
+	background c-red-dark-trans
 
 	font-family Consolas, 'Courier New';
-	color rgb(255,128,128)
+	color c-red
 
 span.icon-sortable
 	font-size 14px
-	color rgb(128,192,255)
+	color c-blue
 
 span.icon-edit
 	font-size 18px
-	color rgb(192,128,255)
-
-.stylized
-	font 12px Graduate
-
-.subdued
-	color rgb(128,128,128)
+	color c-purple
 
 label
 	font 10px Verdana
 	color white
 
+.stylized
+	font 12px Graduate
+
+.subdued
+	color c-white-trans
+
 a
 	text-decoration none
-	color rgb(128,192,255)
+	color c-blue
 
 a:hover
 	text-decoration underline
@@ -158,23 +185,24 @@ a.menu-item
 	margin-right 15px
 
 .purple
-	color rgb(192,128,255)
+	color c-purple
 
 .gold
-	color rgb(255,192,128)
+	color c-gold
 
 a.gold:hover
 	text-decoration none
-	border-bottom 1px rgb(255,192,128) solid
+	border-bottom 1px c-gold solid
 
+// ======================================================================================================================== Divs
 div.main
 	margin-top 10px
 	margin-bottom 8px
 	padding 5px
 	box-sizing border-box
 
-	background linear-gradient(90deg, rgba(16,32,48,.8), rgba(16,32,48,.4))
-	border 1px rgba(64,96,128,.6) solid
+	background linear-gradient(90deg, c-blue-dark2-transl, c-blue-dark2-transh)
+	border 1px c-blue-transh solid
 
 	box-shadow 0 20px 25px 5px rgba(0,0,0,.2)
 	box-shadow 0 10px 25px 5px rgba(0,0,0,.4)
@@ -189,6 +217,15 @@ div.menu-bar-right
 	top 100px
 	right 10px
 
+div.edit-page-link
+	padding 0 5px 5px 5px
+
+	position fixed
+	top 0
+	right 0
+
+	background rgba(0,0,0,.8)
+
 div.darkened
 	padding 10px
 	background rgba(0,0,0,.3)
@@ -200,15 +237,7 @@ div.hide-overflow
 	overflow hidden
 	white-space nowrap
 
-div.edit-page-link
-	padding 0 5px 5px 5px
-
-	position fixed
-	top 0
-	right 0
-
-	background rgba(0,0,0,.8)
-
+// ======================================================================================================================== Tables
 table
 	width 100%
 
@@ -221,19 +250,19 @@ table.small
 
 tr.heading td p
 	font-style italic
-	color rgb(192,192,192)
+	color c-white-dark
 
 tr.heading td p a
-	color rgb(192,192,192)
+	color c-greenblue-transl
 
 tr.list td
 	padding 0
-	padding-left 7px
+	padding-left 10px
 	
 	height 21px // A height of 21px centers 11px Verdana text better
 	vertical-align middle
 
-	border-bottom 1px rgba(128,255,255,.2) dashed
+	border-bottom 1px c-greenblue-transh dashed
 
 tr.list:last-child td
 	border none
@@ -242,43 +271,45 @@ tr.list td a
 	color white
 
 tr.list td a:hover
-	border-bottom 1px rgb(128,128,128) solid
+	border-bottom 1px c-white-trans solid
 	text-decoration none
 
 tr.list td a.normal
-	color rgb(128,192,255)
+	color c-blue
 
 tr.list td a.normal:hover
-	text-decoration underline
 	border none
+	text-decoration underline
 
 td
 	padding 5px
 	vertical-align top
 
 td.label p
-	color rgb(192,192,192)
+	color c-white-dark
 
+// ======================================================================================================================== Forms
 input[type='text'], input[type='password'], input[type='number'], textarea, select
 	padding 3px
 	width 100%
 
 	background rgba(0,0,0,.2)
 	border none
+	border-bottom 1px c-transparent solid
 
 	font 11px Verdana
 	color white
 
 input[type='number']
 	width 40px
-	color rgb(255,192,128)
+	color c-gold
 
 textarea
 	max-width 480px
 	min-height 80px
 
 	background rgba(0,0,0,.2)
-	border-bottom 1px rgba(0,0,0,0) solid
+	border-bottom 1px c-transparent solid
 
 select
 	margin-top 5px
@@ -288,7 +319,7 @@ option
 	background black
 
 input[type='text']:hover, input[type='password']:hover, input[type='number']:hover, textarea:hover
-	border-bottom 1px rgba(192,128,255,.8) solid
+	border-bottom 1px c-purple-transl solid
 
 input[type='checkbox']
 	position relative
@@ -303,7 +334,7 @@ input[type='submit']
 	height 30px
 
 	background rgba(0,0,0,.3)
-	border 1px rgb(64,64,64) solid
+	border 1px c-grey-dark solid
 
 	font 11px Verdana
 	color white
@@ -311,17 +342,17 @@ input[type='submit']
 	cursor pointer
 
 input[type='submit']:hover
-	background rgba(192,128,255,.1)
-	border 1px rgba(192,128,255,.8) solid
+	background c-purple-transh
+	border 1px c-purple-transl solid
 
-	box-shadow 0 0 50px 5px rgba(192,128,255,.1)
+	box-shadow 0 0 50px 5px c-purple-transh
 
 input[type='submit']:disabled
-	color rgb(128,128,128)
+	color c-white-trans
 
 input[type='submit']:disabled:hover
 	background rgba(0,0,0,.3)
-	border 1px rgb(64,64,64) solid
+	border 1px c-grey-dark solid
 
 	box-shadow none
 	cursor default
@@ -330,19 +361,22 @@ input[type='submit'].small
 	width 50px
 	height 25px
 
+// ======================================================================================================================== Other
 hr
+	margin-bottom 15px
+
 	border none
-	border-top 1px rgb(128,128,128) dashed
+	border-top 1px c-greenblue-transh dashed
 
 ::-webkit-scrollbar
 	width 15px
 
 ::-webkit-scrollbar-track
 	background black
-	border-left 1px rgba(128,192,255,.5) dotted
+	border-left 1px c-blue-trans dotted
 
 ::-webkit-scrollbar-thumb
-	background rgba(128,192,255,.1)
+	background c-blue-transh
 
 ::-webkit-scrollbar-thumb:hover
-	background rgba(128,192,255,.2)
+	background c-purple-transh

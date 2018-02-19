@@ -32,20 +32,20 @@ div.bg-image {
 }
 div.sprite {
   position: absolute;
-  top: -20px;
+  top: -23px;
   right: 300px;
   width: 104px;
   height: 144px;
   z-index: -1;
   background: url("/images/wada_sprite.png");
   filter: opacity(50%);
+  image-rendering: pixelated;
 }
 h1.logo {
   margin: 0;
   padding-left: 15px;
   width: 200px;
   font: 80px Graduate;
-  color: #fff;
   transition: text-shadow 3s;
   text-shadow: -2px 2px 0px rgba(0,230,230,0.5), -4px 4px 0px rgba(1,204,204,0.5), -6px 6px 0px rgba(0,189,189,0.5);
   cursor: pointer;
@@ -70,7 +70,7 @@ h3 {
 h3 {
   font-size: 25px;
 }
-h3.heading {
+h3.section-heading {
   position: relative;
   top: 14px;
   left: 20px;
@@ -114,15 +114,15 @@ span.icon-edit {
   font-size: 18px;
   color: #c080ff;
 }
+label {
+  font: 10px Verdana;
+  color: #fff;
+}
 .stylized {
   font: 12px Graduate;
 }
 .subdued {
-  color: #808080;
-}
-label {
-  font: 10px Verdana;
-  color: #fff;
+  color: rgba(255,255,255,0.5);
 }
 a {
   text-decoration: none;
@@ -149,8 +149,8 @@ div.main {
   margin-bottom: 8px;
   padding: 5px;
   box-sizing: border-box;
-  background: linear-gradient(90deg, rgba(16,32,48,0.8), rgba(16,32,48,0.4));
-  border: 1px rgba(64,96,128,0.6) solid;
+  background: linear-gradient(90deg, rgba(16,32,64,0.8), rgba(16,32,64,0.2));
+  border: 1px rgba(128,192,255,0.2) solid;
   box-shadow: 0 20px 25px 5px rgba(0,0,0,0.2);
   box-shadow: 0 10px 25px 5px rgba(0,0,0,0.4);
 }
@@ -164,6 +164,13 @@ div.menu-bar-right {
   top: 100px;
   right: 10px;
 }
+div.edit-page-link {
+  padding: 0 5px 5px 5px;
+  position: fixed;
+  top: 0;
+  right: 0;
+  background: rgba(0,0,0,0.8);
+}
 div.darkened {
   padding: 10px;
   background: rgba(0,0,0,0.3);
@@ -173,13 +180,6 @@ div.hide-overflow {
   width: 150px;
   overflow: hidden;
   white-space: nowrap;
-}
-div.edit-page-link {
-  padding: 0 5px 5px 5px;
-  position: fixed;
-  top: 0;
-  right: 0;
-  background: rgba(0,0,0,0.8);
 }
 table {
   width: 100%;
@@ -196,11 +196,11 @@ tr.heading td p {
   color: #c0c0c0;
 }
 tr.heading td p a {
-  color: #c0c0c0;
+  color: rgba(128,255,255,0.8);
 }
 tr.list td {
   padding: 0;
-  padding-left: 7px;
+  padding-left: 10px;
   height: 21px;
   vertical-align: middle;
   border-bottom: 1px rgba(128,255,255,0.2) dashed;
@@ -212,15 +212,15 @@ tr.list td a {
   color: #fff;
 }
 tr.list td a:hover {
-  border-bottom: 1px #808080 solid;
+  border-bottom: 1px rgba(255,255,255,0.5) solid;
   text-decoration: none;
 }
 tr.list td a.normal {
   color: #80c0ff;
 }
 tr.list td a.normal:hover {
-  text-decoration: underline;
   border: none;
+  text-decoration: underline;
 }
 td {
   padding: 5px;
@@ -238,6 +238,7 @@ select {
   width: 100%;
   background: rgba(0,0,0,0.2);
   border: none;
+  border-bottom: 1px rgba(0,0,0,0) solid;
   font: 11px Verdana;
   color: #fff;
 }
@@ -281,12 +282,12 @@ input[type='submit'] {
   cursor: pointer;
 }
 input[type='submit']:hover {
-  background: rgba(192,128,255,0.1);
+  background: rgba(192,128,255,0.2);
   border: 1px rgba(192,128,255,0.8) solid;
-  box-shadow: 0 0 50px 5px rgba(192,128,255,0.1);
+  box-shadow: 0 0 50px 5px rgba(192,128,255,0.2);
 }
 input[type='submit']:disabled {
-  color: #808080;
+  color: rgba(255,255,255,0.5);
 }
 input[type='submit']:disabled:hover {
   background: rgba(0,0,0,0.3);
@@ -299,8 +300,9 @@ input[type='submit'].small {
   height: 25px;
 }
 hr {
+  margin-bottom: 15px;
   border: none;
-  border-top: 1px #808080 dashed;
+  border-top: 1px rgba(128,255,255,0.2) dashed;
 }
 ::-webkit-scrollbar {
   width: 15px;
@@ -310,10 +312,10 @@ hr {
   border-left: 1px rgba(128,192,255,0.5) dotted;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(128,192,255,0.1);
+  background: rgba(128,192,255,0.2);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(128,192,255,0.2);
+  background: rgba(192,128,255,0.2);
 }
 @-moz-keyframes bg-scroll-anim {
   100% {
