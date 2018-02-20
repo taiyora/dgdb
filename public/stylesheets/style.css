@@ -317,7 +317,7 @@ hr {
   background: rgba(128,192,255,0.2);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(192,128,255,0.2);
+  background: rgba(128,255,255,0.2);
 }
 @-moz-keyframes bg-scroll-anim {
   100% {
