@@ -27,9 +27,10 @@ div.bg-image {
   width: 50%;
   height: 100%;
   z-index: -1;
-  background: url("/images/wada.png") repeat;
+  background: url("/images/wada.webp") repeat;
   background-size: 100%;
   filter: opacity(50%);
+  animation: 1s bg-image-bounce-anim infinite alternate ease-in-out;
 }
 div.sprite {
   position: absolute;
@@ -381,6 +382,26 @@ hr.tight {
 @keyframes bg-scroll-anim {
   100% {
     background-position: -3000px 0;
+  }
+}
+@-moz-keyframes bg-image-bounce-anim {
+  100% {
+    background-position: 0 -3px;
+  }
+}
+@-webkit-keyframes bg-image-bounce-anim {
+  100% {
+    background-position: 0 -3px;
+  }
+}
+@-o-keyframes bg-image-bounce-anim {
+  100% {
+    background-position: 0 -3px;
+  }
+}
+@keyframes bg-image-bounce-anim {
+  100% {
+    background-position: 0 -3px;
   }
 }
 @-moz-keyframes marquee {

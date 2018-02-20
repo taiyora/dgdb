@@ -59,10 +59,15 @@ div.bg-image
 	height 100%
 	z-index -1
 
-	background url('/images/wada.png') repeat
+	background url('/images/wada.webp') repeat
 	background-size 100%
-
 	filter opacity(50%)
+
+	animation 1s bg-image-bounce-anim infinite alternate ease-in-out
+
+@keyframes bg-image-bounce-anim
+	100%
+		background-position 0 -3px
 
 div.sprite
 	position absolute
