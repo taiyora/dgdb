@@ -328,6 +328,9 @@ input[type='submit'].small {
   width: 50px;
   height: 25px;
 }
+img.ss {
+  margin-bottom: -4px;
+}
 hr {
   border: none;
   border-top: 1px rgba(128,255,255,0.2) dashed;

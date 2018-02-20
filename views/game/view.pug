@@ -247,7 +247,8 @@ block content
 		div(style='float: right; width: 19.6%;')
 			div.main
 				each ss in game.ss_urls
-					a(href=ss) <img src=!{ss} width='100%'>
+					a(href=ss) <img class='ss' src=!{ss} width='100%'>
+					hr
 
 				else
 					p No screenshots found
