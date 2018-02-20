@@ -147,7 +147,7 @@ block content
 								if game.title_romaji
 									h3.fancy <span class='subdued'>(!{game.title_romaji})</span>
 
-								if game.title_english && (game.title_english != game.title_jp)
+								if game.title_english && (game.title_english != game.title_jp) && (game.title_english != game.title_romaji)
 									h3.fancy= game.title_english
 
 							br
