@@ -43,7 +43,7 @@ block content
 							if revision.type == 'g'
 								p <a class='normal' href='/game/view/!{revision.relation_id}'>!{revision.title}</a>
 							else
-								p <a class='normal' href='/game/view/!{revision.relation_id}' style='color: rgb(128,255,128);'>!{revision.title}</a>
+								p(style='color: rgb(128,255,128);')= revision.title
 
 					td
 						p= revision.username
