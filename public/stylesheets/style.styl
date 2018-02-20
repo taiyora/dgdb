@@ -219,6 +219,29 @@ div.menu-bar-right
 	top 100px
 	right 10px
 
+div.banner
+	position absolute
+	top 0
+	left 0
+	width 100%
+	height 20px
+
+	overflow hidden
+	background linear-gradient(90deg, c-transparent, rgba(0,0,0,.5))
+
+div.banner p
+	margin-top 3px
+	animation marquee 60s linear infinite
+
+@keyframes marquee
+	0%
+		transform translateX(100%)
+	100%
+		transform translateX(-100%)
+
+div.banner p:hover
+	animation-play-state paused
+
 div.edit-page-link
 	padding 0 5px 5px 5px
 
