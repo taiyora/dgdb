@@ -165,8 +165,10 @@ router.get('/view/:id', function(req, res, next) {
 				'version', version,
 				'download', download )
 					FROM releases WHERE game_id = $1
-					ORDER BY release_date DESC, language ASC)
-						AS releases,
+					ORDER BY
+						NULLIF(release_date, 'xxxx-xx-xx') DESC NULLS LAST,
+						language ASC)
+							AS releases,
 
 			array(SELECT rating FROM ratings WHERE game_id = $1)
 				AS ratings,
