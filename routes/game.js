@@ -385,6 +385,8 @@ router.post(['/new', '/edit/:id'], requireLogin, function(req, res, next) { // e
 		formAction = '/game/edit/' + req.params.id;
 		editing = true;
 
+		form.id = req.params.id;
+
 		// Make sure the user entered a revision message
 		if (!form.message) {
 			error = 'Please enter a revision message noting what change(s) you made';
