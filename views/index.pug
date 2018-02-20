@@ -1,3 +1,30 @@
 extends layout
 
 block content
+    div.main
+        p The Doujin Game DataBase is a community-powered website where anybody can contribute.
+
+    br
+
+    div(style='float: right; width: 50%;')
+        p
+            | <b>What is a Doujin Game?</b><br>
+            | Doujin (同人) is
+            |     "a general Japanese term for a group of people or friends who share an interest, activity, hobbies, or achievement."<sup><a href='https://en.wikipedia.org/wiki/D%C5%8Djin'>1</a></sup>
+            |     However, in "Doujin Game" the term is used to refer to amateur, self-published works; the equivalent of "indie".<br>
+            | Touhou, Yume Nikki, Higurashi; Doujin Games are creative, influential, and heart-pounding.
+            |     Who knows what kind of hidden wonders lurk in these divs?<br>
+            | <br>
+            | <b>What is DGDB?</b><br>
+            | This site catalogues Doujin Games through user contribution, and ranks them to pick out the best.<br>
+            | Users can rate their favourite games, build lists, find recommendations, and much more.<br>
+            | <a href='/account/register'>Make an account</a> and get started!
+            |     Or just check out the <a href='/game/list?s=rating_bayesian&o=desc'>top games</a>.
+
+        if random_ss.url
+            br
+            br
+
+            center
+                p <b>Random Game</b>
+                p <a href='/game/view/!{random_ss.game_id}'><img class='preview' src='!{random_ss.url}' width='50%'></a>

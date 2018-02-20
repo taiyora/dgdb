@@ -341,6 +341,13 @@ input[type='submit'].small {
 img.ss {
   margin-bottom: -4px;
 }
+img.preview {
+  margin-top: 5px;
+  filter: opacity(50%);
+}
+img.preview:hover {
+  filter: opacity(100%);
+}
 hr {
   border: none;
   border-top: 1px rgba(128,255,255,0.2) dashed;

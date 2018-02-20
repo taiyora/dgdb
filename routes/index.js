@@ -16,8 +16,22 @@ router.use(main.sessionsMiddleware);
 // eslint-disable-next-line max-len
 // ======================================================================================================================== Home
 router.get('/', function(req, res, next) {
-	res.render('index', {
-		title: websiteName + ' // home' });
+	const query = `
+		SELECT * FROM screenshots
+		WHERE enabled = TRUE
+		ORDER BY random()
+		LIMIT 1;`;
+
+	pgPool.query(query, function(err, res2) {
+		if (err) {
+			console.error(err);
+		}
+
+		res.render('index', {
+			title: websiteName + ' // home',
+			page: 'home',
+			random_ss: res2.rows ? res2.rows[0] : {} });
+	});
 });
 
 // eslint-disable-next-line max-len
