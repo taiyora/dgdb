@@ -265,6 +265,7 @@ div.hide-overflow
 // ======================================================================================================================== Tables
 table
 	width 100%
+	border-spacing 0
 
 table.centered
 	margin 0 auto
@@ -281,16 +282,14 @@ tr.heading td p a
 	color c-greenblue-transl
 
 tr.list td
-	padding 0
+	padding 1px
 	padding-left 5px
 	
 	height 21px // A height of 21px centers 11px Verdana text better
 	vertical-align middle
 
-	border-bottom 1px c-greenblue-transh dashed
-
-tr.list:last-child td
-	border none
+tr.list:nth-child(even)
+	background rgba(128,192,255,.05)
 
 tr.list td a
 	color white

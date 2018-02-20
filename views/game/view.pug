@@ -139,11 +139,28 @@ block content
 			div.main
 				table
 					tr
-						td(width='50%')
+						td(width='60%' style='background: rgba(128,192,255,.05);')
+							center
+								if game.title_jp
+									h2= game.title_jp
+
+								if game.title_romaji
+									h3.fancy <span class='subdued'>(!{game.title_romaji})</span>
+
+								if game.title_english && (game.title_english != game.title_jp)
+									h3.fancy= game.title_english
+
+							br
+
+							if game.description
+								div.darkened
+									pre= game.description
+
+						td
 							table
 								if game.title_jp
 									tr.list
-										td.label(width='30%')
+										td.label(width='40%')
 											p Japanese title
 										td
 											p !{game.title_jp}
@@ -227,22 +244,6 @@ block content
 										td
 											p <a class='normal' href=!{game.download_alt}>Link</a>
 
-						td
-							if game.title_jp
-								h2= game.title_jp
-
-							if game.title_romaji
-								h3.fancy <span class='subdued'>(!{game.title_romaji})</span>
-
-							if game.title_english && (game.title_english != game.title_jp)
-								h3.fancy= game.title_english
-
-							br
-
-							if game.description
-								div.darkened
-									pre= game.description
-
 		div(style='float: right; width: 19.6%;')
 			div.main
 				each ss in game.ss_urls
@@ -301,7 +302,7 @@ block content
 									if release.download
 										p <a class='normal' href='!{release.download}'>DL</a>
 								td
-									p <a href='/release/edit/!{release.id}'><span class='icon-edit' style='font-size: 12px;'>✎</span></a>
+									p <a href='/release/edit/!{release.id}'><span class='icon-edit' style='font-size: 14px;'>✎</span></a>&nbsp;
 
 				else
 					p No releases found
@@ -309,7 +310,10 @@ block content
 		div(style='float: left; width: 80%;')
 			h3.section-heading Ratings and Reviews
 
-			div.main(style='float: left; width: 30%;')
+			div.main(style='float: left; width: 69.5%;')
+				p No reviews found
+
+			div.main(style='float: right; width: 30%;')
 				if user
 					div.darkened
 						form#rating-form
@@ -336,7 +340,7 @@ block content
 								p.rating= game.rating_average
 
 					tr.list
-						td.label(width='52%')
+						td.label(width='50%')
 							p Number of ratings
 						td
 							p= game.ratings.length
@@ -348,12 +352,9 @@ block content
 					table
 						each rating in game.ratings_recent
 							tr.list
-								td.label(width='36%')
+								td.label(width='40%')
 									p.timestamp= rating.f3
-								td.label(width='16%')
+								td.label(width='10%')
 									p.rating= rating.f2
 								td
 									p= rating.f1
-
-			div.main(style='float: right; width: 69.5%;')
-				p No reviews found
