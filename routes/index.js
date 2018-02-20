@@ -9,7 +9,7 @@ router.use('/release', require('./release'));
 const main = require('../main');
 
 const websiteName = main.websiteName;
-const pgPool      = main.pgPool
+const pgPool      = main.pgPool;
 router.use(main.sessionsConfig);
 router.use(main.sessionsMiddleware);
 
