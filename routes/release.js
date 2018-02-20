@@ -168,7 +168,7 @@ function saveReleaseEntry(form, releaseId, userId, callback) {
 			VALUES ($1, $2, $3, $4, $5, $6, $7)
 			RETURNING *;`;
 
-			vars = [form.game_id].concat(vars);
+		vars = [form.game_id].concat(vars);
 	}
 
 	pgPool.query(query, vars, function(err, res) {
@@ -192,6 +192,10 @@ function saveReleaseEntry(form, releaseId, userId, callback) {
 			// Determine which fields were edited
 			// (or just add whatever fields were filled if it's a new entry)
 			for (const key in form) {
+				if (key == 'game_id') {
+					continue;
+				}
+
 				if ((form[key] != res.rows[0][key]) || (!releaseId && form[key])) {
 					query += ', ' + key;
 					vars.push(form[key]);
