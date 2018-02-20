@@ -409,6 +409,9 @@ router.post(['/new', '/edit/:id'], requireLogin, function(req, res, next) { // e
 		form.title_romaji.length  > 100  ||
 		form.title_english.length > 100  ||
 		form.title_other.length   > 100  ||
+		form.creator.length       > 50   ||
+		form.company.length       > 50   ||
+		form.publisher.length     > 50   ||
 		form.website.length       > 100  ||
 		form.vndb.length          > 25   ||
 		form.download.length      > 200  ||
@@ -496,6 +499,9 @@ function saveGameEntry(form, gameId, userId, callback) {
 		form.title_english_official ? 'TRUE' : 'FALSE',
 		form.title_other,
 		form.description,
+		form.creator,
+		form.company,
+		form.publisher,
 		form.website,
 		form.vndb,
 		form.download,
@@ -515,11 +521,14 @@ function saveGameEntry(form, gameId, userId, callback) {
 				title_english_official = $5,
 				title_other = $6,
 				description = $7,
-				website = $8,
-				vndb = $9,
-				download = $10,
-				download_alt = $11,
-				screenshots = $12
+				creator = $8,
+				company = $9,
+				publisher = $10,
+				website = $11,
+				vndb = $12,
+				download = $13,
+				download_alt = $14,
+				screenshots = $15
 			FROM (SELECT * FROM games WHERE id = $1 FOR UPDATE) dummy
 			WHERE games.id = dummy.id
 			RETURNING dummy.*;`;
@@ -538,13 +547,16 @@ function saveGameEntry(form, gameId, userId, callback) {
 				title_english_official,
 				title_other,
 				description,
+				creator,
+				company,
+				publisher,
 				website,
 				vndb,
 				download,
 				download_alt,
 				screenshots,
 				entry_created )
-			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
 			RETURNING *;`;
 	}
 

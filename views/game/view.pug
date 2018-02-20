@@ -178,6 +178,27 @@ block content
 										td
 											p= game.title_other
 
+								if game.creator
+									tr.list
+										td.label
+											p Creator
+										td
+											p= game.creator
+
+								if game.company
+									tr.list
+										td.label
+											p Company
+										td
+											p= game.company
+
+								if game.publisher
+									tr.list
+										td.label
+											p Publisher
+										td
+											p= game.publisher
+
 								if game.website
 									tr.list
 										td.label

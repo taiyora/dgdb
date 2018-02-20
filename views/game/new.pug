@@ -65,6 +65,44 @@ block content
 							autocomplete='off')
 
 				tr
+					td(colspan='3')
+						hr
+						p.stylized.subdued(align='center') creator details
+
+				tr
+					td(style='height: 40px;')
+						label(for='creator') Original creator <span class='subdued'>(individual)</span>
+						input#creator(
+							type='text'
+							name='creator'
+							value=form.creator
+							maxlength='50'
+							autocomplete='off' )
+
+					td
+						label(for='company') Company
+						input#creator(
+							type='text'
+							name='company'
+							value=form.company
+							maxlength='50'
+							autocomplete='off' )
+
+					td
+						label(for='publisher') Publisher
+						input#creator(
+							type='text'
+							name='publisher'
+							value=form.publisher
+							maxlength='50'
+							autocomplete='off' )
+
+				tr
+					td(colspan='3')
+						hr
+						p.stylized.subdued(align='center') links
+
+				tr
 					td(style='height: 40px;')
 						label(for='website') Website <span class='subdued'>(original Japanese prefered)</span>
 						input#website(
