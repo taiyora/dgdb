@@ -239,6 +239,16 @@ tr.list td a.normal:hover {
   border: none;
   text-decoration: underline;
 }
+tr.list td a.icon-edit {
+  position: relative;
+  bottom: 1px;
+  font-size: 15px;
+  color: #c080ff;
+}
+tr.list td a.icon-edit:hover {
+  border: none;
+  color: #ffc080;
+}
 td {
   padding: 5px;
   vertical-align: top;
