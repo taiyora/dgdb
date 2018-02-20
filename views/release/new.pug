@@ -51,6 +51,20 @@ block content
 							autocomplete='off' )
 
 				tr
+					td
+					td
+						label(for='download') Download link/page  <span class='subdued'>(or purchase)</span>
+						input#download(
+							type='text'
+							name='download'
+							value=form.download
+							maxlength='200'
+							autocomplete='off' )
+
+					td
+
+
+				tr
 					td(colspan='3' align='center')
 						if editing
 							hr

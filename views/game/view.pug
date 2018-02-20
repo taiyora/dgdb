@@ -275,11 +275,12 @@ block content
 							td(width='20%')
 								p Release date
 							td
-							td(width='38%')
+							td(width='40%')
 								p Title
-							td(width='38%')
+							td(width='40%')
 								p Version
-							td(width='4%')
+							td
+							td
 
 						each release in game.releases
 							tr.list
@@ -296,7 +297,10 @@ block content
 									p= release.title
 								td
 									p= release.version
-								td(align='right')
+								td
+									if release.download
+										p <a class='normal' href='!{release.download}'>DL</a>
+								td
 									p <a href='/release/edit/!{release.id}'><span class='icon-edit' style='font-size: 12px;'>✎</span></a>
 
 				else

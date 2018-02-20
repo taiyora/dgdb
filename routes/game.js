@@ -162,7 +162,8 @@ router.get('/view/:id', function(req, res, next) {
 				'title', title,
 				'language', language,
 				'release_date', release_date,
-				'version', version )
+				'version', version,
+				'download', download )
 					FROM releases WHERE game_id = $1 ORDER BY release_date DESC)
 						AS releases,
 

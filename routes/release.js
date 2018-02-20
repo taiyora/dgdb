@@ -69,7 +69,8 @@ router.post(['/new', '/edit/:id'], requireLogin, function(req, res, next) {
 	if (form.title.length         > 100 ||
 		form.language.length      > 10  ||
 		form.release_date.length  > 10  ||
-		form.version.length       > 50)
+		form.version.length       > 50  ||
+		form.download.length      > 200)
 	{
 		error = 'Bypassing the character limit is bad!';
 	}
@@ -131,6 +132,7 @@ function saveReleaseEntry(form, releaseId, userId, callback) {
 		form.language,
 		form.release_date,
 		form.version,
+		form.download,
 		getTimestamp() ];
 
 	if (releaseId) {
@@ -142,7 +144,8 @@ function saveReleaseEntry(form, releaseId, userId, callback) {
 				title = $2,
 				language = $3,
 				release_date = $4,
-				version = $5
+				version = $5,
+				download = $6
 			FROM (SELECT * FROM releases WHERE id = $1 FOR UPDATE) dummy
 			WHERE releases.id = dummy.id
 			RETURNING dummy.*;`;
@@ -160,8 +163,9 @@ function saveReleaseEntry(form, releaseId, userId, callback) {
 				language,
 				release_date,
 				version,
+				download,
 				entry_created )
-			VALUES ($1, $2, $3, $4, $5, $6)
+			VALUES ($1, $2, $3, $4, $5, $6, $7)
 			RETURNING *;`;
 
 			vars = [form.game_id].concat(vars);
