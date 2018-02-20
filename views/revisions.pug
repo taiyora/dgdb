@@ -41,9 +41,9 @@ block content
 					td
 						div.hide-overflow
 							if revision.type == 'g'
-								p <a class='normal' href='/game/!{revision.relation_id}'>!{revision.title}</a>
+								p <a class='normal' href='/game/view/!{revision.relation_id}'>!{revision.title}</a>
 							else
-								p <a class='normal' href='/game/!{revision.relation_id}' style='color: rgb(128,255,128);'>!{revision.title}</a>
+								p <a class='normal' href='/game/view/!{revision.relation_id}' style='color: rgb(128,255,128);'>!{revision.title}</a>
 
 					td
 						p= revision.username
