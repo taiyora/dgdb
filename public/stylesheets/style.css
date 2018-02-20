@@ -27,7 +27,7 @@ div.bg-image {
   width: 50%;
   height: 100%;
   z-index: -1;
-  background: url("/images/wada.jpg") repeat;
+  background: url("/images/wada.png") repeat;
   background-size: 100%;
   filter: opacity(50%);
 }
