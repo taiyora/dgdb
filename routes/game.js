@@ -158,6 +158,7 @@ router.get('/view/:id', function(req, res, next) {
 				AS ss_urls,
 
 			array(SELECT json_build_object(
+				'id', id,
 				'title', title,
 				'language', language,
 				'release_date', release_date,

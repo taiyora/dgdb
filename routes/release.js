@@ -12,7 +12,7 @@ router.use(main.sessionsMiddleware);
 const requireLogin = main.requireLogin;
 
 // eslint-disable-next-line max-len
-// ======================================================================================================================== New
+// ======================================================================================================================== New | Edit (POST)
 router.get('/new/:gameId', requireLogin, function(req, res, next) {
 	res.render('release/new', {
 		title: websiteName + ' // new release',
@@ -22,7 +22,7 @@ router.get('/new/:gameId', requireLogin, function(req, res, next) {
 		gameId: req.params.gameId });
 });
 
-router.post('/new', requireLogin, function(req, res, next) {
+router.post(['/new', '/edit/:id'], requireLogin, function(req, res, next) {
 	const form = req.body;
 	let error = '';
 
@@ -31,7 +31,32 @@ router.post('/new', requireLogin, function(req, res, next) {
 	let editing = false;
 
 	let releaseId = 0;
-	form.message = '(auto) New release';
+
+	if (req.params.id) {
+		// In this case, we're actually editing an existing entry.
+		// By releaseId being not 0, everything here will be handled in the context
+		// of editing rather than adding a new entry
+		releaseId = req.params.id;
+		form.id = releaseId;
+
+		destPageTitle = websiteName + ' // edit release: ' + form.title;
+		formAction = '/release/edit/' + req.params.id;
+		editing = true;
+
+		// Make sure the user entered a revision message
+		if (!form.message) {
+			error = 'Please enter a revision message noting what change(s) you made';
+		}
+		else {
+			if (form.message.length > 310) { // textarea maxlength is wrong?
+				error = 'Bypassing the character limit is bad!';
+			}
+		}
+	}
+	else {
+		// Since this must be a new entry, set form.message to be a relevant note
+		form.message = '(auto) New release';
+	}
 
 	const languages = [
 		'Japanese',
@@ -73,7 +98,7 @@ router.post('/new', requireLogin, function(req, res, next) {
 					form: form,
 					formAction: formAction,
 					editing: editing,
-					gameId: req.params.gameId });
+					gameId: form.game_id });
 			}
 		});
 	}
@@ -83,8 +108,8 @@ router.post('/new', requireLogin, function(req, res, next) {
 			title: websiteName + ' // new release',
 			error: error,
 			form: form,
-			formAction: '/release/new',
-			editing: false,
+			formAction: formAction,
+			editing: editing,
 			gameId: form.game_id });
 	}
 });
@@ -102,7 +127,6 @@ router.post('/new', requireLogin, function(req, res, next) {
 function saveReleaseEntry(form, releaseId, userId, callback) {
 	let query;
 	let vars = [
-		form.game_id,
 		form.title,
 		form.language,
 		form.release_date,
@@ -115,11 +139,10 @@ function saveReleaseEntry(form, releaseId, userId, callback) {
 		// enter the changes into the revision details
 		query = `
 			UPDATE releases SET
-				game_id = $2,
-				title = $3,
-				language = $4,
-				release_date = $5,
-				version = $6,
+				title = $2,
+				language = $3,
+				release_date = $4,
+				version = $5
 			FROM (SELECT * FROM releases WHERE id = $1 FOR UPDATE) dummy
 			WHERE releases.id = dummy.id
 			RETURNING dummy.*;`;
@@ -140,6 +163,8 @@ function saveReleaseEntry(form, releaseId, userId, callback) {
 				entry_created )
 			VALUES ($1, $2, $3, $4, $5, $6)
 			RETURNING *;`;
+
+			vars = [form.game_id].concat(vars);
 	}
 
 	pgPool.query(query, vars, function(err, res) {
@@ -206,5 +231,39 @@ function saveReleaseEntry(form, releaseId, userId, callback) {
 		}
 	});
 }
+
+// eslint-disable-next-line max-len
+// ======================================================================================================================== Edit (GET)
+/*
+ * Editing is actually handled the same way as making a new entry. But as long
+ * as the formAction variable is set correctly, we'll edit the entry instead.
+ */
+router.get('/edit/:id', requireLogin, function(req, res, next) {
+	const query = 'SELECT * FROM releases WHERE id = $1;';
+	const vars = [ req.params.id ];
+
+	pgPool.query(query, vars, function(err, res2) {
+		if (err) {
+			console.error(err);
+
+			res.render('release/new', {
+				title: websiteName + ' // edit release',
+				error: 'Something went wrong; please try again' });
+		}
+		else if (!res2.rows.length) {
+			res.render('release/new', {
+				title: websiteName + ' // edit release',
+				error: 'No entry with that ID exists' });
+		}
+		else {
+			res.render('release/new', {
+				title: websiteName + ' // edit release: ' + res2.rows[0].title,
+				form: res2.rows[0],
+				formAction: '/release/edit/' + req.params.id,
+				editing: true,
+				gameId: res2.rows[0].game_id });
+		}
+	});
+});
 
 module.exports = router;

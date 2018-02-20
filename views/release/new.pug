@@ -6,7 +6,10 @@ block content
 
 	if form
 		div.darkened
-			p(align='center') Adding release for game <a href='/game/view/!{gameId}'>#!{gameId}</a>
+			if editing
+				p(align='center') Editing release #!{form.id} (associated game is <a href='/game/view/!{gameId}'>#!{gameId}</a>)
+			else
+				p(align='center') Adding release for game <a href='/game/view/!{gameId}'>#!{gameId}</a>
 
 		//- This page also handles editing entries. The 'formAction' and 'editing' variables specify which operation to do
 		form(action=formAction method='post')
