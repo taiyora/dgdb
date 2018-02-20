@@ -21,6 +21,7 @@ c-blue-transh       = rgba(128, 192, 255,  .2)
 c-blue-dark2-transl = rgba( 16,  32,  64,  .8)
 c-blue-dark2-transh = rgba( 16,  32,  64,  .2)
 c-greenblue-transl  = rgba(128, 255, 255,  .8)
+c-greenblue-trans   = rgba(128, 255, 255,  .5)
 c-greenblue-transh  = rgba(128, 255, 255,  .2)
 c-purple            = rgba(192, 128, 255, 1.0)
 c-purple-transl     = rgba(192, 128, 255,  .8)
@@ -109,7 +110,7 @@ h1.logo a
 	-webkit-text-stroke-color white
 
 // ======================================================================================================================== Headings
-h2, h3
+h2, h3, h4
 	margin 0
 
 	font 35px 'Nova Flat'
@@ -122,6 +123,9 @@ h3.section-heading
 	position relative
 	top 14px
 	left 20px
+
+h4
+	font-size 20px
 
 .fancy
 	font-family 'Indie Flower', AiharaHudemojiKaisho
@@ -250,6 +254,11 @@ div.edit-page-link
 	right 0
 
 	background rgba(0,0,0,.8)
+
+div.centered
+	margin 10px
+	margin-left 20%
+	margin-right 20%
 
 div.darkened
 	padding 10px
@@ -405,6 +414,12 @@ img.ss
 hr
 	border none
 	border-top 1px c-greenblue-transh dashed
+
+hr.bright
+	border-top 1px c-greenblue-trans dashed
+
+hr.tight
+	margin-top -2px
 
 ::-webkit-scrollbar
 	width 15px

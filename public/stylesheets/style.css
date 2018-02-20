@@ -63,7 +63,8 @@ h1.logo a {
   -webkit-text-stroke-color: #fff;
 }
 h2,
-h3 {
+h3,
+h4 {
   margin: 0;
   font: 35px 'Nova Flat';
   color: #fff;
@@ -75,6 +76,9 @@ h3.section-heading {
   position: relative;
   top: 14px;
   left: 20px;
+}
+h4 {
+  font-size: 20px;
 }
 .fancy {
   font-family: 'Indie Flower', AiharaHudemojiKaisho;
@@ -187,6 +191,11 @@ div.edit-page-link {
   top: 0;
   right: 0;
   background: rgba(0,0,0,0.8);
+}
+div.centered {
+  margin: 10px;
+  margin-left: 20%;
+  margin-right: 20%;
 }
 div.darkened {
   padding: 10px;
@@ -334,6 +343,12 @@ img.ss {
 hr {
   border: none;
   border-top: 1px rgba(128,255,255,0.2) dashed;
+}
+hr.bright {
+  border-top: 1px rgba(128,255,255,0.5) dashed;
+}
+hr.tight {
+  margin-top: -2px;
 }
 ::-webkit-scrollbar {
   width: 15px;

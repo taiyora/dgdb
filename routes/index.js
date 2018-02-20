@@ -86,4 +86,11 @@ router.get('/revisions', function(req, res, next) {
 	});
 });
 
+// eslint-disable-next-line max-len
+// ======================================================================================================================== Guide
+router.get('/guide/new_entry', function(req, res, next) {
+	res.render('guide/new_entry', {
+		title: websiteName + ' // guide/new_entry' });
+});
+
 module.exports = router;
