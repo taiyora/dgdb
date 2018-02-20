@@ -24,10 +24,11 @@ div.bg-image {
   position: fixed;
   top: 0;
   left: 0;
-  width: 637px;
+  width: 50%;
   height: 100%;
   z-index: -1;
   background: url("/images/wada.png") repeat;
+  background-size: 100%;
   filter: opacity(50%);
 }
 div.sprite {
