@@ -27,9 +27,11 @@ block content
 							autocomplete='off' )
 
 						select(name='language')
-							option(value='Japanese') Japanese
-							option(value='English') English
-							option(value='French') French
+							each l in ['Japanese', 'English', 'French']
+								if l == form.language
+									option(value=l selected)= l
+								else
+									option(value=l)= l
 
 					td(width='33.4%')
 						label(for='release_date') Release date <span class='subdued'>(use x's if month/day unknown)</span>
