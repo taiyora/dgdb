@@ -5,11 +5,11 @@
  */
 
 // eslint-disable-next-line max-len
-// ================================================================================================================================== Globals
+// ======================================================================================================================== Globals
 const websiteName = 'DGDB';
 
 // eslint-disable-next-line max-len
-// ================================================================================================================================== General
+// ======================================================================================================================== General
 /**
  * We store timestamps in the database as ISO strings, because this is the
  * easiest way to keep them in UTC time.
@@ -22,7 +22,7 @@ function getTimestamp() {
 }
 
 // eslint-disable-next-line max-len
-// ================================================================================================================================== Database
+// ======================================================================================================================== Database
 const pg  = require('pg');
 const url = require('url');
 
@@ -147,7 +147,7 @@ pgPool.query(query, function(err, res) {
 });
 
 // eslint-disable-next-line max-len
-// ================================================================================================================================== Sessions
+// ======================================================================================================================== Sessions
 const sessions = require('client-sessions');
 const keygen   = require('generate-key');
 
@@ -205,8 +205,26 @@ function requireLogin(req, res, next) {
 	}
 }
 
+// ======================================================================================================================== Other
+const git = require('git-last-commit');
+
+const generalMiddleware = function(req, res, next) {
+	if (typeof generalMiddleware.gitLastCommit == 'undefined') {
+		git.getLastCommit(function(err, commit) {
+			generalMiddleware.gitLastCommit = commit.committedOn;
+
+			res.locals.gitLastCommit = generalMiddleware.gitLastCommit;
+			next();
+		});
+	}
+	else {
+		res.locals.gitLastCommit = generalMiddleware.gitLastCommit;
+		next();
+	}
+}
+
 module.exports = {
 	websiteName, // Globals
-	getTimestamp, // General
+	generalMiddleware, getTimestamp, // General
 	pgPool, // Database
 	sessionsConfig, sessionsMiddleware, requireLogin }; // Sessions

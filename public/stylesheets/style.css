@@ -192,6 +192,34 @@ div.banner p {
 div.banner p:hover {
   animation-play-state: paused;
 }
+div.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 30px;
+  text-align: center;
+}
+div.footer:after {
+  position: absolute;
+  bottom: 3px;
+  left: 3px;
+  padding: 5px;
+  background: #000;
+  font: 11px Verdana;
+  color: #c0c0c0;
+  content: 'site info';
+}
+div.footer:hover {
+  background: rgba(0,0,0,0.8);
+}
+div.footer p {
+  margin-top: 7px;
+  filter: opacity(0%);
+}
+div.footer:hover p {
+  filter: opacity(100%);
+}
 div.edit-page-link {
   padding: 0 5px 5px 5px;
   position: fixed;

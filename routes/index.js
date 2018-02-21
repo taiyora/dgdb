@@ -8,6 +8,7 @@ router.use('/release', require('./release'));
 // Load necessary stuff from main.js
 const main = require('../main');
 
+router.use(main.generalMiddleware);
 const websiteName = main.websiteName;
 const pgPool      = main.pgPool;
 router.use(main.sessionsConfig);

@@ -16,6 +16,13 @@ html
 				Having an empty script prevents this bug from occuring. ¯\_(ツ)_/¯ */
 
 	body
+		script.
+			$(document).ready(function() {
+				$('#git-last-commit').each(function(i, obj) {
+					this.innerHTML = moment(parseInt(this.innerHTML) * 1000).fromNow();
+				});
+			});
+
 		div.background
 		div.bg-image
 		div.sprite
@@ -23,7 +30,6 @@ html
 		div.banner
 			p
 				| <span class='subdued'>Welcome to the Doujin Game Database</span> //
-				| <a href='https://github.com/taiyora/dgdb'>GitHub</a> //
 				| <a href='/revisions'>Latest Revisions</a>
 
 		h1.logo <a href='/'>DGDB</a>
@@ -56,3 +62,10 @@ html
 		else
 			div.main
 				block content
+
+		div.footer
+			p.subdued
+				| <a href='https://github.com/taiyora/dgdb'>github</a>
+				| (site updated <span id='git-last-commit'>!{gitLastCommit}</span>) |
+				| contact: <a href='mailto:taiyora@protonmail.com'>taiyora@protonmail.com</a>
+				| (suggestions, etc.)

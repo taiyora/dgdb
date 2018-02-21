@@ -4,6 +4,7 @@ const router = express.Router();
 // Load necessary stuff from main.js
 const main = require('../main');
 
+router.use(main.generalMiddleware);
 const websiteName  = main.websiteName;
 const getTimestamp = main.getTimestamp;
 const pgPool       = main.pgPool;
