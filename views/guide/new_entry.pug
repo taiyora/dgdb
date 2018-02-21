@@ -10,102 +10,130 @@ block content
         br
 
         h4 Games
-        hr.tight
+        hr.tight.bright
 
-        p
+        p.info
             | At least one of the following three titles must be set. Don't guess what a title may be.<br>
             | If a game has changed its title, the current title should be used, stylization and all.
-            |     Old titles should be listed under the "Also known as" field.<br><br>
+            |     Old titles should be listed under the "Also known as" field.<br>
+            | <br>
             | <b>Title (Japanese)</b><br>
-            | The original Japanese title, whether it be in kanji, kana, or the roman alphabet.<br><br>
+            | The Japanese title, whether it be in kanji, kana, or the roman alphabet.<br>
+            | <br>
             | <b>Title (Romaji)</b><br>
-            | The romanized Japanese title.
-            |     Use direct/literal transliteration, e.g. 今日 becomes Kyou, not Kyō or Kyo.<br>
+            | The romanized Japanese title. Use direct/literal transliteration, e.g. 今日 becomes Kyou, not Kyō or Kyo.<br>
             | Leave this field empty if you're unsure of what this is.<br>
-            | Leave this field empty if the Japanese title uses no Japanese characters.<br><br>
+            | Leave this field empty if the Japanese title uses no Japanese characters.<br>
+            | <br>
             | <b>Title (English)</b><br>
             | A translation of the Japanese title into English.
             |     Use the official localization if it exists. It's official if the creator themselves have specified it,
-            |     either directly or through a official release, e.g. a Steam release. Check the "official" box in this case.<br>
+            |     either directly or through an official release, e.g. a Steam release. Check the "official" box in this case.<br>
             | Otherwise, if the Japanese title is already in English/roman script (even partially),
-            |     then use the same (partial) title here. This also counts as an official localization.<br>
-            | If neither of these cases apply, a custom translation can be used.<br><br>
+            |     you can use the same (partial) title here. This can also count as an official localization.<br>
+            | If neither of these cases apply, a custom translation can be used.<br>
+            | <br>
             | <b>Also known as</b><br>
-            | List abbreviations or other titles that the game is known by.
-            |     These titles will be searchable.<br><br>
-            |
+            | List abbreviations or other titles that the game is known by. These titles will be searchable.<br>
+            | <br>
             | <b>Description</b><br>
-            | A description of the game.
-            |     English is preferred, but use a Japanese one if it is all that's available.<br>
+            | A description of the game. English is preferred, but use a Japanese one if it is all that's available.<br>
             | The description can be either flavour text or an explanation of the game (mechanics, etc.). A bit of both is best.
-            |     Notes about the description (e.g. where it was copied from) should be written at the bottom, in parenthesis.<br><br>
-            |
+            |     Notes about the description (e.g. where it was copied from) should be written at the bottom, in parenthesis.<br>
+
+        hr
+        p.info
             | <b>Original creator</b><br>
             | The name/alias of the person who is most responsible for the game.<br>
             | In the case of a team, the lead should be used; if there is no lead, then the writer.
             |     In the case that a team make a remake of a game made by someone else: If the team has a specified lead,
-            |     then use their name/alias; otherwise, use the name/alias of the original creator of the franchise.<br><br>
+            |     then use their name/alias; otherwise, use the name/alias of the original creator of the franchise.<br>
+            | <br>
             | <b>Company/Circle</b><br>
             | Some titles are released under a company name or as part of a circle (a group);
-            |     for example, <i>Ryuukishi07</i> releases titles under the company <i>07th Expansion</i>.<br><br>
+            |     for example, <i>Ryuukishi07</i> releases titles under the company <i>07th Expansion</i>.<br>
+            | <br>
             | <b>Publisher</b><br>
             | Some titles are released (or re-released) through a publisher;
             |     for example, <i>AGM PLAYISM</i> published <i>Yume Nikki</i> on Steam in 2018.<br>
-            | If this applies (even if it's only for e.g. a re-release of the game) then enter the publisher name here.<br><br>
-            |
+            | If this applies (even if it's only for e.g. a re-release of the game) then enter the publisher name here.<br>
+
+        hr
+        p.info
             | <b>Website</b><br>
-            | The main official website for the game. This means the original Japanese site, if possible.
-            |     If the site no longer exists (and isn't cached anywhere (check archive.org)),
-            |     then use the most prolific wiki site for the game.
+            | The main official website for the game. This means the original Japanese site, if possible.<br>
+            | If the Japanese site no longer exists (and isn't cached anywhere (check <a href='https://archive.org/'>archive.org</a>)),
+            |     or is blocked from outside of Japan, then use the most prolific wiki site for the game.
             |     If there is no wiki and the game is translated, then use the translator's page for the game.
             |     Otherwise, leave this field blank.<br>
-            | Generally, this field should point to the most genuine information site for the game.<br><br>
+            | Generally, this field should point to the most genuine information site for the game.<br>
+            | <br>
             | <b>VNDB page</b><br>
-            | If the game is a Visual Novel, then put the URL of its <a href='https://vndb.org/'>vndb.org</a> page here.<br><br>
+            | If the game is a Visual Novel, then put the URL of its <a href='https://vndb.org/'>vndb.org</a> page here.<br>
+            | <br>
+            | <br>
+            | The following download links are for quick access to the most appropriate download for the average user.
+            |     This means the latest English download or store page, if there is one; otherwise the Japanese one.<br>
+            | The alternative link must be for the same language and version as the main one.
+            |     It is simply there in case the main link goes down temporarily.<br>
+            | Releases are there if one is searching for a specific version/language.<br>
+            | <br>
             | <b>Download (or purchase) page/link</b><br>
             | If possible, use a page that hosts/links to the most recent version of the English translation of the game.
-            |     Pages that host a range of versions/translations are heavily preferred.
-            |     Otherwise, use the official page that provides the most recent Japanese release.
-            |     If these pages don't exist, then use a safe download link.<br>
+            |     Pages that additionally host a further range of versions/translations are heavily preferred.<br>
+            | If there is no English translation, use the official page that provides the most recent Japanese release.<br>
+            | If these pages don't exist, then use a safe download link.<br>
             | Only provide links to games (or versions of a game) that are released for free.
-            |     If the game is a commerical-only release, then link to its official store page.<br><br>
+            |     If the game is a commerical-only release, then link to its official store page.<br>
+            | <br>
             | <b>Alternative download page/link</b><br>
-            | Same as the previous field, but use the page or link that is least expected to disappear.<br><br>
-            |
+            | Same as the previous field, but use the page or link that is least expected to disappear.<br>
+            | Don't use a link that is accessed from the previous field's page.
+            |     This field is for links that will provide access to the game in the case that the other link goes down.<br>
+            | <br>
+            | <b>English translated</b><br>
+            | Check this if the download links are for an English version of the game.<br>
+            | <br>
             | <b>Screenshots</b><br>
             | A list of URLs of screenshots of the game.
             |     The first one or two images may be cover art or other official artwork that nicely represents the game.<br>
-            | Use lossless PNG quality images as much as possible. Replace lower quality versions of images.<br>
-            | Avoid domains that don't support hotlinking.
-            | If a URL isn't accepted, then upload it to a simple image host like <a href='https://imgur.com/'>imgur.com</a>.
+            | Use lossless PNG quality images as much as is possible. Replace lower quality versions of images.<br>
+            | Avoid domains that don't support hotlinking.<br>
+            | If a URL isn't accepted, then upload it to a simple image host like <a href='https://imgur.com/'>imgur.com</a>.<br>
+            | <br>
+            | <b>Other links</b><br>
+            | List other links here, e.g. to English wikis, translators' pages, entries on other database sites, etc.
 
         br
         br
 
         h4 Releases
-        hr.tight
+        hr.tight.bright
 
-        p
+        p.info
             | <b>Title</b><br>
-            | The title <i>of this release</i>.
-            |     If this is a Japanese release, use its full Japanese title (in Japanese script).
+            | The title <i>of this release</i>. If this is a Japanese release, use its full Japanese title (in Japanese script).
             |     If it's an English release, use the title given to it by the translator or listed on the official page.<br>
             | Be wary of games whose title has changed between releases.
-            |     For example, <a href='/game/view/10'>Alicemare</a> was originally called "Alice mare",
+            |     For example, <a href='/game/view/10'>Alicemare</a> was originally called "Alice mare"
             |     both in Japanese and by the fan translator. However, the Steam release calls it "Alicemare".
-            |     These details should be accurately recorded.<br><br>
-            |
+            |     These details should be accurately recorded.<br>
+            | <br>
             | <b>Release date</b><br>
-            | The release date in the format Year-Month-Day. Makes sure to use leading 0s, e.g. 2018-02-20.<br>
-            | If part of the date is unknown, use x's; e.g. 2010-xx-xx for a game released sometime in 2010.<br><br>
-            |
+            | The release date in the format Year-Month-Day. Make sure to use leading 0s, e.g. 2018-02-20.<br>
+            | If part of the date is unknown, use x's; e.g. 2010-xx-xx for a game released sometime in 2010.<br>
+            | <br>
             | <b>Version</b><br>
             | The version of this release. This can be a version number like 0.10a, or a tag like "Steam release".<br>
-            | Short notes may also be added if significant, e.g. "1.29 (Windows 10 support)"<br><br>
-            |
+            | Short notes may also be added if significant, e.g. "1.29 (Windows 10 support)"<br>
+            | <br>
             | <b>Download (or purchase) page/link</b><br>
             | The URL where one may download or purchase this release. Use the official page/link for the release if possible.
             |     Use a direct link unless there is a dedicated page for this release.<br>
             | If the download page/link is one that updates with new versions of the game, it is encouraged to rehost the file.<br>
             | Especially for older versions of a game, this may simply be a direct download link to a generic file host
-            |     (as long as it's trustworthy).
+            |     (as long as it's trustworthy).<br>
+            | <br>
+            | <b>Info link</b><br>
+            | Where to find more info on this release. This could be the translator's page for the game, or patch notes, etc.<br>
+            | If the download link already leads to a page rather than a direct download, there's no need to repeat the link here.

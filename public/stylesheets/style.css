@@ -108,6 +108,13 @@ p.error {
   font-weight: bold;
   color: #ff8080;
 }
+p.info b {
+  margin-left: 5px;
+}
+p.info b:before {
+  color: #c080ff;
+  content: '* ';
+}
 pre {
   white-space: pre-wrap;
   word-wrap: break-all;
