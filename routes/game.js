@@ -203,7 +203,8 @@ router.get('/view/:id', function(req, res, next) {
 					'time_stamp', reviews.time_stamp )
 						FROM reviews
 							LEFT JOIN users ON users.id = reviews.user_id
-							LEFT JOIN ratings ON ratings.user_id = users.id
+							LEFT JOIN ratings
+								ON ratings.user_id = users.id AND ratings.game_id = $1
 							WHERE reviews.game_id = $1
 							ORDER BY reviews.time_stamp DESC ))
 								AS reviews,
