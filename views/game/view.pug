@@ -332,6 +332,7 @@ block content
 								p Version
 							td
 							td
+							td
 
 						each release in game.releases
 							tr.list
@@ -349,8 +350,11 @@ block content
 								td
 									p= release.version
 								td
+									if release.info_link
+										p <a class='normal' href='!{release.info_link}' style='color: rgb(128,255,192);'>Info</a>&nbsp;
+								td
 									if release.download
-										p <a class='normal' href='!{release.download}'>DL</a>
+										p <a class='normal' href='!{release.download}'>DL</a>&nbsp;
 								td
 									p <a class='icon-edit' href='/release/edit/!{release.id}'>✎</a>&nbsp;
 

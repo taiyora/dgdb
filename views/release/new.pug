@@ -64,7 +64,13 @@ block content
 							autocomplete='off' )
 
 					td
-
+						label(for='info-link') Info link <span class='subdued'>(e.g. translator's page)</span>
+						input#info-link(
+							type='text'
+							name='info_link'
+							value=form.info_link
+							maxlength='200'
+							autocomplete='off' )
 
 				tr
 					td(colspan='3' align='center')

@@ -164,7 +164,8 @@ router.get('/view/:id', function(req, res, next) {
 				'language', language,
 				'release_date', release_date,
 				'version', version,
-				'download', download )
+				'download', download,
+				'info_link', info_link )
 					FROM releases WHERE game_id = $1
 					ORDER BY
 						NULLIF(release_date, 'xxxx-xx-xx') DESC NULLS LAST,

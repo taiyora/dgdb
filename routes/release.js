@@ -71,7 +71,8 @@ router.post(['/new', '/edit/:id'], requireLogin, function(req, res, next) {
 		form.language.length      > 10  ||
 		form.release_date.length  > 10  ||
 		form.version.length       > 50  ||
-		form.download.length      > 200)
+		form.download.length      > 200 ||
+		form.info_link.length     > 200)
 	{
 		error = 'Bypassing the character limit is bad!';
 	}
@@ -134,6 +135,7 @@ function saveReleaseEntry(form, releaseId, userId, callback) {
 		form.release_date,
 		form.version,
 		form.download,
+		form.info_link,
 		getTimestamp() ];
 
 	if (releaseId) {
@@ -146,7 +148,8 @@ function saveReleaseEntry(form, releaseId, userId, callback) {
 				language = $3,
 				release_date = $4,
 				version = $5,
-				download = $6
+				download = $6,
+				info_link = $7
 			FROM (SELECT * FROM releases WHERE id = $1 FOR UPDATE) dummy
 			WHERE releases.id = dummy.id
 			RETURNING dummy.*;`;
@@ -165,6 +168,7 @@ function saveReleaseEntry(form, releaseId, userId, callback) {
 				release_date,
 				version,
 				download,
+				info_link,
 				entry_created )
 			VALUES ($1, $2, $3, $4, $5, $6, $7)
 			RETURNING *;`;
