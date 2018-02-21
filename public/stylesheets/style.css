@@ -151,7 +151,8 @@ a:hover {
   text-decoration: underline;
 }
 a.menu-item {
-  margin-right: 15px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 .purple {
   color: #c080ff;
@@ -175,8 +176,12 @@ div.main {
 }
 div.menu-bar {
   position: absolute;
-  top: 100px;
-  left: 300px;
+  top: 90px;
+  left: 290px;
+  padding: 9px;
+  background: rgba(0,0,0,0.2);
+  border: 1px rgba(128,192,255,0.2) solid;
+  border-bottom: none;
 }
 div.menu-bar-right {
   position: absolute;
