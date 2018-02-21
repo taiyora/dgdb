@@ -261,14 +261,37 @@ block content
 										td.label
 											p Download
 										td
-											p <a class='normal' href=!{game.download}>Link</a>
+											if game.english_translated
+												p <a class='normal' href=!{game.download}>Link</a>
+													<span class='purple'> (English)</span>
+
+											else
+												p <a class='normal' href=!{game.download}>Link</a>
+													<span class='subdued'> (Japanese)</span>
 
 								if game.download_alt
 									tr.list
 										td.label
 											p Alternative download
 										td
-											p <a class='normal' href=!{game.download_alt}>Link</a>
+											if game.english_translated
+												p <a class='normal' href=!{game.download_alt}>Link</a>
+													<span class='purple'> (English)</span>
+
+											else
+												p <a class='normal' href=!{game.download_alt}>Link</a>
+													<span class='subdued'> (Japanese)</span>
+
+								if game.other_links
+									tr
+										td.label
+											p Other links
+										td
+											each link in game.other_links.split('\n')
+												p
+													| !{link.split('=')[0]}
+													| <a class='normal' href=!{link.split('=')[1]}>!{link.split('=')[1]}</a>
+													| <br>
 
 		div(style='float: right; width: 19.6%;')
 			div.main

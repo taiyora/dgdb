@@ -143,14 +143,31 @@ block content
 							maxlength='200'
 							autocomplete='off')
 
+						if form.english_translated
+							input#english-translated(type='checkbox' name='english_translated' checked)
+						else
+							input#english-translated(type='checkbox' name='english_translated')
+
+						label(for='english-translated' style='color: rgb(192,192,192);')
+							| English translated (applies to Alternative download also)
+
 					td
-						label(for='download_alt') Alternative download page/link
-						input#download(
+						label(for='download-alt') Alternative download page/link
+						input#download-alt(
 							type='text'
 							name='download_alt'
 							value=form.download_alt
 							maxlength='200'
 							autocomplete='off')
+
+				tr
+					td(colspan='3' align='center')
+						label(for='other-links') Other links
+						br
+						textarea#other-links(
+							name='other_links'
+							placeholder='Wiki=URL\nTranslator\'s homepage=URL\n...'
+							maxlength='1000' )= form.other_links
 
 				tr
 					td(colspan='3' align='center')

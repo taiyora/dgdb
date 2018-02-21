@@ -472,7 +472,8 @@ router.post(['/new', '/edit/:id'], requireLogin, function(req, res, next) { // e
 		form.download.length      > 200  ||
 		form.download_alt.length  > 200  ||
 		form.description.length   > 3100 || // textarea maxlength is wrong?
-		form.screenshots.length   > 1100)   // ^
+		form.screenshots.length   > 1100 || // ^
+		form.other_links.length   > 1100)   // ^
 	{
 		error = 'Bypassing the character limit is bad!';
 	}
@@ -561,7 +562,9 @@ function saveGameEntry(form, gameId, userId, callback) {
 		form.vndb,
 		form.download,
 		form.download_alt,
+		form.english_translated ? 'TRUE' : 'FALSE',
 		form.screenshots,
+		form.other_links,
 		getTimestamp() ];
 
 	if (gameId) {
@@ -583,7 +586,9 @@ function saveGameEntry(form, gameId, userId, callback) {
 				vndb = $12,
 				download = $13,
 				download_alt = $14,
-				screenshots = $15
+				english_translated = $15,
+				screenshots = $16,
+				other_links = $17
 			FROM (SELECT * FROM games WHERE id = $1 FOR UPDATE) dummy
 			WHERE games.id = dummy.id
 			RETURNING dummy.*;`;
@@ -609,9 +614,12 @@ function saveGameEntry(form, gameId, userId, callback) {
 				vndb,
 				download,
 				download_alt,
+				english_translated,
 				screenshots,
+				other_links,
 				entry_created )
-			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
+			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10,
+				$11, $12, $13, $14, $15, $16, $17)
 			RETURNING *;`;
 	}
 
@@ -639,6 +647,13 @@ function saveGameEntry(form, gameId, userId, callback) {
 			}
 			else {
 				form.title_english_official = false;
+			}
+
+			if (form.english_translated) {
+				form.english_translated = true;
+			}
+			else {
+				form.english_translated = false;
 			}
 
 			// Determine which fields were edited
