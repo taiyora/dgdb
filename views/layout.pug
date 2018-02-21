@@ -19,7 +19,12 @@ html
 		script.
 			$(document).ready(function() {
 				$('#git-last-commit').each(function(i, obj) {
-					this.innerHTML = moment(parseInt(this.innerHTML) * 1000).fromNow();
+					if ( /^\d+$/.test(this.innerHTML) ) {
+						this.innerHTML = moment(parseInt(this.innerHTML)).fromNow();
+					}
+					else {
+						this.innerHTML = moment(this.innerHTML).fromNow();
+					}
 				});
 			});
 

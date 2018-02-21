@@ -209,23 +209,29 @@ function requireLogin(req, res, next) {
 const git = require('git-last-commit');
 
 const generalMiddleware = function(req, res, next) {
-	if (typeof generalMiddleware.gitLastCommit == 'undefined') {
-		git.getLastCommit(function(err, commit) {
-			if (err) {
-				console.error(err);
-				generalMiddleware.gitLastCommit = '';
-			}
-			else {
-				generalMiddleware.gitLastCommit = commit.committedOn;
-			}
-
-			res.locals.gitLastCommit = generalMiddleware.gitLastCommit;
-			next();
-		});
+	if (process.env.HEROKU_RELEASE_CREATED_AT) {
+		res.locals.gitLastCommit = process.env.HEROKU_RELEASE_CREATED_AT;
+		next();
 	}
 	else {
-		res.locals.gitLastCommit = generalMiddleware.gitLastCommit;
-		next();
+		if (typeof generalMiddleware.gitLastCommit == 'undefined') {
+			git.getLastCommit(function(err, commit) {
+				if (err) {
+					console.error(err);
+					generalMiddleware.gitLastCommit = '';
+				}
+				else {
+					generalMiddleware.gitLastCommit = parseInt(commit.committedOn) * 1000;
+				}
+
+				res.locals.gitLastCommit = generalMiddleware.gitLastCommit;
+				next();
+			});
+		}
+		else {
+			res.locals.gitLastCommit = generalMiddleware.gitLastCommit;
+			next();
+		}
 	}
 }
 
