@@ -96,6 +96,30 @@ pgPool.query(query, function(err, res) {
 	}
 });
 
+query = `
+	CREATE OR REPLACE FUNCTION upsert_reviews(
+		uid        integer,
+		gid        integer,
+		new_review varchar(11000),
+		new_time   text )
+	RETURNS VOID AS $$
+		DECLARE
+		BEGIN
+			UPDATE reviews SET review = new_review, time_stamp = new_time
+				WHERE user_id = uid AND game_id = gid;
+			IF NOT FOUND THEN
+				INSERT INTO reviews (user_id, game_id, review, time_stamp)
+					VALUES (uid, gid, new_review, new_time);
+			END IF;
+		END;
+	$$ LANGUAGE 'plpgsql';`;
+
+pgPool.query(query, function(err, res) {
+	if (err) {
+		console.error(err);
+	}
+});
+
 // Returns the Bayesian average for a game's ratings.
 // minimum_votes and global_average can just be set to 1 and 5.5 at first.
 // Forumla is: WR = (v * R + m * C) / (v + m)

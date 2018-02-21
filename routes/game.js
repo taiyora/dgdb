@@ -192,7 +192,23 @@ router.get('/view/:id', function(req, res, next) {
 					AS ratings_recent,
 
 			(SELECT rating FROM ratings WHERE game_id = $1 AND user_id = $2)
-				AS user_rating
+				AS user_rating,
+
+			array_to_json(array(
+				SELECT json_build_object(
+					'username', users.username,
+					'rating', ratings.rating,
+					'review', review,
+					'time_stamp', reviews.time_stamp )
+						FROM reviews
+							LEFT JOIN users ON users.id = reviews.user_id
+							LEFT JOIN ratings ON ratings.user_id = users.id
+							WHERE reviews.game_id = $1
+							ORDER BY reviews.time_stamp DESC ))
+								AS reviews,
+
+			(SELECT review FROM reviews WHERE game_id = $1 AND user_id = $2)
+				AS user_review
 
 		FROM games WHERE id = $1;`;
 
@@ -257,6 +273,36 @@ router.post('/updateRating', requireLogin, function(req, res, next) {
 	pgPool.query(query, vars, function(err, res2) {
 		if (err) {
 			console.error(err);
+			res.send('failure');
+		}
+		else {
+			res.send('success');
+		}
+	});
+});
+
+// eslint-disable-next-line max-len
+// ------------------------------------------------------------------------------------------ Update Review
+router.post('/updateReview', requireLogin, function(req, res, next) {
+	const form = req.body;
+
+	// Ensure that review is within the character limit
+	if (!form.review.length || form.review.length > 10000) {
+		res.send('failure');
+		return;
+	}
+
+	const query = `SELECT upsert_reviews($1, $2, $3, $4);`;
+	const vars = [
+		res.locals.user ? res.locals.user.id : 0,
+		form.game_id,
+		form.review,
+		getTimestamp() ];
+
+	pgPool.query(query, vars, function(err, res2) {
+		if (err) {
+			console.error(err);
+			res.send('failure');
 		}
 		else {
 			res.send('success');

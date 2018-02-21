@@ -124,6 +124,32 @@ block content
 
 				return false; // Not sure if this is needed
 			});
+
+			// Update database when user submits a review
+			$('#review-form').submit(function(e) {
+				// Prevent the page from trying to change
+				e.preventDefault();
+				e.stopImmediatePropagation();
+
+				// Temporarily disable the submit button
+				$('#review-submit').prop('disabled', true);
+
+				$.ajax({
+					type: 'POST',
+					url: '/game/updateReview',
+					data: $('#review-form').serialize(),
+					success: function(res) {
+						if (res == 'success') {
+							$('#review-saved').show();
+							$('#review-saved').fadeOut(3000);
+						}
+
+						$('#review-submit').prop('disabled', false);
+					}
+				});
+
+				return false; // Not sure if this is needed
+			});
 		});
 
 	if error
@@ -312,11 +338,33 @@ block content
 			h3.section-heading Ratings and Reviews
 
 			div.main(style='float: left; width: 69.5%;')
-				p No reviews found
+				if user
+					div(align='right')
+						form#review-form
+							input(type='hidden' name='game_id' value=game.id)
+
+							textarea(name='review' placeholder='Your review (max 10,000 characters)')= game.user_review
+							br
+
+							p <span id='review-saved' class='gold' style='display: none;'>Saved! &nbsp; </span>
+								<input id='review-submit' type='submit' class='small' value='Save'>
+
+					hr.bright
+
+				if game.reviews.length
+					each review in game.reviews
+						h5 !{review.username} <span class='subdued'>—</span> <span class='rating'>!{review.rating}</span>
+						div.darkened
+							pre= review.review
+
+						p.subdued(align='right')= review.time_stamp
+
+				else
+					p No reviews found
 
 			div.main(style='float: right; width: 30%;')
 				if user
-					div.darkened
+					div.darkened(style='margin-bottom: 5px;')
 						form#rating-form
 							input(type='hidden' name='game_id' value=game.id)
 
