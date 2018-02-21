@@ -211,7 +211,13 @@ const git = require('git-last-commit');
 const generalMiddleware = function(req, res, next) {
 	if (typeof generalMiddleware.gitLastCommit == 'undefined') {
 		git.getLastCommit(function(err, commit) {
-			generalMiddleware.gitLastCommit = commit.committedOn;
+			if (err) {
+				console.error(err);
+				generalMiddleware.gitLastCommit = '';
+			}
+			else {
+				generalMiddleware.gitLastCommit = commit.committedOn;
+			}
 
 			res.locals.gitLastCommit = generalMiddleware.gitLastCommit;
 			next();
