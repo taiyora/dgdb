@@ -289,7 +289,7 @@ block content
 										td
 											each link in game.other_links.split('\n')
 												p
-													| !{link.split('=')[0]}
+													| !{link.split('=')[0]}<br>
 													| <a class='normal' href=!{link.split('=')[1]}>!{link.split('=')[1]}</a>
 													| <br>
 
