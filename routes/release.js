@@ -170,7 +170,7 @@ function saveReleaseEntry(form, releaseId, userId, callback) {
 				download,
 				info_link,
 				entry_created )
-			VALUES ($1, $2, $3, $4, $5, $6, $7)
+			VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 			RETURNING *;`;
 
 		vars = [form.game_id].concat(vars);
